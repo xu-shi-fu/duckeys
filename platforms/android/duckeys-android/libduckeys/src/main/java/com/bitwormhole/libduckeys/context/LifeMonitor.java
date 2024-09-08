@@ -5,9 +5,11 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.bitwormhole.libduckeys.helper.DuckLogger;
+
 public class LifeMonitor implements Life {
 
-    private final static String theDefaultTag = "LifeMonitor";
+    private final static String theDefaultTag = DuckLogger.TAG;
     private final String mTag;
 
     public LifeMonitor() {
