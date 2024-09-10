@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activities.PianoKeyboardActivity">
+
+    <SurfaceView
+        android:id="@+id/surface_view_small"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="1" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <SurfaceView
+        android:id="@+id/surface_view_large"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="3" />
+
+</LinearLayout>

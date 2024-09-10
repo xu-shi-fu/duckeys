@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="piano_black_key_normal">#1C1C1C</color>
+    <color name="piano_black_key_down">#C35B5B</color>
+    <color name="piano_white_key_normal">#EBEBEB</color>
+    <color name="piano_white_key_down">#FFAA5858</color>
+
+</resources>
