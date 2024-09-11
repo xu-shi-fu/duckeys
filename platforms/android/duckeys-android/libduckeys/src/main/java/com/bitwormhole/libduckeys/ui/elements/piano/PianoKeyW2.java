@@ -7,4 +7,11 @@ import com.bitwormhole.libduckeys.ui.boxes.Container;
  */
 
 public class PianoKeyW2 extends Container {
+
+    private final PianoKeyW mParentKey;
+
+    public PianoKeyW2(PianoKeyW parent) {
+        mParentKey = parent;
+    }
+
 }

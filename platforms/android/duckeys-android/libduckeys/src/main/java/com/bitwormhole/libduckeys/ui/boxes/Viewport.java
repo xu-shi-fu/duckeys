@@ -1,34 +1,27 @@
 package com.bitwormhole.libduckeys.ui.boxes;
 
+import android.util.Log;
+import android.view.MotionEvent;
+
+import com.bitwormhole.libduckeys.helper.DuckLogger;
+
 import java.util.List;
 
-public class Viewport extends Box implements RenderAble, LayoutAble {
+public class Viewport extends Box implements RenderAble, LayoutAble, TouchAble {
 
     public Element root;
-    public long revision; // 表示渲染或布局的版本
-
-
-    /**
-     * invoke 调用 Runnable，带同步锁
-     */
-    public synchronized void invoke(Runnable r) {
-        revision++;
-        r.run();
-    }
 
     @Override
     public void updateLayout(LayoutContext lc) {
         if (root == null || lc == null) {
             return;
         }
-        invoke(() -> {
-            final Viewport vpt = Viewport.this;
-            root.x = 0;
-            root.y = 0;
-            root.width = vpt.width;
-            root.height = vpt.height;
-            root.updateLayout(lc);
-        });
+        final Viewport vpt = Viewport.this;
+        root.x = 0;
+        root.y = 0;
+        root.width = vpt.width;
+        root.height = vpt.height;
+        root.updateLayout(lc);
     }
 
 
@@ -57,5 +50,49 @@ public class Viewport extends Box implements RenderAble, LayoutAble {
         for (RenderingItem item : list) {
             item.target.render(rc, item);
         }
+    }
+
+    private void logOnTouch(TouchContext tc, TouchEventAdapter ada) {
+        MotionEvent event = tc.event;
+        int action = event.getAction();
+        String msg = null;
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                msg = "MotionEvent.ACTION_DOWN";
+                break;
+
+            case MotionEvent.ACTION_POINTER_UP:
+                msg = "MotionEvent.ACTION_POINTER_UP";
+                break;
+
+            case MotionEvent.ACTION_UP:
+                msg = "MotionEvent.ACTION_UP";
+                break;
+
+            default:
+                // msg = "MotionEvent.default: " + action;
+                msg = MotionEvent.actionToString(action);
+                break;
+        }
+        Log.d(DuckLogger.TAG, msg);
+    }
+
+
+    @Override
+    public void onTouch(TouchContext tc, TouchEventAdapter ada) {
+
+        if (tc == null || root == null) {
+            return;
+        }
+
+        ada = new TouchEventAdapter();
+        ada.context = tc;
+        ada.offsetX = 0;
+        ada.offsetY = 0;
+        ada.parent = null;
+        ada.target = root;
+
+        logOnTouch(tc, ada);
+        root.onTouch(tc, ada);
     }
 }

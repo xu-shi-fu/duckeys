@@ -67,15 +67,6 @@ public class PianoKeyboard extends Container {
 
     @Override
     public void render(RenderingContext rc, RenderingItem item) {
-
-        // just for try
-        for (PianoKey key : allKeys) {
-            int i = key.note.index;
-            if (i % 5 == 0) {
-                key.colorCurrent = key.colorKeyDown;
-            }
-        }
-
         super.render(rc, item);
     }
 

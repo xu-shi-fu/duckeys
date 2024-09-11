@@ -24,8 +24,8 @@ public class PianoKeyW extends PianoKey {
     public PianoKeyW(Note n) {
         super(n);
 
-        upper = new PianoKeyW1();
-        lower = new PianoKeyW2();
+        upper = new PianoKeyW1(this);
+        lower = new PianoKeyW2(this);
     }
 
     @Override

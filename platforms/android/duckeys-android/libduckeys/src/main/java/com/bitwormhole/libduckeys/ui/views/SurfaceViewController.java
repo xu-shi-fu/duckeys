@@ -20,6 +20,7 @@ import com.bitwormhole.libduckeys.helper.DuckLogger;
 import com.bitwormhole.libduckeys.ui.boxes.Element;
 import com.bitwormhole.libduckeys.ui.boxes.LayoutContext;
 import com.bitwormhole.libduckeys.ui.boxes.RenderingContext;
+import com.bitwormhole.libduckeys.ui.boxes.TouchContext;
 import com.bitwormhole.libduckeys.ui.boxes.Viewport;
 
 import java.util.ArrayList;
@@ -37,9 +38,12 @@ public class SurfaceViewController implements Life {
     private MyOnTouchListener mOnTouchListener;
 
     private int mFrameCount;
+    private long mRevision; // 表示渲染或布局的版本
+
 
     public SurfaceViewController(Activity parent) {
         mActivity = parent;
+        mRevision = System.currentTimeMillis();
     }
 
 
@@ -83,7 +87,8 @@ public class SurfaceViewController implements Life {
     private class MyOnTouchListener implements View.OnTouchListener {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            return false;
+            dispatchOnTouchEvent(view, motionEvent);
+            return true;
         }
     }
 
@@ -130,8 +135,8 @@ public class SurfaceViewController implements Life {
 
         LayoutContext lc = new LayoutContext();
         lc.viewport = vpt;
-        vpt.invoke(() -> {
-            lc.revision = vpt.revision;
+        invoke(() -> {
+            lc.revision = mRevision;
             lc.androidContext = mActivity;
             vpt.updateLayout(lc);
         });
@@ -149,12 +154,27 @@ public class SurfaceViewController implements Life {
         RenderingContext rc = new RenderingContext();
         rc.viewport = vpt;
         rc.canvas = can;
-        vpt.invoke(() -> {
-            rc.revision = vpt.revision;
+        invoke(() -> {
+            rc.revision = mRevision;
             vpt.render(rc, null);
         });
     }
 
+    private void dispatchOnTouchEvent(View view, MotionEvent motionEvent) {
+
+        Viewport vpt = mViewport;
+        if (vpt == null) return;
+
+        Element root = vpt.root;
+        if (root == null) return;
+
+        TouchContext tc = new TouchContext(motionEvent);
+        tc.view = view;
+
+        invoke(() -> {
+            vpt.onTouch(tc, null);
+        });
+    }
 
     public void init(SurfaceView view, Viewport vpt) {
         mSurfaceView = view;
@@ -188,6 +208,14 @@ public class SurfaceViewController implements Life {
         }
     }
 
+    /**
+     * invoke 调用 Runnable，带同步锁
+     */
+    public synchronized void invoke(Runnable r) {
+        mRevision++;
+        r.run();
+    }
+
     @Override
     public void onStart() {
     }
@@ -214,6 +242,5 @@ public class SurfaceViewController implements Life {
 
     @Override
     public void onDestroy() {
-
     }
 }

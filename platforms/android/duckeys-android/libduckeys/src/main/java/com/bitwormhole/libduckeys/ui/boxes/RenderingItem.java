@@ -13,6 +13,13 @@ public class RenderingItem extends Box {
     public final RenderingContext context;
     public final Node target;
 
+    // copy the src
+    public RenderingItem(RenderingItem src) {
+        super(src);
+        context = src.context;
+        target = src.target;
+    }
+
     public RenderingItem(RenderingContext ctx, Node tar) {
         this.context = ctx;
         this.target = tar;

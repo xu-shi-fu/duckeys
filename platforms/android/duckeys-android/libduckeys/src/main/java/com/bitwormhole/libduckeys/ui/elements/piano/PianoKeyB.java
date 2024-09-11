@@ -48,5 +48,8 @@ public class PianoKeyB extends PianoKey {
         p.setStyle(Paint.Style.FILL_AND_STROKE);
         p.setColor(colorCurrent);
         can.drawRect(left, top, right, bottom, p);
+
+        // draw led(s)
+        PianoKeyLEDRenderer.renderLEDBar(rc, item, this.leds);
     }
 }

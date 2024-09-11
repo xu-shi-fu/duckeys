@@ -144,6 +144,7 @@ public class PianoKeyGroup extends Container {
             addChild(white);
             addChild(white.upper);
             white.z = 1;
+            white.upper.z = 2;
         }
         for (PianoKeyB black : keysB5) {
             addChild(black);

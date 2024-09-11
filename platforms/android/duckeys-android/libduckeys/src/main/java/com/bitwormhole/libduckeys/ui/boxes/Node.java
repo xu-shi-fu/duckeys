@@ -1,6 +1,6 @@
 package com.bitwormhole.libduckeys.ui.boxes;
 
-public class Node extends Box implements RenderAble, LayoutAble {
+public class Node extends Box implements RenderAble, LayoutAble, TouchAble {
 
     private Node parent;
 
@@ -16,12 +16,10 @@ public class Node extends Box implements RenderAble, LayoutAble {
 
     @Override
     public void render(RenderingContext rc, RenderingItem item) {
-
     }
 
     @Override
     public void updateLayout(LayoutContext lc) {
-
     }
 
     public Node getParent() {
@@ -34,5 +32,9 @@ public class Node extends Box implements RenderAble, LayoutAble {
 
     public boolean isChildOf(Node parent) {
         return this.parent == parent;
+    }
+
+    @Override
+    public void onTouch(TouchContext ctx, TouchEventAdapter ada) {
     }
 }
