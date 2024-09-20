@@ -1,37 +1,38 @@
 #include <stdio.h>
 #include <memory.h>
 
-#include "duckeys_ble.h"
-#include "duckeys_led.h"
-#include "duckeys_usb.h"
-#include "duckeys_debug.h"
-#include "duckeys_fifo.h"
+#include "duckeys_app.h"
 
-typedef struct type_DuckeysApp
+typedef struct
 {
 
-    DuckeysBLE ble;
-    DuckeysDebug debug;
-    DuckeysLED led;
-    DuckeysFIFO fifo;
-    DuckeysUSB usb;
+    DuckeysApp app;
 
-} DuckeysApp;
+    // DuckeysBLE ble;
+    // DuckeysDebug debug;
+    // DuckeysLED led;
+    // DuckeysFIFO fifo;
+    // DuckeysUSB usb;
 
-static DuckeysApp theApp;
+} DuckeysAppImpl;
+
+static DuckeysAppImpl theApp;
 
 void app_main(void)
 {
-    DuckeysApp *app = &theApp;
-    memset(app, 0, sizeof(theApp));
+    ESP_LOGI(DUCKEYS_LOG_TAG, "app_main, begin");
+
+    memset(&theApp, 0, sizeof(theApp));
+    DuckeysAppImpl *impl = &theApp;
+    DuckeysApp *app = &impl->app;
 
     Error err;
-    err = duckeys_usb_init(&app->usb);
-    err = duckeys_ble_init(&app->ble);
-    err = duckeys_fifo_init(&app->fifo);
-
+    err = duckeys_app_init(app);
     if (err != Nil)
     {
-        ESP_LOGE(DUCKEYS_LOG_TAG, "app_main, end");
+        ESP_LOGE(DUCKEYS_LOG_TAG, "app_main, error: %s", err->Message);
+        return;
     }
+
+    ESP_LOGI(DUCKEYS_LOG_TAG, "app_main, end");
 }

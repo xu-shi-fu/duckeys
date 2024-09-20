@@ -2,10 +2,13 @@
 #ifndef __DUCKEYS_LED_H__
 #define __DUCKEYS_LED_H__
 
-#include "common_types.h"
+#include "common/types.h"
+#include "common/errors.h"
 
 typedef struct type_DuckeysLED
 {
+
+    // struct DuckeysApp *app;
 
 } DuckeysLED;
 
