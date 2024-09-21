@@ -1,20 +1,20 @@
 #include "common/bytes.h"
 
-void ByteBufferReset(ByteBuffer *bb)
+void ByteBuffer9527Reset(ByteBuffer9527 *bb)
 {
     bb->Len = 0;
     bb->Overflow = No;
 }
 
-// void ByteBufferCreate(ByteBuffer *bb, __uint16_t size)
+// void ByteBuffer9527Create(ByteBuffer9527 *bb, DK_LENGTH size)
 // {
 // }
 
-// void ByteBufferDestroy(ByteBuffer *bb)
+// void ByteBuffer9527Destroy(ByteBuffer9527 *bb)
 // {
 // }
 
-void ByteBufferWrite(ByteBuffer *bb, __uint8_t *src, __uint16_t size)
+void ByteBuffer9527Write(ByteBuffer9527 *bb, const __uint8_t *src, DK_LENGTH size)
 {
     for (__uint16_t i = 0; i < size; i++)
     {

@@ -2,9 +2,6 @@
 #ifndef __COMMON_TYPES_H__
 #define __COMMON_TYPES_H__
 
-#include <esp_log.h>
-#include <stdio.h>
-
 #define Nil 0
 #define No 0
 #define Yes 1
@@ -13,6 +10,9 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-typedef __uint8_t BOOL;
+typedef unsigned char DK_BOOL;
+typedef unsigned char DK_BYTE;
+typedef unsigned long DK_LENGTH;
+typedef const char *DK_STRING;
 
 #endif

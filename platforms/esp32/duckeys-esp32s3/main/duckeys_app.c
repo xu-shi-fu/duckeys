@@ -12,31 +12,31 @@ Error duckeys_app_init(DuckeysApp *self)
 {
     Error err;
 
-    err = duckeys_debug_init(&self->debug);
+    err = duckeys_debug_init(&self->debug, self);
     if (err != Nil)
     {
         return err;
     }
 
-    err = duckeys_fifo_init(&self->fifo);
+    err = duckeys_fifo_init(&self->fifo, self);
     if (err != Nil)
     {
         return err;
     }
 
-    err = duckeys_led_init(&self->led);
+    err = duckeys_led_init(&self->led, self);
     if (err != Nil)
     {
         return err;
     }
 
-    err = duckeys_ble_init(&self->ble);
+    err = duckeys_ble_init(&self->ble, self);
     if (err != Nil)
     {
         return err;
     }
 
-    err = duckeys_usb_init(&self->usb);
+    err = duckeys_usb_init(&self->usb, self);
     if (err != Nil)
     {
         return err;

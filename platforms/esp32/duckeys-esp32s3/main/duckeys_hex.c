@@ -1,6 +1,6 @@
 #include "common/hex.h"
 
-ByteBuffer *HexParse(const char *str, ByteBuffer *dst)
+ByteBuffer9527 *HexParse(const char *str, ByteBuffer9527 *dst)
 {
     const int limit = 0xffff;
     int count = 0;
@@ -34,7 +34,7 @@ ByteBuffer *HexParse(const char *str, ByteBuffer *dst)
         {
             // at: 13579...
             __uint8_t b = num | (n & 0x0f);
-            ByteBufferWrite(dst, &b, sizeof(b));
+            ByteBuffer9527Write(dst, &b, sizeof(b));
             num = 0;
         }
         else

@@ -8,12 +8,6 @@ typedef struct
 
     DuckeysApp app;
 
-    // DuckeysBLE ble;
-    // DuckeysDebug debug;
-    // DuckeysLED led;
-    // DuckeysFIFO fifo;
-    // DuckeysUSB usb;
-
 } DuckeysAppImpl;
 
 static DuckeysAppImpl theApp;
@@ -25,6 +19,9 @@ void app_main(void)
     memset(&theApp, 0, sizeof(theApp));
     DuckeysAppImpl *impl = &theApp;
     DuckeysApp *app = &impl->app;
+
+    app->ble.hub = &app->hub;
+    app->usb.hub = &app->hub;
 
     Error err;
     err = duckeys_app_init(app);

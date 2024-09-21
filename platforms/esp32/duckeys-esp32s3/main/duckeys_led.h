@@ -5,13 +5,9 @@
 #include "common/types.h"
 #include "common/errors.h"
 
-typedef struct type_DuckeysLED
+typedef struct
 {
 
-    // struct DuckeysApp *app;
-
 } DuckeysLED;
-
-Error duckeys_led_init(DuckeysLED *self);
 
 #endif

@@ -4,15 +4,12 @@
 
 #include "common/types.h"
 #include "common/errors.h"
+#include "duckeys_hub.h"
 
-typedef struct type_DuckeysUSB
+typedef struct
 {
-
-    // struct DuckeysApp *app;
+    DuckeysHub *hub;
 
 } DuckeysUSB;
-
-// 初始化指定的 USB 模块
-Error duckeys_usb_init(DuckeysUSB *self);
 
 #endif
