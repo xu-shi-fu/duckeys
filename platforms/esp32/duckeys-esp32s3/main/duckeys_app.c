@@ -8,17 +8,21 @@
 
 #include "duckeys_app.h"
 
+#define ENABLE_MOD_USB No
+#define ENABLE_MOD_BLE Yes
+#define ENABLE_MOD_DEBUG No
+
 Error duckeys_app_init(DuckeysApp *self)
 {
     Error err;
 
-    err = duckeys_debug_init(&self->debug, self);
+    err = duckeys_fifo_init(&self->fifo, self);
     if (err != Nil)
     {
         return err;
     }
 
-    err = duckeys_fifo_init(&self->fifo, self);
+    err = duckeys_hub_init(&self->hub, self);
     if (err != Nil)
     {
         return err;
@@ -30,16 +34,31 @@ Error duckeys_app_init(DuckeysApp *self)
         return err;
     }
 
-    err = duckeys_ble_init(&self->ble, self);
-    if (err != Nil)
+    if (ENABLE_MOD_BLE)
     {
-        return err;
+        err = duckeys_ble_init(&self->ble, self);
+        if (err != Nil)
+        {
+            return err;
+        }
     }
 
-    err = duckeys_usb_init(&self->usb, self);
-    if (err != Nil)
+    if (ENABLE_MOD_USB)
     {
-        return err;
+        err = duckeys_usb_init(&self->usb, self);
+        if (err != Nil)
+        {
+            return err;
+        }
+    }
+
+    if (ENABLE_MOD_DEBUG)
+    {
+        err = duckeys_debug_init(&self->debug, self);
+        if (err != Nil)
+        {
+            return err;
+        }
     }
 
     return Nil;

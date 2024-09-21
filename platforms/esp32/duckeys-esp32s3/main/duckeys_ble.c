@@ -5,6 +5,7 @@
 #include "duckeys_ble_helper.h"
 #include "duckeys_hub.h"
 #include "duckeys_app.h"
+#include "duckeys_version.h"
 #include "common/hex.h"
 
 enum
@@ -18,6 +19,9 @@ enum
     IDX_CHAR_DOWN,
     IDX_CHAR_DOWN_VAL,
     IDX_CHAR_DOWN_CFG,
+
+    IDX_CHAR_ABOUT,
+    IDX_CHAR_ABOUT_VAL,
 
     HRS_IDX_NB,
 };
@@ -44,6 +48,7 @@ enum
 #define DUCKEYS_SERVICE_UUID "03B80E5A-EDE8-4B33-A751-6CE34EC4C700"
 #define DUCKEYS_CHAR_UP_UUID "e7ea0001-8e30-2e58-bdb6-0987991661e8"
 #define DUCKEYS_CHAR_DOWN_UUID "e7ea0002-8e30-2e58-bdb6-0987991661e8"
+#define DUCKEYS_CHAR_ABOUT_UUID "e7ea0003-8e30-2e58-bdb6-0987991661e8"
 #define DUCKEYS_CHAR_MIDI_UUID "7772E5DB-3868-4112-A1A9-F2669D106BF3"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -67,9 +72,6 @@ struct gatts_profile_inst
 
 static void duckeys_ble_gatts_event_handler_profile0(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
 
-// static DK_STRING duckeys_ble_stringify_gap_event(esp_gap_ble_cb_event_t event);
-// static DK_STRING duckeys_ble_stringify_gatts_event(esp_gatts_cb_event_t event);
-
 static void duckeys_ble_handle_write_event(DuckeysBLE *self, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
 
 static void duckeys_ble_handle_write_upstream(DuckeysBLE *self, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
@@ -86,6 +88,7 @@ static esp_bt_uuid_t duckeys_service_uuid;
 static esp_bt_uuid_t duckeys_char_midi_uuid;
 static esp_bt_uuid_t duckeys_char_down_uuid;
 static esp_bt_uuid_t duckeys_char_up_uuid;
+static esp_bt_uuid_t duckeys_char_about_uuid;
 
 // static const uint8_t GATTS_CHAR_UUID_TEST_UP[16] = {
 //     0xe7, 0xea, 0x00, 0x01, 0x8e, 0x30, 0x2e, 0x58, 0xbd, 0xb6, 0x09, 0x87, 0x99, 0x16, 0x61, 0xe8};
@@ -94,8 +97,10 @@ static esp_bt_uuid_t duckeys_char_up_uuid;
 
 static const uint8_t char_prop_write = ESP_GATT_CHAR_PROP_BIT_WRITE;
 static const uint8_t char_prop_read_write_notify = ESP_GATT_CHAR_PROP_BIT_WRITE | ESP_GATT_CHAR_PROP_BIT_READ | ESP_GATT_CHAR_PROP_BIT_NOTIFY;
+static const uint8_t char_prop_read_only = ESP_GATT_CHAR_PROP_BIT_READ;
 static const uint8_t heart_measurement_ccc[2] = {0x00, 0x00};
 static const uint8_t char_value[4] = {0x11, 0x22, 0x33, 0x44};
+static const char duckeys_about_info[] = DUCKEYS_VERSION_URI;
 
 ////////////////////////////////////////////////////////////////////////////////
 // var
@@ -171,6 +176,13 @@ static const esp_gatts_attr_db_t gatt_db[HRS_IDX_NB] =
         /* Client Characteristic Configuration Descriptor */
         [IDX_CHAR_DOWN_CFG] =
             {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&character_client_config_uuid, ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE, sizeof(uint16_t), sizeof(heart_measurement_ccc), (uint8_t *)heart_measurement_ccc}},
+
+        [IDX_CHAR_ABOUT] =
+            {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&character_declaration_uuid, ESP_GATT_PERM_READ, CHAR_DECLARATION_SIZE, CHAR_DECLARATION_SIZE, (uint8_t *)&char_prop_read_only}},
+
+        /* Characteristic Value */
+        [IDX_CHAR_ABOUT_VAL] =
+            {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_128, (uint8_t *)duckeys_char_about_uuid.uuid.uuid128, ESP_GATT_PERM_READ, sizeof(duckeys_about_info), sizeof(duckeys_about_info), (uint8_t *)duckeys_about_info}},
 
 };
 
@@ -484,6 +496,7 @@ Error duckeys_ble_init(DuckeysBLE *self, DuckeysApp *app)
     duckeys_ble_parse_uuid_128(DUCKEYS_CHAR_MIDI_UUID, &duckeys_char_midi_uuid);
     duckeys_ble_parse_uuid_128(DUCKEYS_CHAR_DOWN_UUID, &duckeys_char_down_uuid);
     duckeys_ble_parse_uuid_128(DUCKEYS_CHAR_UP_UUID, &duckeys_char_up_uuid);
+    duckeys_ble_parse_uuid_128(DUCKEYS_CHAR_ABOUT_UUID, &duckeys_char_about_uuid);
 
     esp_err_t ret;
     esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
