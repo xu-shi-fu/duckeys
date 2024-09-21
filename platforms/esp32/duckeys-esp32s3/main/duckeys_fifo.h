@@ -5,7 +5,7 @@
 #include "common/types.h"
 #include "common/errors.h"
 
-typedef struct type_DuckeysFIFO
+typedef struct DuckeysFIFO_t
 {
 
     // struct DuckeysApp *app;

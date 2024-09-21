@@ -1,7 +1,6 @@
 
-#include <esp_err.h>
-#include <tinyusb.h>
 
+#include "duckeys_libs.h"
 #include "duckeys_usb.h"
 #include "duckeys_app.h"
 
@@ -39,6 +38,8 @@ static const char *s_str_desc[5] = {
     "100001",             // 3: Serials, should use chip ID
     "Duckeys",            // 4: MIDI
 };
+
+static DuckeysUSB *the_duckeys_usb_inst = Nil;
 
 /* A combination of interfaces must have a unique product id, since PC will save device driver after the first plug.
  * Same VID/PID with different interface e.g MSC (first), then CDC (later) will possibly cause system error on PC.
@@ -84,13 +85,51 @@ static const uint8_t s_midi_cfg_desc[] = {
 // 处理转发过来的上行数据
 int duckeys_hub_handle_up_bytes(DuckeysHub *self, const DK_BYTE *data, DK_LENGTH len)
 {
-    // todo ...
+    static uint8_t const cable_num = 0; // MIDI jack associated with USB endpoint
+    if (tud_midi_mounted() && (len > 0))
+    {
+        tud_midi_stream_write(cable_num, data, len);
+        return len;
+    }
     return 0;
+}
+
+void duckeys_usb_debug_ontimer()
+{
+    DuckeysUSB *self = the_duckeys_usb_inst;
+    if (self == Nil)
+    {
+        return;
+    }
+
+    long count = self->debug_count;
+    DK_BYTE buffer[3];
+    if (count & 0x01)
+    {
+        // note no
+        buffer[0] = NOTE_ON;
+        buffer[1] = self->debug_note;
+        buffer[2] = 90;
+    }
+    else
+    {
+        // note off
+        buffer[0] = NOTE_OFF;
+        buffer[1] = self->debug_note;
+        buffer[2] = 0;
+        int note = self->debug_note + 1;
+        self->debug_note = (note & 0x1f) + (32);
+    }
+    self->debug_count++;
+
+    duckeys_hub_handle_up_bytes(self->hub, buffer, sizeof(buffer));
 }
 
 Error duckeys_usb_init(DuckeysUSB *self, DuckeysApp *app)
 {
     ESP_LOGI(DUCKEYS_LOG_TAG, "duckeys_usb_init - begin");
+
+    the_duckeys_usb_inst = self;
 
     tinyusb_config_t const tusb_cfg = {
         .device_descriptor = &desc_device, // If device_descriptor is NULL, tinyusb_driver_install() will use Kconfig

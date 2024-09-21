@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include <memory.h>
 
+#include "duckeys_libs.h"
 #include "duckeys_app.h"
 
 typedef struct

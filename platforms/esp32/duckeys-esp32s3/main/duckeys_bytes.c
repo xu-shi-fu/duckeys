@@ -1,25 +1,33 @@
 #include "common/bytes.h"
 
-void ByteBuffer9527Reset(ByteBuffer9527 *bb)
+void ByteBufferReset(ByteBuffer *bb)
 {
     bb->Len = 0;
     bb->Overflow = No;
 }
 
-// void ByteBuffer9527Create(ByteBuffer9527 *bb, DK_LENGTH size)
-// {
-// }
-
-// void ByteBuffer9527Destroy(ByteBuffer9527 *bb)
-// {
-// }
-
-void ByteBuffer9527Write(ByteBuffer9527 *bb, const __uint8_t *src, DK_LENGTH size)
+void ByteBufferInit(ByteBuffer *bb, DK_BYTE *buffer, DK_LENGTH size)
 {
-    for (__uint16_t i = 0; i < size; i++)
+    bb->Capacity = size;
+    bb->Overflow = No;
+    bb->Data = buffer;
+    bb->Len = 0;
+}
+
+// void ByteBufferCreate(ByteBuffer *bb, DK_LENGTH size)
+// {
+// }
+
+// void ByteBufferDestroy(ByteBuffer *bb)
+// {
+// }
+
+void ByteBufferWrite(ByteBuffer *bb, const DK_BYTE *src, DK_LENGTH size)
+{
+    for (DK_LENGTH i = 0; i < size; i++)
     {
-        __uint8_t b = src[i];
-        __uint16_t len = bb->Len;
+        DK_BYTE b = src[i];
+        DK_LENGTH len = bb->Len;
         if (len < bb->Capacity)
         {
             bb->Data[len] = b;
@@ -31,4 +39,9 @@ void ByteBuffer9527Write(ByteBuffer9527 *bb, const __uint8_t *src, DK_LENGTH siz
             break;
         }
     }
+}
+
+void ByteBufferWriteByte(ByteBuffer *bb, DK_BYTE b)
+{
+    ByteBufferWrite(bb, &b, sizeof(b));
 }

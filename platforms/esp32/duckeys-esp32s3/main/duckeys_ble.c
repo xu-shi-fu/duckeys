@@ -1,10 +1,9 @@
 
-#include <esp_bt.h>
-#include <esp_bt_main.h>
-#include <nvs_flash.h>
-#include <memory.h>
 
+#include "duckeys_libs.h"
 #include "duckeys_ble.h"
+#include "duckeys_ble_helper.h"
+#include "duckeys_hub.h"
 #include "duckeys_app.h"
 #include "common/hex.h"
 
@@ -68,9 +67,8 @@ struct gatts_profile_inst
 
 static void duckeys_ble_gatts_event_handler_profile0(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
 
-static const char *duckeys_ble_stringify_gap_event(esp_gap_ble_cb_event_t event);
-
-static const char *duckeys_ble_stringify_gatts_event(esp_gatts_cb_event_t event);
+// static DK_STRING duckeys_ble_stringify_gap_event(esp_gap_ble_cb_event_t event);
+// static DK_STRING duckeys_ble_stringify_gatts_event(esp_gatts_cb_event_t event);
 
 static void duckeys_ble_handle_write_event(DuckeysBLE *self, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
 
@@ -102,7 +100,7 @@ static const uint8_t char_value[4] = {0x11, 0x22, 0x33, 0x44};
 ////////////////////////////////////////////////////////////////////////////////
 // var
 
-static DuckeysHub *the_duckeys_ble_inst = Nil;
+static DuckeysBLE *the_duckeys_ble_inst = Nil;
 
 static uint8_t adv_config_done = 0;
 static bool is_connected = false;
@@ -447,8 +445,8 @@ void duckeys_ble_handle_write_upstream(DuckeysBLE *self, esp_gatt_if_t gatts_if,
     }
 
     uint16_t len = param->write.len;
-    uint8_t *data = param->write.value;
     uint16_t offset = param->write.offset;
+    char *data = (char *)(param->write.value);
 
     if (offset > 0)
     {

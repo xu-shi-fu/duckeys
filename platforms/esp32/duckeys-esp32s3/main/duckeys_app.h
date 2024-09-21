@@ -12,7 +12,7 @@
 #include "duckeys_hub.h"
 #include "duckeys_usb.h"
 
-typedef struct
+typedef struct DuckeysApp_t
 {
 
     DuckeysBLE ble;

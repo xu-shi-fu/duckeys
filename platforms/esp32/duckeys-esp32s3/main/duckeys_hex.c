@@ -1,6 +1,6 @@
 #include "common/hex.h"
 
-ByteBuffer9527 *HexParse(const char *str, ByteBuffer9527 *dst)
+ByteBuffer  *HexParse(DK_STRING str, ByteBuffer *dst)
 {
     const int limit = 0xffff;
     int count = 0;
@@ -33,8 +33,8 @@ ByteBuffer9527 *HexParse(const char *str, ByteBuffer9527 *dst)
         if (count & 0x01)
         {
             // at: 13579...
-            __uint8_t b = num | (n & 0x0f);
-            ByteBuffer9527Write(dst, &b, sizeof(b));
+            DK_BYTE b = num | (n & 0x0f);
+            ByteBufferWrite(dst, &b, sizeof(b));
             num = 0;
         }
         else

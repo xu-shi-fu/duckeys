@@ -4,8 +4,8 @@
 
 #include "bytes.h"
 
-ByteBuffer9527 *HexParse(const char *str, ByteBuffer9527 *dst);
+ByteBuffer *HexParse(DK_STRING str, ByteBuffer *dst);
 
-ByteBuffer9527 *HexStringify(const uint8_t *data, DK_LENGTH len, ByteBuffer9527 *dst);
+ByteBuffer *HexStringify(const DK_BYTE *data, DK_LENGTH len, ByteBuffer *dst);
 
 #endif

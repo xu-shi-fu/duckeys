@@ -1,16 +1,19 @@
+
+#include "duckeys_libs.h"
 #include "duckeys_ble.h"
 #include "common/bytes.h"
+#include "common/hex.h"
+#include "duckeys_ble_helper.h"
 
-const esp_bt_uuid_t *duckeys_ble_parse_uuid_128(DK_STRING str, esp_bt_uuid_t *dst)
+Error duckeys_ble_parse_uuid_128(DK_STRING str, esp_bt_uuid_t *dst)
 {
     uint8_t buffer[16]; // uuid128 = 8bits * 16
-    ByteBuffer9527 bb;
+    ByteBuffer bb;
     const uint16_t size = sizeof(buffer);
 
     memset(&bb, 0, sizeof(bb));
     memset(buffer, 0, size);
-    bb.Capacity = size;
-    bb.Data = buffer;
+    ByteBufferInit(&bb, buffer, size);
     HexParse(str, &bb);
 
     uint8_t i1, i2, v1, v2;
@@ -24,10 +27,10 @@ const esp_bt_uuid_t *duckeys_ble_parse_uuid_128(DK_STRING str, esp_bt_uuid_t *ds
 
     memcpy(dst->uuid.uuid128, buffer, size);
     dst->len = size;
-    return dst;
+    return Nil;
 }
 
-const char *duckeys_ble_stringify_gap_event(esp_gap_ble_cb_event_t event)
+DK_STRING duckeys_ble_stringify_gap_event(esp_gap_ble_cb_event_t event)
 {
     switch (event)
     {
@@ -204,7 +207,7 @@ const char *duckeys_ble_stringify_gap_event(esp_gap_ble_cb_event_t event)
     return "";
 }
 
-const char *duckeys_ble_stringify_gatts_event(esp_gatts_cb_event_t event)
+DK_STRING duckeys_ble_stringify_gatts_event(esp_gatts_cb_event_t event)
 {
     switch (event)
     {

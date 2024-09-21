@@ -1,4 +1,5 @@
 
+#include "duckeys_libs.h"
 #include "duckeys_fifo.h"
 #include "duckeys_app.h"
 

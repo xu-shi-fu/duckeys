@@ -6,10 +6,15 @@
 #include "common/errors.h"
 #include "duckeys_hub.h"
 
-typedef struct
+typedef struct DuckeysUSB_t
 {
     DuckeysHub *hub;
 
+    int debug_note;
+    long debug_count;
+
 } DuckeysUSB;
+
+void duckeys_usb_debug_ontimer();
 
 #endif

@@ -5,7 +5,7 @@
 #include "common/types.h"
 #include "common/errors.h"
 
-typedef struct
+typedef struct  DuckeysLED_t
 {
 
 } DuckeysLED;

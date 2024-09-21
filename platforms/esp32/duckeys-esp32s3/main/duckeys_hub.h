@@ -5,7 +5,7 @@
 #include "common/types.h"
 #include "common/errors.h"
 
-typedef struct
+typedef struct DuckeysHub_t
 {
 
     DK_BYTE upstream_buffer[256];
