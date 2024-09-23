@@ -1,6 +1,6 @@
 package com.bitwormhole.libduckeys.midi;
 
-public interface MIDIConnector {
+public interface MidiUriConnector  {
 
 
 }
