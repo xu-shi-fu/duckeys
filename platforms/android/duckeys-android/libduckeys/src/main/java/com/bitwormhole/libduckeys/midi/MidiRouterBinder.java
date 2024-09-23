@@ -1,13 +1,16 @@
 package com.bitwormhole.libduckeys.midi;
 
-import android.app.Service;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.IBinder;
+import java.io.IOException;
 
-import androidx.annotation.Nullable;
+public interface MidiRouterBinder extends MERT {
 
-public interface MidiRouterConnection extends ServiceConnection {
+    String hello(String msg);
 
+    MidiConfiguration configuration();
 
+    void connect(MidiConfiguration cfg) throws IOException;
+
+    void disconnect() throws IOException;
+
+    int state();
 }

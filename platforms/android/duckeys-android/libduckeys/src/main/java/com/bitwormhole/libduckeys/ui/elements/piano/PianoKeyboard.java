@@ -20,6 +20,8 @@ public class PianoKeyboard extends Container {
 
     private final Container mInnerClient; // 各个 group 实际上放在这个容器里面
 
+    public final PianoKeyTouchManager keyTouchManager;
+
     public int countKeysInView; // 视图内可见的按键个数
     public int firstKeysInView; // 视图内的第一个按键的 index (0~127)
 
@@ -29,6 +31,7 @@ public class PianoKeyboard extends Container {
         groups = this.makeGroups();
         allKeys = this.make128KeysArray(groups);
         mInnerClient = new Container();
+        keyTouchManager = new PianoKeyTouchManager();
         firstKeysInView = 0;
         countKeysInView = 61;
 

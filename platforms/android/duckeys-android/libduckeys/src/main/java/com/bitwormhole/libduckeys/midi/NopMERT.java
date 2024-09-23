@@ -1,12 +1,12 @@
 package com.bitwormhole.libduckeys.midi;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-public final class NopMidiStream implements  MidiStream  {
+public final class NopMERT implements MidiEventHandler , MidiEventDispatcher {
 
     @Override
-    public void write(MidiEvent me) {
+    public void dispatch(MidiEvent me) {
+    }
 
+    @Override
+    public void handle(MidiEvent me) {
     }
 }

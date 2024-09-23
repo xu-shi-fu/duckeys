@@ -1,6 +1,11 @@
 package com.bitwormhole.libduckeys.midi;
 
-public interface MidiUriConnector  {
+import java.net.URI;
 
+import java.io.IOException;
+
+public interface MidiUriConnector {
+
+    MidiUriConnection open(URI uri) throws IOException;
 
 }

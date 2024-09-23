@@ -13,9 +13,9 @@ import com.bitwormhole.libduckeys.ui.boxes.TouchEventAdapter;
  * */
 public class PianoKey extends Container {
 
-    PianoKeyboard ownerKeyboard;
-    PianoKeyGroup ownerGroup;
-    boolean enabled;
+    public PianoKeyboard ownerKeyboard;
+    public PianoKeyGroup ownerGroup;
+    public boolean enabled;
     public final Note note;
     public final PianoKeyLEDBar leds;
 
@@ -46,20 +46,9 @@ public class PianoKey extends Container {
     @Override
     public void onTouch(TouchContext ctx, TouchEventAdapter ada) {
         super.onTouch(ctx, ada);
-
-        MotionEvent event = ada.context.event;
-        int action = event.getAction();
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_HOVER_ENTER:
-                onKeyDown();
-                break;
-            case MotionEvent.ACTION_HOVER_EXIT:
-            case MotionEvent.ACTION_UP:
-                onKeyUp();
-            default:
-                break;
-        }
+        PianoKeyTouchManager ktm = this.ownerKeyboard.keyTouchManager;
+        ktm.handleTouchEvent(this, ada);
+        ada.point.setHandled();
     }
 
     private void onKeyDown() {

@@ -1,7 +1,11 @@
 package com.bitwormhole.libduckeys.ble;
 
-public interface IBluetoothDeviceListHandler {
+public interface IBluetoothScanningCallback {
 
-      void  onDeviceListUpdated (  List <  BluetoothDeviceHolder  > list    ) ;
+    int START = 1;
+    int UPDATED = 2;
+    int FINISH = 3;
+
+    void onScanningStateChanged(int state, IBluetoothDeviceScanner scanner);
 
 }

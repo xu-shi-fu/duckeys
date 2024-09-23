@@ -55,7 +55,8 @@ public class Container extends Element {
 
         super.onTouch(ctx, ada);
 
-        if (ctx.done) return;
+        TouchPoint point = ada.point;
+        if (point.done) return;
 
         if (ada.depth > ctx.depthLimit) {
             throw new RuntimeException("the onTouch-event-path is too deep");
@@ -63,7 +64,7 @@ public class Container extends Element {
 
         // 按从大到小的顺序逐个测试
         forChildren(true, (child) -> {
-            if (ctx.done) {
+            if (point.done) {
                 return;
             }
             if (isHitChild(child, ada)) {
@@ -74,27 +75,17 @@ public class Container extends Element {
     }
 
     private TouchEventAdapter makeTouchEventAdapterForChild(Node child, TouchEventAdapter parent) {
-        float ox = parent.offsetX - child.x;
-        float oy = parent.offsetY - child.y;
-        TouchEventAdapter a2 = new TouchEventAdapter(child, ox, oy, parent);
+        float x2 = parent.x - child.x;
+        float y2 = parent.y - child.y;
+        TouchEventAdapter a2 = new TouchEventAdapter(child, x2, y2, parent);
         return a2;
     }
 
 
     private boolean isHitChild(Node child, TouchEventAdapter parent) {
-        TouchPoint[] points = parent.context.points;
-        for (TouchPoint tp : points) {
-            if (tp.done) {
-                continue;
-            }
-            float x1 = parent.getX(tp.index);
-            float y1 = parent.getY(tp.index);
-            boolean cp = child.containPoint((int) x1, (int) y1);
-            if (cp) {
-                return true;
-            }
-        }
-        return false;
+        float x2 = parent.x;
+        float y2 = parent.y;
+        return child.containPoint((int) x2, (int) y2);
     }
 
 

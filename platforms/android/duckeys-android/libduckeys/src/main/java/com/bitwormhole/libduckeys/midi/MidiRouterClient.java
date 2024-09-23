@@ -11,23 +11,27 @@ import android.util.Log;
 import com.bitwormhole.libduckeys.context.BaseLife;
 import com.bitwormhole.libduckeys.helper.DuckLogger;
 
-public class MidiRouterServiceController extends BaseLife {
+public class MidiRouterClient extends BaseLife implements MERT {
 
     private final Activity mActivity;
     private final Intent mServiceIntent;
+    private final MidiEventRT mMeRT;
+    private MidiRouterBinder mMidiRouterBinder;
 
-    public MidiRouterServiceController(Activity a) {
+
+    public MidiRouterClient(Activity a) {
         mActivity = a;
         mServiceIntent = new Intent(a, MidiRouterService.class);
+        mMeRT = new MidiEventRT();
     }
-
-    private MidiRouterBinder mMidiRouterBinder;
 
     private final ServiceConnection mMidiRouterConn = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder ib) {
             mMidiRouterBinder = (MidiRouterBinder) ib;
+            mMidiRouterBinder.setRx(mMeRT);
+            mMeRT.setTx(mMidiRouterBinder.getTx());
 
             long now = System.currentTimeMillis();
             String msg = mMidiRouterBinder.hello("ts_" + now);
@@ -36,9 +40,20 @@ public class MidiRouterServiceController extends BaseLife {
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
+            mMeRT.setTx(null);
+            mMidiRouterBinder.setRx(null);
             mMidiRouterBinder = null;
         }
     };
+
+
+    public MidiEventDispatcher getTx() {
+        return mMeRT;
+    }
+
+    public void setRx(MidiEventHandler rx) {
+        mMeRT.setRx(rx);
+    }
 
 
     @Override
@@ -56,14 +71,12 @@ public class MidiRouterServiceController extends BaseLife {
     @Override
     public void onPause() {
         super.onPause();
-        // unbind
         mActivity.unbindService(mMidiRouterConn);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        // bind
         mActivity.bindService(mServiceIntent, mMidiRouterConn, Context.BIND_AUTO_CREATE);
     }
 

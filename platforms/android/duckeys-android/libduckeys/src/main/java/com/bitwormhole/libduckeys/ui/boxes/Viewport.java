@@ -69,11 +69,15 @@ public class Viewport extends Box implements RenderAble, LayoutAble, TouchAble {
                 msg = "MotionEvent.ACTION_UP";
                 break;
 
+            case MotionEvent.ACTION_MOVE:
+                // msg = "MotionEvent.ACTION_UP";
+                break;
+
             default:
-                // msg = "MotionEvent.default: " + action;
                 msg = MotionEvent.actionToString(action);
                 break;
         }
+        if (msg == null) return;
         Log.d(DuckLogger.TAG, msg);
     }
 
@@ -85,14 +89,27 @@ public class Viewport extends Box implements RenderAble, LayoutAble, TouchAble {
             return;
         }
 
-        ada = new TouchEventAdapter();
-        ada.context = tc;
-        ada.offsetX = 0;
-        ada.offsetY = 0;
-        ada.parent = null;
-        ada.target = root;
+        TouchPoint[] plist = tc.points;
+        MotionEvent me = tc.event;
+        int ai = me.getActionIndex();
 
-        logOnTouch(tc, ada);
-        root.onTouch(tc, ada);
+        for (TouchPoint tp : plist) {
+
+            if (tp.index != ai) {
+                continue;
+            }
+
+            ada = new TouchEventAdapter();
+            ada.context = tc;
+            ada.depth = 0;
+            ada.parent = null;
+            ada.point = tp;
+            ada.target = root;
+            ada.x = me.getX(tp.index);
+            ada.y = me.getY(tp.index);
+
+            logOnTouch(tc, ada);
+            root.onTouch(tc, ada);
+        }
     }
 }

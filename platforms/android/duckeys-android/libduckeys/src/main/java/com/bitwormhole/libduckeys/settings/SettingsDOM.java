@@ -1,16 +1,19 @@
 package com.bitwormhole.libduckeys.settings;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingGroup extends SettingNode {
+public class SettingsDOM implements Serializable {
 
-    public SettingGroup(SettingContext ctx, String aName, SettingNode aParent) {
-        super(ctx, aName, aParent);
+    private DeviceSettings devices;
+
+
+    public DeviceSettings getDevices() {
+        return devices;
     }
 
-    public List<SettingNode> children() {
-        return new ArrayList<>();
+    public void setDevices(DeviceSettings devices) {
+        this.devices = devices;
     }
-
 }
