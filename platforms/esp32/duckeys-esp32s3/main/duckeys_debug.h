@@ -7,6 +7,7 @@
 
 typedef struct DuckeysDebug_t
 {
+    DK_BOOL Enabled;
 
 } DuckeysDebug;
 

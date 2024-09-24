@@ -8,6 +8,8 @@
 
 typedef struct DuckeysUSB_t
 {
+    DK_BOOL Enabled;
+
     DuckeysHub *hub;
 
     int debug_note;

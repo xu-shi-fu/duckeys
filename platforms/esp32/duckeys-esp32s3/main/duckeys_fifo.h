@@ -5,11 +5,13 @@
 #include "common/types.h"
 #include "common/errors.h"
 
-typedef struct DuckeysFIFO_t
-{
+// 【已弃用】DuckeysFIFO 这个模块已经被弃用，用 DuckeysHub 代替
 
-    // struct DuckeysApp *app;
+// typedef struct DuckeysFIFO_t
+// {
 
-} DuckeysFIFO;
+//     // struct DuckeysApp *app;
+
+// } DuckeysFIFO;
 
 #endif

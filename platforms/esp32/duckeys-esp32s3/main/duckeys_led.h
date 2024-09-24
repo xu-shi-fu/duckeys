@@ -5,8 +5,10 @@
 #include "common/types.h"
 #include "common/errors.h"
 
-typedef struct  DuckeysLED_t
+typedef struct DuckeysLED_t
 {
+
+    DK_BOOL Enabled;
 
 } DuckeysLED;
 

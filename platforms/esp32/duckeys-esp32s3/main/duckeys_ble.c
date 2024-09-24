@@ -10,7 +10,14 @@
 
 enum
 {
-    IDX_SVC,
+    IDX_SERVICE_DUCKEYS,
+
+    IDX_CHAR_BLE_MIDI1,
+    IDX_CHAR_BLE_MIDI1_VAL,
+    IDX_CHAR_BLE_MIDI1_CFG,
+
+    IDX_CHAR_ABOUT,
+    IDX_CHAR_ABOUT_VAL,
 
     IDX_CHAR_UP,
     IDX_CHAR_UP_VAL,
@@ -20,10 +27,7 @@ enum
     IDX_CHAR_DOWN_VAL,
     IDX_CHAR_DOWN_CFG,
 
-    IDX_CHAR_ABOUT,
-    IDX_CHAR_ABOUT_VAL,
-
-    HRS_IDX_NB,
+    COUNT_INDEX_NUMBER,
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -46,10 +50,10 @@ enum
 #define CONFIG_SET_RAW_ADV_DATA
 
 #define DUCKEYS_SERVICE_UUID "03B80E5A-EDE8-4B33-A751-6CE34EC4C700"
-#define DUCKEYS_CHAR_UP_UUID "e7ea0001-8e30-2e58-bdb6-0987991661e8"
-#define DUCKEYS_CHAR_DOWN_UUID "e7ea0002-8e30-2e58-bdb6-0987991661e8"
-#define DUCKEYS_CHAR_ABOUT_UUID "e7ea0003-8e30-2e58-bdb6-0987991661e8"
-#define DUCKEYS_CHAR_MIDI_UUID "7772E5DB-3868-4112-A1A9-F2669D106BF3"
+#define DUCKEYS_CHAR_UP_UUID "6C2A6D6C-B649-47B2-B947-F04D1BC1D2FC"
+#define DUCKEYS_CHAR_DOWN_UUID "55F891E6-22AB-44AA-B720-7510BB8F07FC"
+#define DUCKEYS_CHAR_ABOUT_UUID "8E5169B6-3642-41BD-9957-F0039FCA0280"
+#define DUCKEYS_CHAR_MIDI1_UUID "7772E5DB-3868-4112-A1A9-F2669D106BF3"
 
 ////////////////////////////////////////////////////////////////////////////////
 // struct
@@ -85,7 +89,7 @@ static const uint16_t character_client_config_uuid = ESP_GATT_UUID_CHAR_CLIENT_C
 
 // static const uint16_t GATTS_SERVICE_UUID_TEST = 0x2233;
 static esp_bt_uuid_t duckeys_service_uuid;
-static esp_bt_uuid_t duckeys_char_midi_uuid;
+static esp_bt_uuid_t duckeys_char_midi1_uuid;
 static esp_bt_uuid_t duckeys_char_down_uuid;
 static esp_bt_uuid_t duckeys_char_up_uuid;
 static esp_bt_uuid_t duckeys_char_about_uuid;
@@ -112,7 +116,7 @@ static bool is_connected = false;
 static uint16_t spp_conn_id = 0;
 static esp_gatt_if_t spp_gatts_if = 0xff;
 
-static uint16_t heart_rate_handle_table[HRS_IDX_NB];
+static uint16_t heart_rate_handle_table[COUNT_INDEX_NUMBER];
 
 static esp_ble_adv_params_t adv_params = {
     .adv_int_min = 0x20,
@@ -147,42 +151,49 @@ static uint8_t raw_adv_data[] = {
 
 /* Full Database Description - Used to add attributes into the database */
 // { { auto_rsp } , { uuid_length, uuid_ptr, perm, max_length, length, value_ptr } }
-static const esp_gatts_attr_db_t gatt_db[HRS_IDX_NB] =
+static const esp_gatts_attr_db_t gatt_db[COUNT_INDEX_NUMBER] =
     {
-        // Service Declaration
-        [IDX_SVC] =
+        // Service : Duckeys BLE MIDI
+        [IDX_SERVICE_DUCKEYS] =
             {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&primary_service_uuid, ESP_GATT_PERM_READ, ESP_UUID_LEN_128, ESP_UUID_LEN_128, (uint8_t *)duckeys_service_uuid.uuid.uuid128}},
 
-        /* Characteristic Declaration */
-        [IDX_CHAR_UP] =
-            {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&character_declaration_uuid, ESP_GATT_PERM_READ, CHAR_DECLARATION_SIZE, CHAR_DECLARATION_SIZE, (uint8_t *)&char_prop_write}},
+        // Characteristic : BLE MIDI 1.0 data
 
-        /* Characteristic Value */
-        [IDX_CHAR_UP_VAL] =
-            {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_128, (uint8_t *)duckeys_char_up_uuid.uuid.uuid128, ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE, GATTS_DEMO_CHAR_VAL_LEN_MAX, sizeof(char_value), (uint8_t *)char_value}},
-
-        /* Client Characteristic Configuration Descriptor */
-        [IDX_CHAR_UP_CFG] =
-            {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&character_client_config_uuid, ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE, sizeof(uint16_t), sizeof(heart_measurement_ccc), (uint8_t *)heart_measurement_ccc}},
-
-        /* Characteristic Declaration */
-        [IDX_CHAR_DOWN] =
+        [IDX_CHAR_BLE_MIDI1] =
             {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&character_declaration_uuid, ESP_GATT_PERM_READ, CHAR_DECLARATION_SIZE, CHAR_DECLARATION_SIZE, (uint8_t *)&char_prop_read_write_notify}},
 
-        /* Characteristic Value */
-        [IDX_CHAR_DOWN_VAL] =
-            {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_128, (uint8_t *)duckeys_char_down_uuid.uuid.uuid128, ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE, GATTS_DEMO_CHAR_VAL_LEN_MAX, sizeof(char_value), (uint8_t *)char_value}},
+        [IDX_CHAR_BLE_MIDI1_VAL] =
+            {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_128, (uint8_t *)duckeys_char_midi1_uuid.uuid.uuid128, ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE, GATTS_DEMO_CHAR_VAL_LEN_MAX, sizeof(char_value), (uint8_t *)char_value}},
 
-        /* Client Characteristic Configuration Descriptor */
-        [IDX_CHAR_DOWN_CFG] =
+        [IDX_CHAR_BLE_MIDI1_CFG] =
             {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&character_client_config_uuid, ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE, sizeof(uint16_t), sizeof(heart_measurement_ccc), (uint8_t *)heart_measurement_ccc}},
 
+        // Characteristic: duckeys device about info
         [IDX_CHAR_ABOUT] =
             {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&character_declaration_uuid, ESP_GATT_PERM_READ, CHAR_DECLARATION_SIZE, CHAR_DECLARATION_SIZE, (uint8_t *)&char_prop_read_only}},
 
-        /* Characteristic Value */
         [IDX_CHAR_ABOUT_VAL] =
             {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_128, (uint8_t *)duckeys_char_about_uuid.uuid.uuid128, ESP_GATT_PERM_READ, sizeof(duckeys_about_info), sizeof(duckeys_about_info), (uint8_t *)duckeys_about_info}},
+
+        // Characteristic: duckeys midi data upstream
+        [IDX_CHAR_UP] =
+            {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&character_declaration_uuid, ESP_GATT_PERM_READ, CHAR_DECLARATION_SIZE, CHAR_DECLARATION_SIZE, (uint8_t *)&char_prop_write}},
+
+        [IDX_CHAR_UP_VAL] =
+            {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_128, (uint8_t *)duckeys_char_up_uuid.uuid.uuid128, ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE, GATTS_DEMO_CHAR_VAL_LEN_MAX, sizeof(char_value), (uint8_t *)char_value}},
+
+        [IDX_CHAR_UP_CFG] =
+            {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&character_client_config_uuid, ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE, sizeof(uint16_t), sizeof(heart_measurement_ccc), (uint8_t *)heart_measurement_ccc}},
+
+        // Characteristic: duckeys midi data downstream
+        [IDX_CHAR_DOWN] =
+            {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&character_declaration_uuid, ESP_GATT_PERM_READ, CHAR_DECLARATION_SIZE, CHAR_DECLARATION_SIZE, (uint8_t *)&char_prop_read_write_notify}},
+
+        [IDX_CHAR_DOWN_VAL] =
+            {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_128, (uint8_t *)duckeys_char_down_uuid.uuid.uuid128, ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE, GATTS_DEMO_CHAR_VAL_LEN_MAX, sizeof(char_value), (uint8_t *)char_value}},
+
+        [IDX_CHAR_DOWN_CFG] =
+            {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&character_client_config_uuid, ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE, sizeof(uint16_t), sizeof(heart_measurement_ccc), (uint8_t *)heart_measurement_ccc}},
 
 };
 
@@ -370,13 +381,13 @@ static void duckeys_ble_gatts_event_handler_profile0(esp_gatts_cb_event_t event,
 
 #endif
 
-        esp_err_t create_attr_ret = esp_ble_gatts_create_attr_tab(gatt_db, gatts_if, HRS_IDX_NB, SVC_INST_ID);
+        esp_err_t create_attr_ret = esp_ble_gatts_create_attr_tab(gatt_db, gatts_if, COUNT_INDEX_NUMBER, SVC_INST_ID);
         if (create_attr_ret)
         {
             ESP_LOGE(DUCKEYS_LOG_TAG, "create attr table failed, error code = %x", create_attr_ret);
         }
 
-        esp_ble_gatts_create_service(gatts_if, &heart_rate_profile_tab[DUCKEYS_PROFILE_P0_ID].service_id, HRS_IDX_NB);
+        esp_ble_gatts_create_service(gatts_if, &heart_rate_profile_tab[DUCKEYS_PROFILE_P0_ID].service_id, COUNT_INDEX_NUMBER);
         break;
     }
 
@@ -386,17 +397,17 @@ static void duckeys_ble_gatts_event_handler_profile0(esp_gatts_cb_event_t event,
         {
             ESP_LOGE(DUCKEYS_LOG_TAG, "create attribute table failed, error code=0x%x", param->add_attr_tab.status);
         }
-        else if (param->add_attr_tab.num_handle != HRS_IDX_NB)
+        else if (param->add_attr_tab.num_handle != COUNT_INDEX_NUMBER)
         {
             ESP_LOGE(DUCKEYS_LOG_TAG, "create attribute table abnormally, num_handle (%d) \
                         doesn't equal to HRS_IDX_NB(%d)",
-                     param->add_attr_tab.num_handle, HRS_IDX_NB);
+                     param->add_attr_tab.num_handle, COUNT_INDEX_NUMBER);
         }
         else
         {
             ESP_LOGI(DUCKEYS_LOG_TAG, "create attribute table successfully, the number handle = %d", param->add_attr_tab.num_handle);
             memcpy(heart_rate_handle_table, param->add_attr_tab.handles, sizeof(heart_rate_handle_table));
-            esp_ble_gatts_start_service(heart_rate_handle_table[IDX_SVC]);
+            esp_ble_gatts_start_service(heart_rate_handle_table[IDX_SERVICE_DUCKEYS]);
         }
         break;
     }
@@ -488,15 +499,19 @@ int duckeys_hub_handle_down_string(DuckeysHub *self, DK_STRING str)
 // 初始化 BLE 模块
 Error duckeys_ble_init(DuckeysBLE *self, DuckeysApp *app)
 {
+    the_duckeys_ble_inst = self;
+    if (!self->Enabled)
+    {
+        ESP_LOGW(DUCKEYS_LOG_TAG, "module_ble: disabled");
+        return Nil;
+    }
     ESP_LOGI(DUCKEYS_LOG_TAG, "duckeys_ble_init - begin");
 
-    the_duckeys_ble_inst = self;
-
     duckeys_ble_parse_uuid_128(DUCKEYS_SERVICE_UUID, &duckeys_service_uuid);
-    duckeys_ble_parse_uuid_128(DUCKEYS_CHAR_MIDI_UUID, &duckeys_char_midi_uuid);
+    duckeys_ble_parse_uuid_128(DUCKEYS_CHAR_MIDI1_UUID, &duckeys_char_midi1_uuid);
+    duckeys_ble_parse_uuid_128(DUCKEYS_CHAR_ABOUT_UUID, &duckeys_char_about_uuid);
     duckeys_ble_parse_uuid_128(DUCKEYS_CHAR_DOWN_UUID, &duckeys_char_down_uuid);
     duckeys_ble_parse_uuid_128(DUCKEYS_CHAR_UP_UUID, &duckeys_char_up_uuid);
-    duckeys_ble_parse_uuid_128(DUCKEYS_CHAR_ABOUT_UUID, &duckeys_char_about_uuid);
 
     esp_err_t ret;
     esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();

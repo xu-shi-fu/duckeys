@@ -14,6 +14,13 @@ void duckeys_debug_timer_task(void *arg)
 
 Error duckeys_debug_init(DuckeysDebug *self, DuckeysApp *app)
 {
+
+    if (!self->Enabled)
+    {
+        ESP_LOGW(DUCKEYS_LOG_TAG, "module_debug: disabled");
+        return Nil;
+    }
+
     ESP_LOGI(DUCKEYS_LOG_TAG, "duckeys_debug_init");
     xTaskCreate(duckeys_debug_timer_task, "duckeys_debug_timer_task", 2048, NULL, 10, NULL);
     return Nil;

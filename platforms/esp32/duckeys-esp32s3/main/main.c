@@ -9,15 +9,15 @@ typedef struct
 
 } DuckeysAppImpl;
 
-static DuckeysAppImpl theApp;
+static DuckeysAppImpl the_app_inst;
 
 void app_main(void)
 {
     ESP_LOGI(DUCKEYS_LOG_TAG, "app_main, begin");
 
-    memset(&theApp, 0, sizeof(theApp));
-    DuckeysAppImpl *impl = &theApp;
+    DuckeysAppImpl *impl = &the_app_inst;
     DuckeysApp *app = &impl->app;
+    memset(app, 0, sizeof(DuckeysApp));
 
     app->ble.hub = &app->hub;
     app->usb.hub = &app->hub;

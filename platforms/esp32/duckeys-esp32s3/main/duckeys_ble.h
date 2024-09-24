@@ -8,6 +8,8 @@
 
 typedef struct DuckeysBLE_t
 {
+    DK_BOOL Enabled;
+
     DuckeysHub *hub;
 
     DK_BOOL is_connected;

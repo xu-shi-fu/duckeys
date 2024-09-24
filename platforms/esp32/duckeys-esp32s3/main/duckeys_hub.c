@@ -7,8 +7,14 @@
 
 Error duckeys_hub_init(DuckeysHub *self, DuckeysApp *app)
 {
-    ESP_LOGI(DUCKEYS_LOG_TAG, "duckeys_hub_init");
+    if (!self->Enabled)
+    {
+        ESP_LOGW(DUCKEYS_LOG_TAG, "module_hub: disabled");
+        return Nil;
+    }
 
+    ESP_LOGI(DUCKEYS_LOG_TAG, "duckeys_hub_init - begin");
+    ESP_LOGI(DUCKEYS_LOG_TAG, "duckeys_hub_init - end");
     return Nil;
 }
 

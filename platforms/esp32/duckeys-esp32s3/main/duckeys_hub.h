@@ -7,6 +7,7 @@
 
 typedef struct DuckeysHub_t
 {
+    DK_BOOL Enabled;
 
     DK_BYTE upstream_buffer[256];
     DK_BYTE downstream_buffer[256];

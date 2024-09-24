@@ -18,9 +18,10 @@ typedef struct DuckeysApp_t
     DuckeysBLE ble;
     DuckeysDebug debug;
     DuckeysLED led;
-    DuckeysFIFO fifo;
     DuckeysHub hub;
     DuckeysUSB usb;
+
+    // DuckeysFIFO fifo;
 
 } DuckeysApp;
 
@@ -30,10 +31,11 @@ Error duckeys_app_init(DuckeysApp *self);
 // 初始化指定的各个模块
 
 Error duckeys_ble_init(DuckeysBLE *self, DuckeysApp *app);
-Error duckeys_fifo_init(DuckeysFIFO *self, DuckeysApp *app);
 Error duckeys_debug_init(DuckeysDebug *self, DuckeysApp *app);
 Error duckeys_usb_init(DuckeysUSB *self, DuckeysApp *app);
 Error duckeys_led_init(DuckeysLED *self, DuckeysApp *app);
 Error duckeys_hub_init(DuckeysHub *self, DuckeysApp *app);
+
+// Error duckeys_fifo_init(DuckeysFIFO *self, DuckeysApp *app);
 
 #endif

@@ -127,9 +127,13 @@ void duckeys_usb_debug_ontimer()
 
 Error duckeys_usb_init(DuckeysUSB *self, DuckeysApp *app)
 {
-    ESP_LOGI(DUCKEYS_LOG_TAG, "duckeys_usb_init - begin");
-
     the_duckeys_usb_inst = self;
+    if (!self->Enabled)
+    {
+        ESP_LOGW(DUCKEYS_LOG_TAG, "module_usb: disabled");
+        return Nil;
+    }
+    ESP_LOGI(DUCKEYS_LOG_TAG, "duckeys_usb_init - begin");
 
     tinyusb_config_t const tusb_cfg = {
         .device_descriptor = &desc_device, // If device_descriptor is NULL, tinyusb_driver_install() will use Kconfig
