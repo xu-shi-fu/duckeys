@@ -8,11 +8,8 @@ public class TouchContext {
     public View view;
     public final MotionEvent event;
     public final TouchPoint[] points; // 列出所有待处理的触摸点
-
     public int depthLimit;
 
-    // done 如果等于 true，表示所有的触点已被处理
-    public boolean done;
 
     public TouchContext(MotionEvent me) {
         this.depthLimit = 32;
@@ -30,39 +27,5 @@ public class TouchContext {
             list[i] = tp;
         }
         return list;
-    }
-
-    private void forPoint(int index, TouchPoint.Handler h) {
-        TouchPoint[] all = points;
-        if (0 <= index && index < all.length) {
-            TouchPoint tp = all[index];
-            h.handlePoint(tp);
-        }
-    }
-
-    private void updateDone() {
-        int todo = 0;
-        for (TouchPoint item : points) {
-            if (!item.done) {
-                todo++;
-            }
-        }
-        done = (todo <= 0);
-    }
-
-    public void setPointHandled(int index) {
-        forPoint(index, (tp) -> {
-            tp.handled = true;
-            tp.done = true;
-            updateDone();
-        });
-    }
-
-    public void setPointCancelled(int index) {
-        forPoint(index, (tp) -> {
-            tp.cancelld = true;
-            tp.done = true;
-            updateDone();
-        });
     }
 }

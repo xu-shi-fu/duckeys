@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activities.CurrentDeviceActivity">
+
+
+    <Button
+        android:id="@+id/button_show_history_device_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="显示曾经连接过的设备..." />
+
+    <Button
+        android:id="@+id/button_add_new_device"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="+连接到一个新的设备" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="当前连接的设备:" />
+
+    <TextView
+        android:id="@+id/text_current_device_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(name)"
+        android:textSize="33dp" />
+
+    <TextView
+        android:id="@+id/text_current_device_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(type)" />
+
+    <TextView
+        android:id="@+id/text_current_device_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(address)" />
+
+</LinearLayout>

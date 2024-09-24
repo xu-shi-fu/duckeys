@@ -3,11 +3,12 @@ package com.bitwormhole.libduckeys.ui.boxes;
 public class TouchEventAdapter {
 
     public int depth;
-    public float offsetX;
-    public float offsetY;
+    public float x; // 相对 target 的 x
+    public float y; // 相对 target 的 y
     public Node target;
     public TouchContext context;
     public TouchEventAdapter parent;
+    public TouchPoint point;
 
     // init
     public TouchEventAdapter() {
@@ -16,42 +17,22 @@ public class TouchEventAdapter {
     // copy
     public TouchEventAdapter(TouchEventAdapter src) {
         this.target = src.target;
-        this.offsetX = src.offsetX;
-        this.offsetY = src.offsetY;
+        this.x = src.x;
+        this.y = src.y;
         this.parent = src.parent;
         this.context = src.context;
         this.depth = src.depth;
+        this.point = src.point;
     }
 
     // make child
-    public TouchEventAdapter(Node aTarget, float offx, float offy, TouchEventAdapter aParent) {
+    public TouchEventAdapter(Node aTarget, float xInNode, float yInNode, TouchEventAdapter aParent) {
         this.target = aTarget;
-        this.offsetX = offx;
-        this.offsetY = offy;
+        this.x = xInNode;
+        this.y = yInNode;
         this.parent = aParent;
         this.context = aParent.context;
         this.depth = aParent.depth + 1;
+        this.point = aParent.point;
     }
-
-
-    public float getX() {
-        float x = context.event.getX();
-        return x + offsetX;
-    }
-
-    public float getX(int indexPtr) {
-        float x = context.event.getX(indexPtr);
-        return x + offsetX;
-    }
-
-    public float getY() {
-        float y = context.event.getY();
-        return y + offsetY;
-    }
-
-    public float getY(int indexPtr) {
-        float y = context.event.getY(indexPtr);
-        return y + offsetY;
-    }
-
 }

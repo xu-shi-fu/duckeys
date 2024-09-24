@@ -150,6 +150,9 @@ public class PianoKeyGroup extends Container {
             addChild(black);
             black.z = 2;
         }
+        for (PianoKey pk : keys12) {
+            pk.ownerKeyboard = this.ownerKeyboard;
+        }
     }
 
     private int getBlackKeyHeight() {
