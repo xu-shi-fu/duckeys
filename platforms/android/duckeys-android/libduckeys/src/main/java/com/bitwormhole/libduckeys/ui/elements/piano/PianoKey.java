@@ -36,7 +36,7 @@ public class PianoKey extends Container {
         int c1 = Color.GRAY;
 
         PianoKeyLED led0 = new PianoKeyLED();
-        led0.text = note.fullname;
+        led0.text = note.name;
         led0.colorCurrent = c0;
         led0.colorNormal = c0;
         led0.colorText = c1;

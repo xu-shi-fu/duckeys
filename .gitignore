@@ -86,3 +86,5 @@ lint/tmp/
 
 # Android Profiling
 *.hprof
+platforms/android/duckeys-android/.idea/misc.xml
+platforms/android/duckeys-android/.idea/misc.xml

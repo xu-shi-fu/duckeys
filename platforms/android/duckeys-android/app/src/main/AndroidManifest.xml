@@ -53,6 +53,7 @@
         <activity android:name="com.bitwormhole.libduckeys.ui.activities.MidiConnectionActivity" />
         <activity android:name="com.bitwormhole.libduckeys.ui.activities.CurrentDeviceActivity" />
         <activity android:name="com.bitwormhole.libduckeys.ui.activities.HistoryDeviceActivity" />
+        <activity android:name="com.bitwormhole.libduckeys.ui.activities.SimplePadActivity" />
 
     </application>
 

@@ -33,4 +33,10 @@
         android:layout_height="wrap_content"
         android:text="Show Current Device" />
 
+    <Button
+        android:id="@+id/button_show_simple_midi_pad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Show Simple MIDI Pad" />
+
 </LinearLayout>

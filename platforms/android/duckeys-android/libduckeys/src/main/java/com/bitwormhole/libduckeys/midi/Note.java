@@ -3,27 +3,41 @@ package com.bitwormhole.libduckeys.midi;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public final class Note {
 
-    public final char name; // 按键的音名，取值为(C,D,E,F,G,A,B)其中之一
+    public final char key; // 按键名，取值为(C,D,E,F,G,A,B)其中之一; 与 sharp 字段组合构成音名
     public final boolean sharp;  // 是否为黑键 (指带 # 记号)
     public final int group; // 所在 group 的 ID
-    public final String fullname; // 音符的全名，例如："F#-2"
     public final int index;  // 在 midi[128] 音符数组中的索引
+    public final int midi;  // midi 音符的值 (它的值应该与 index 相同)
+    public final float frequency;  // midi 音符的 频率，单位：Hz
+
+    public final String name; // 音符的全名，例如："F#-2"
+
 
     private Note(Builder b) {
-        String simpleName = String.valueOf(b.name).toUpperCase();
-        name = b.name;
+        String simpleName = String.valueOf(b.key).toUpperCase();
+        key = simpleName.charAt(0);
         sharp = b.sharp;
         group = b.group;
-        index = Convert.computeNoteIndex(b);
-        fullname = simpleName + (sharp ? "#" : "") + b.group;
+        midi = b.value;
+        index = b.value;
+        frequency = b.frequency;
+        name = simpleName + (sharp ? "#" : "") + b.group;
     }
+
+
+    // public /////////////////////////////////////////////////
 
     @NonNull
     @Override
     public String toString() {
-        return fullname;
+        return name;
     }
 
     @Override
@@ -40,156 +54,274 @@ public final class Note {
         if (other instanceof Note) {
             Note o1 = this;
             Note o2 = (Note) other;
-            return o1.index == o2.index;
+            return o1.midi == o2.midi;
         }
         return false;
     }
 
-    private static final Note[] cache = new Note[128];
-    private static final Note theErrNote = makeErrNote();
+    public static Note forNote(int index) {
+        Cache c = getCache();
+        return c.findByIndex(index, true);
+    }
 
+    public static Note forNote(String name) {
+        Cache c = getCache();
+        return c.findByFilter((n) -> {
+            return n.name.equals(name);
+        }, true);
+    }
+
+    public static Note forNote(char key, boolean sharp, int group) {
+        Cache c = getCache();
+        return c.findByFilter((n) -> {
+            return ((key == n.key) && (sharp == n.sharp) & (group == n.group));
+        }, true);
+    }
+
+    public static Note[] listAll() {
+        Cache c = getCache();
+        Note[] src = c.notes;
+        Note[] dst = new Note[src.length];
+        for (int i = 0; i < src.length; i++) {
+            dst[i] = src[i];
+        }
+        return dst;
+    }
+
+
+    // private /////////////////////////////////////////////////
+
+    private static Cache cache;
 
     private static Note makeErrNote() {
         Builder b = new Builder();
+        b.key = 'z';
+        b.frequency = 1;
         return b.create();
+    }
+
+    private static Cache getCache() {
+        Cache c = cache;
+        if (c == null) {
+            c = loadCache();
+            cache = c;
+        }
+        return c;
+    }
+
+    private static Cache loadCache() {
+        Cache c = new Cache();
+        c.err = makeErrNote();
+        c.notes = getAllNotes();
+        return c;
+    }
+
+    private final static class Cache {
+        private Note[] notes;
+        private Note err;
+
+        Note findByFilter(Filter f, boolean no_nil) {
+            Note[] all = notes;
+            for (Note item : all) {
+                if (item == null) {
+                    continue;
+                }
+                if (f.accept(item)) {
+                    return item;
+                }
+            }
+            if (no_nil) {
+                return err;
+            }
+            return null;
+        }
+
+        Note findByIndex(int index, boolean no_nil) {
+            Note[] all = notes;
+            Note have = null;
+            if (0 <= index && index < all.length) {
+                have = all[index];
+            }
+            if (have == null && no_nil) {
+                have = err;
+            }
+            return have;
+        }
+    }
+
+    private static interface Filter {
+        boolean accept(Note n);
     }
 
     private final static class Builder {
 
-        public char name;
+        public char key;
         public boolean sharp;
         public int group;
+        public int value;
+        public float frequency;
 
         public Note create() {
             return new Note(this);
         }
     }
 
-    private final static class Convert {
 
-        static char charAt(String str, int i) {
-            int len = str.length();
-            if ((0 <= i) && (i < len)) {
-                return str.charAt(i);
-            }
-            return 'x';
+    private final static class ShiftNoteGroupBuilder {
+
+        private final Note[] g0;
+        private final Map<String, Note> table; // map full-name to note
+
+        public ShiftNoteGroupBuilder(Note[] ref) {
+            this.g0 = ref;
+            this.table = new HashMap<>();
         }
 
-        public static Note parseNote(String name) {
-            if (name == null) {
-                return theErrNote;
+        // @Param shift 表示与基准音符组的偏移（即相差的八度个数）
+        // @return 返回成功添加的音符个数
+        public int addGroupNotes(int shift) {
+            int count = 0;
+            for (Note note0 : g0) {
+                Note note1 = makeNote(note0, shift);
+                if (note1 != null) {
+                    table.put(note1.name, note1);
+                    count++;
+                }
             }
-            String name2 = name.toUpperCase();
-            char ch0 = charAt(name2, 0);
-            char ch1 = charAt(name2, 1);
+            return count;
+        }
+
+        public Note makeNote(Note n0, final int shift) {
             Builder b = new Builder();
-            b.name = ch0;
-            b.sharp = (ch1 == '#');
-            try {
-                String group = name.substring(b.sharp ? 2 : 1);
-                b.group = Integer.parseInt(group);
-            } catch (Exception e) {
-                b.group = 0;
+            b.sharp = n0.sharp;
+            b.key = n0.key;
+            b.frequency = n0.frequency;
+            b.value = n0.midi;
+            b.group = n0.group;
+            int step = shift;
+            if (step < 0) {
+                for (; step < 0; step++) {
+                    b.frequency /= 2;
+                    b.value -= 12;
+                    b.group--;
+                }
+            } else if (step > 0) {
+                for (; step > 0; step--) {
+                    b.frequency *= 2;
+                    b.value += 12;
+                    b.group++;
+                }
+            }
+            if (b.value < 0 || 127 < b.value) {
+                return null;
             }
             return b.create();
         }
 
-        static final int theGroupShift = 2;
 
-        private static final String[] theGroupKeys = {
-                "C", "C#", "D", "D#", "E",
-                "F", "F#", "G", "G#", "A", "A#", "B"
-        };
+        public Note[] create() {
+            List<Note> list = new ArrayList<>();
+            table.values().forEach((item) -> {
+                list.add(item);
+            });
+            list.sort((a, b) -> {
+                return a.index - b.index;
+            });
+            Note[] arr = new Note[list.size()];
+            return list.toArray(arr);
+        }
+    }
 
-        public static Note createNoteWithIndex(int index) {
-            if (index < 0 || 127 < index) {
-                return theErrNote;
+    private final static class ReferenceNoteGroupBuilder {
+
+        private final List<Note> list;
+        private final Note ref;
+
+        public ReferenceNoteGroupBuilder(Note base) {
+            list = new ArrayList<>();
+            ref = base;
+        }
+
+        void add(int offset, char key, char sharp) {
+            final float et12 = 1.0594630943593F; // 12平均律的系数
+            float f = ref.frequency;
+            int step = offset;
+            if (step < 0) {
+                for (; step < 0; step++) {
+                    f = f / et12;
+                }
+            } else if (step > 0) {
+                for (; step > 0; step--) {
+                    f = f * et12;
+                }
             }
-            final int nKey = index % 12;
-            final int nGroup = index / 12;
-            String keyName = theGroupKeys[nKey];
-            char ch0 = charAt(keyName, 0);
-            char ch1 = charAt(keyName, 1);
             Builder b = new Builder();
-            b.name = ch0;
-            b.sharp = (ch1 == '#');
-            b.group = nGroup - theGroupShift;
-            return b.create();
+            b.group = ref.group;
+            b.value = ref.midi + offset;
+            b.frequency = f;
+            b.sharp = (sharp == '#');
+            b.key = key;
+            list.add(b.create());
         }
 
-        public static int computeNoteIndex(Builder b) {
-            int base = (b.group + theGroupShift) * 12;
-            int offset = 0;
-            switch (b.name) {
-                case 'C':
-                    offset = 0;
-                    break;
-                case 'D':
-                    offset = 2;
-                    break;
-                case 'E':
-                    offset = 4;
-                    break;
-                case 'F':
-                    offset = 5;
-                    break;
-                case 'G':
-                    offset = 7;
-                    break;
-                case 'A':
-                    offset = 9;
-                    break;
-                case 'B':
-                    offset = 11;
-                    break;
-                default:
-                    break;
-            }
-            if (b.sharp) {
-                offset++;
-            }
-            return base + offset;
+        public Note[] create() {
+            int count = list.size();
+            Note[] arr = new Note[count];
+            return list.toArray(arr);
         }
     }
 
 
-    private static Note load(Note want) {
-        final int min = 0;
-        final int max = cache.length - 1;
-        if (want == null) {
-            want = theErrNote;
+    // 获取所有音符
+    private static Note[] getAllNotes() {
+        Note[] ref = getReferenceNoteGroup();
+        ShiftNoteGroupBuilder b = new ShiftNoteGroupBuilder(ref);
+        for (int shift = -1; ; shift--) {
+            int count = b.addGroupNotes(shift);
+            if (count <= 0) {
+                break;
+            }
         }
-        int index = want.index;
-        if ((min <= index) && (index <= max)) {
-            // good, NOP
-        } else {
-            index = min;
-            want = theErrNote;
+        b.addGroupNotes(0);
+        for (int shift = 1; ; shift++) {
+            int count = b.addGroupNotes(shift);
+            if (count <= 0) {
+                break;
+            }
         }
-        Note have = cache[index];
-        if (have == null) {
-            have = want;
-            cache[index] = want;
-        }
-        return have;
+        return b.create();
     }
 
+    // 获取参考音符组
+    private static Note[] getReferenceNoteGroup() {
 
-    public static Note forNote(char name, boolean sharp, int group) {
+        Note a440 = getReferenceNote();
+        ReferenceNoteGroupBuilder b = new ReferenceNoteGroupBuilder(a440);
+
+        b.add(-9, 'C', '-');
+        b.add(-8, 'C', '#');
+        b.add(-7, 'D', '-');
+        b.add(-6, 'D', '#');
+        b.add(-5, 'E', '-');
+        b.add(-4, 'F', '-');
+        b.add(-3, 'F', '#');
+        b.add(-2, 'G', '-');
+        b.add(-1, 'G', '#');
+        b.add(0, 'A', '-');
+        b.add(1, 'A', '#');
+        b.add(2, 'B', '-');
+
+        return b.create();
+    }
+
+    // 获取参考音符 (A,440Hz)
+    private static Note getReferenceNote() {
         Builder b = new Builder();
-        b.name = name;
-        b.sharp = sharp;
-        b.group = group;
-        return load(b.create());
-    }
-
-    public static Note forNote(int index) {
-        Note want = Convert.createNoteWithIndex(index);
-        return load(want);
-    }
-
-    public static Note forNote(String name) {
-        Note want = Convert.parseNote(name);
-        return load(want);
+        b.key = 'A';
+        b.sharp = false;
+        b.frequency = 440;
+        b.group = 3;
+        b.value = 69;
+        return b.create();
     }
 }

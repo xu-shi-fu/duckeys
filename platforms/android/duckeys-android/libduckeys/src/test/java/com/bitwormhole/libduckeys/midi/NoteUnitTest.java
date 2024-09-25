@@ -50,18 +50,39 @@ public class NoteUnitTest {
         }
     }
 
+
+    @Test
+    public void doListAllNotesTest() {
+        Note[] all = Note.listAll();
+        StringBuilder sb = new StringBuilder();
+        for (int i = all.length - 1; i >= 0; i--) {
+            Note item = all[i];
+            sb.setLength(0);
+            sb.append("[Note");
+            sb.append(" index:").append(item.index);
+            sb.append(" midi:").append(item.midi);
+            sb.append(" group:").append(item.group);
+            sb.append(" name:").append(item.name);
+            sb.append(" freq:").append(item.frequency);
+            sb.append("]");
+            System.out.println(sb);
+        }
+    }
+
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static class TestItem {
+        int midi;
         int index;
         int group;
-        String fullname;
+        String name;
         boolean sharp;
         char key;
 
         void testSelf() {
             Note n1 = Note.forNote(index);
-            Note n2 = Note.forNote(fullname);
+            Note n2 = Note.forNote(name);
             Note n3 = Note.forNote(key, sharp, group);
 
             checkNote("n1", n1);
@@ -71,7 +92,7 @@ public class NoteUnitTest {
 
         void checkNote(String tag, Note n) {
 
-            if (n.name != this.key) {
+            if (n.key != this.key) {
                 throwError(tag, n, "bad key");
             }
 
@@ -87,7 +108,11 @@ public class NoteUnitTest {
                 throwError(tag, n, "bad index");
             }
 
-            if (!this.fullname.equals(n.fullname)) {
+            if (n.midi != this.midi) {
+                throwError(tag, n, "bad midi-value");
+            }
+
+            if (!this.name.equals(n.name)) {
                 throwError(tag, n, "bad fullname");
             }
         }
@@ -141,7 +166,7 @@ public class NoteUnitTest {
 
         TestItem create() {
             TestItem ti = new TestItem();
-            ti.fullname = mFullName;
+            ti.name = mFullName;
             ti.group = mGroup;
             ti.index = mIndex;
             ti.key = mKey;

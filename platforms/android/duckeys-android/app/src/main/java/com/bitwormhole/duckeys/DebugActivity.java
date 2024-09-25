@@ -9,6 +9,7 @@ import com.bitwormhole.libduckeys.ui.activities.BluetoothScanningActivity;
 import com.bitwormhole.libduckeys.ui.activities.CurrentDeviceActivity;
 import com.bitwormhole.libduckeys.ui.activities.MidiConnectionActivity;
 import com.bitwormhole.libduckeys.ui.activities.PianoKeyboardActivity;
+import com.bitwormhole.libduckeys.ui.activities.SimplePadActivity;
 
 public class DebugActivity extends Activity {
 
@@ -28,6 +29,10 @@ public class DebugActivity extends Activity {
         });
         findViewById(R.id.button_show_current_device).setOnClickListener((v) -> {
             Intent i = new Intent(this, CurrentDeviceActivity.class);
+            startActivity(i);
+        });
+        findViewById(R.id.button_show_simple_midi_pad).setOnClickListener((v) -> {
+            Intent i = new Intent(this, SimplePadActivity.class);
             startActivity(i);
         });
     }

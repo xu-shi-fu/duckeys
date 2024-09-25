@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:alignmentMode="alignBounds"
+    android:columnCount="4"
+    android:orientation="vertical"
+    android:rowCount="4"
+    tools:context="com.bitwormhole.libduckeys.ui.views.MidiPadView">
+
+
+    <Button
+        android:id="@+id/button_pad_b0"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:text="0" />
+
+    <Button
+        android:id="@+id/button_pad_b1"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:text="1" />
+
+    <Button
+        android:id="@+id/button_pad_b2"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:text="2" />
+
+    <Button
+        android:id="@+id/button_pad_b3"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:text="3" />
+
+    <Button
+        android:id="@+id/button_pad_b4"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:text="4" />
+
+    <Button
+        android:id="@+id/button_pad_b5"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:text="5" />
+
+    <Button
+        android:id="@+id/button_pad_b6"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:text="6" />
+
+    <Button
+        android:id="@+id/button_pad_b7"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:text="7" />
+
+    <Button
+        android:id="@+id/button_pad_b8"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:text="8" />
+
+    <Button
+        android:id="@+id/button_pad_b9"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:text="9" />
+
+    <Button
+        android:id="@+id/button_pad_b10"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:text="10" />
+
+    <Button
+        android:id="@+id/button_pad_b11"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:text="11" />
+
+    <Button
+        android:id="@+id/button_pad_b12"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:text="12" />
+
+    <Button
+        android:id="@+id/button_pad_b13"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:text="13" />
+
+    <Button
+        android:id="@+id/button_pad_b14"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:text="14" />
+
+    <Button
+        android:id="@+id/button_pad_b15"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:text="15" />
+
+
+</GridLayout>
