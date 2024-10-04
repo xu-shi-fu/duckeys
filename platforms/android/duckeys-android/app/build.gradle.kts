@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.bitwormhole.duckeys"
+    namespace = "com.github.xushifustudio.duckeys"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.bitwormhole.duckeys"
+        applicationId = "com.github.xushifustudio.duckeys"
         minSdk = 26
         targetSdk = 28
         versionCode = 1
@@ -47,6 +47,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    buildToolsVersion = "35.0.0"
 }
 
 dependencies {

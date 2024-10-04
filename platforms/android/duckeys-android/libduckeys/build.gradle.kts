@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.bitwormhole.libduckeys"
+    namespace = "com.github.xushifustudio.libduckeys"
     compileSdk = 34
 
     defaultConfig {
@@ -26,6 +26,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    buildToolsVersion = "35.0.0"
 }
 
 dependencies {

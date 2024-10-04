@@ -44,4 +44,10 @@
         android:layout_height="wrap_content"
         android:text="(address)" />
 
+    <Switch
+        android:id="@+id/switch_connection_enabled"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="连接" />
+
 </LinearLayout>

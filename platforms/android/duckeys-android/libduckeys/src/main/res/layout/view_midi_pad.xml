@@ -7,7 +7,7 @@
     android:columnCount="4"
     android:orientation="vertical"
     android:rowCount="4"
-    tools:context="com.bitwormhole.libduckeys.ui.views.MidiPadView">
+    tools:context="com.github.xushifustudio.libduckeys.ui.views.MidiPadView">
 
 
     <Button

@@ -28,16 +28,16 @@
         tools:targetApi="31">
 
         <service
-            android:name="com.bitwormhole.libduckeys.midi.MidiRouterService"
+            android:name="com.github.xushifustudio.libduckeys.context.DuckService"
             android:exported="false"
             android:foregroundServiceType="connectedDevice" />
 
         <provider
-            android:name="com.bitwormhole.libduckeys.midi.MidiRouterProvider"
-            android:authorities="com.bitwormhole.libduckeys.midi" />
+            android:name="com.github.xushifustudio.libduckeys.midi.MidiRouterProvider"
+            android:authorities="com.github.xushifustudio.libduckeys.midi" />
 
         <activity
-            android:name=".DebugActivity"
+            android:name=".StartupActivity"
             android:exported="true"
             android:theme="@style/Theme.Duckeys">
             <intent-filter>
@@ -48,12 +48,14 @@
         </activity>
 
         <activity android:name=".MainActivity" />
-        <activity android:name="com.bitwormhole.libduckeys.ui.activities.PianoKeyboardActivity" />
-        <activity android:name="com.bitwormhole.libduckeys.ui.activities.BluetoothScanningActivity" />
-        <activity android:name="com.bitwormhole.libduckeys.ui.activities.MidiConnectionActivity" />
-        <activity android:name="com.bitwormhole.libduckeys.ui.activities.CurrentDeviceActivity" />
-        <activity android:name="com.bitwormhole.libduckeys.ui.activities.HistoryDeviceActivity" />
-        <activity android:name="com.bitwormhole.libduckeys.ui.activities.SimplePadActivity" />
+        <activity android:name=".DebugActivity" />
+
+        <activity android:name="com.github.xushifustudio.libduckeys.ui.activities.PianoKeyboardActivity" />
+        <activity android:name="com.github.xushifustudio.libduckeys.ui.activities.BluetoothScanningActivity" />
+        <activity android:name="com.github.xushifustudio.libduckeys.ui.activities.MidiConnectionActivity" />
+        <activity android:name="com.github.xushifustudio.libduckeys.ui.activities.CurrentDeviceActivity" />
+        <activity android:name="com.github.xushifustudio.libduckeys.ui.activities.HistoryDeviceActivity" />
+        <activity android:name="com.github.xushifustudio.libduckeys.ui.activities.SimplePadActivity" />
 
     </application>
 
