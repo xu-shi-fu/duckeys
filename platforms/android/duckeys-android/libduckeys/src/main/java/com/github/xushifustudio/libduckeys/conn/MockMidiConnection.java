@@ -1,17 +1,9 @@
 package com.github.xushifustudio.libduckeys.conn;
 
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCallback;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.content.Context;
-
-import androidx.annotation.NonNull;
-
+import com.github.xushifustudio.libduckeys.midi.MidiEvent;
 import com.github.xushifustudio.libduckeys.midi.MidiEventDispatcher;
 import com.github.xushifustudio.libduckeys.midi.MidiEventHandler;
 import com.github.xushifustudio.libduckeys.midi.MidiUriConnection;
-import com.github.xushifustudio.libduckeys.midi.NopMERT;
 
 import java.io.IOException;
 import java.net.URI;
@@ -19,18 +11,25 @@ import java.net.URI;
 public final class MockMidiConnection implements MidiUriConnection {
 
     private final URI mURI;
-    private final NopMERT mRT;
+    private final MidiEventHandler mRx;
+    private final MidiEventDispatcher mTx;
 
-
-    public MockMidiConnection(URI uri) {
+    public MockMidiConnection(URI uri, MidiEventHandler rx) {
         mURI = uri;
-        mRT = new NopMERT();
+        mRx = rx;
+        mTx = new MyDispatcher();
     }
 
+    private class MyDispatcher implements MidiEventDispatcher {
+
+        @Override
+        public void dispatch(MidiEvent me) {
+        }
+    }
 
     @Override
     public MidiEventDispatcher getTx() {
-        return mRT;
+        return mTx;
     }
 
     @Override
@@ -40,7 +39,8 @@ public final class MockMidiConnection implements MidiUriConnection {
 
 
     @Override
-    public void setRx(MidiEventHandler rx) {
+    public MidiEventHandler getRx() {
+        return mRx;
     }
 
     @Override

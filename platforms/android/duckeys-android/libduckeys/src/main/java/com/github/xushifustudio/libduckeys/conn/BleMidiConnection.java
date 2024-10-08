@@ -162,8 +162,8 @@ public final class BleMidiConnection implements MidiUriConnection {
     }
 
     @Override
-    public void setRx(MidiEventHandler rx) {
-        mMidiEventRT.setRx(rx);
+    public MidiEventHandler getRx() {
+        return mMidiEventRT;
     }
 
     @Override

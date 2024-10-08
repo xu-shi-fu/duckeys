@@ -56,9 +56,9 @@ public final class DefaultMidiUriAgent implements MidiUriAgent, ComponentLife {
 
 
     @Override
-    public MidiUriConnection open(URI uri) throws IOException {
+    public MidiUriConnection open(URI uri, MidiEventHandler h) throws IOException {
         MidiUriConnector connector = findConnector(uri);
-        return connector.open(uri);
+        return connector.open(uri, h);
     }
 
     @Override

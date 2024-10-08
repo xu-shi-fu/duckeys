@@ -9,6 +9,7 @@ import com.github.xushifustudio.libduckeys.context.ComponentContext;
 import com.github.xushifustudio.libduckeys.context.ComponentLife;
 import com.github.xushifustudio.libduckeys.context.ComponentRegistration;
 import com.github.xushifustudio.libduckeys.context.ComponentRegistrationBuilder;
+import com.github.xushifustudio.libduckeys.midi.MidiEventHandler;
 import com.github.xushifustudio.libduckeys.midi.MidiUriConnection;
 import com.github.xushifustudio.libduckeys.midi.MidiUriConnector;
 
@@ -30,7 +31,7 @@ public class BleMidiConnector implements MidiUriConnector, ComponentLife {
     }
 
     @Override
-    public MidiUriConnection open(URI uri) throws IOException {
+    public MidiUriConnection open(URI uri , MidiEventHandler rx ) throws IOException {
 
         String addr = uri.getHost() + "";
         addr = addr.replace('-', ':');

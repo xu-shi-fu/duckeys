@@ -4,8 +4,12 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.URI;
 
-public interface MidiUriConnection extends Closeable, MERT {
+public interface MidiUriConnection extends Closeable {
 
     URI getURI();
+
+    MidiEventDispatcher getTx();
+
+    MidiEventHandler getRx();
 
 }

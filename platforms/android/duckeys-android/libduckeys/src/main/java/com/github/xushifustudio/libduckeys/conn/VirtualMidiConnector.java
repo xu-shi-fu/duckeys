@@ -1,5 +1,6 @@
 package com.github.xushifustudio.libduckeys.conn;
 
+import com.github.xushifustudio.libduckeys.midi.MidiEventHandler;
 import com.github.xushifustudio.libduckeys.midi.MidiUriConnection;
 import com.github.xushifustudio.libduckeys.midi.MidiUriConnector;
 
@@ -14,7 +15,7 @@ public class VirtualMidiConnector implements MidiUriConnector {
     }
 
     @Override
-    public MidiUriConnection open(URI uri) throws IOException {
+    public MidiUriConnection open(URI uri, MidiEventHandler h) throws IOException {
         return null;
     }
 }

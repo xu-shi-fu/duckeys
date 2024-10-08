@@ -9,14 +9,12 @@ import com.github.xushifustudio.libduckeys.midi.MidiUriConnection;
 
 public class ServerContext {
 
-
     public Server server;
 
     public Context context;
 
     public HandlerRegistry hr;
-    public Components components;
 
-    public MidiUriConnection currentConnection;
+    public Components components;
 
 }

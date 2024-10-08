@@ -8,6 +8,6 @@ public interface MidiUriConnector {
 
     boolean supports(URI uri);
 
-    MidiUriConnection open(URI uri) throws IOException;
+    MidiUriConnection open(URI uri, MidiEventHandler h) throws IOException;
 
 }

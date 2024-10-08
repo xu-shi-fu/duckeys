@@ -1,10 +1,8 @@
 package com.github.xushifustudio.libduckeys.conn;
 
-import com.github.xushifustudio.libduckeys.midi.MidiEventDispatcher;
 import com.github.xushifustudio.libduckeys.midi.MidiEventHandler;
 import com.github.xushifustudio.libduckeys.midi.MidiUriConnection;
 import com.github.xushifustudio.libduckeys.midi.MidiUriConnector;
-import com.github.xushifustudio.libduckeys.midi.NopMERT;
 
 import java.io.IOException;
 import java.net.URI;
@@ -23,7 +21,7 @@ public final class MockMidiConnector implements MidiUriConnector {
     }
 
     @Override
-    public MidiUriConnection open(URI uri) throws IOException {
-        return new MockMidiConnection(uri);
+    public MidiUriConnection open(URI uri, MidiEventHandler rx) throws IOException {
+        return new MockMidiConnection(uri, rx);
     }
 }

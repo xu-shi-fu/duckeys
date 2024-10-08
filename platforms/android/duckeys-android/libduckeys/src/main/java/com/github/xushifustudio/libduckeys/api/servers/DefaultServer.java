@@ -98,7 +98,6 @@ public class DefaultServer implements Server, ComponentLife {
         mSC.context = cc.context;
         mSC.server = this;
         mSC.hr = new DefaultHR();
-        mSC.currentConnection = null;
 
         return cr;
     }

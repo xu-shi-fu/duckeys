@@ -10,7 +10,9 @@ import com.github.xushifustudio.libduckeys.context.ComponentContext;
 import com.github.xushifustudio.libduckeys.context.ComponentLife;
 import com.github.xushifustudio.libduckeys.context.ComponentRegistration;
 import com.github.xushifustudio.libduckeys.context.ComponentRegistrationBuilder;
+import com.github.xushifustudio.libduckeys.context.DuckContext;
 import com.github.xushifustudio.libduckeys.helper.IO;
+import com.github.xushifustudio.libduckeys.midi.MidiEventHandler;
 import com.github.xushifustudio.libduckeys.midi.MidiUriAgent;
 import com.github.xushifustudio.libduckeys.midi.MidiUriConnection;
 
@@ -20,6 +22,7 @@ import java.net.URI;
 public final class MidiConnectionController implements Controller, ComponentLife {
 
     private ServerContext mSC;
+    private DuckContext mDC;
     private MidiUriAgent mAgent;
 
     @Override
@@ -55,29 +58,37 @@ public final class MidiConnectionController implements Controller, ComponentLife
 
         MidiUriAgent agent = mAgent;
         MidiUriConnection conn = null;
+        MidiEventHandler rx = mDC.getMainMidiEventHandler();
 
         try {
             // open
             String url = req.device.getUrl();
-            conn = agent.open(URI.create(url));
+            conn = agent.open(URI.create(url), rx);
 
-            // save to settings
+            // write to history
+            if (req.writeToHistory) {
+                this.writeToHistory(req);
+            }
 
             // swap newer & older
-            MidiUriConnection olderConn = mSC.currentConnection;
-            mSC.currentConnection = conn;
+            MidiUriConnection olderConn = mDC.getCurrentConnection();
+            mDC.setCurrentConnection(conn);
             conn = olderConn;
         } finally {
             IO.close(conn);
         }
 
-
         MidiConnectionService.Response resp = new MidiConnectionService.Response();
         return MidiConnectionService.encode(resp);
     }
 
-    private void loadAgent(ComponentContext cc) {
+    private void writeToHistory(MidiConnectionService.Request req) {
+        // todo ...
+    }
+
+    private void onCreate(ComponentContext cc) {
         mAgent = cc.components.find(MidiUriAgent.class);
+        mDC = cc.components.find(DuckContext.class);
     }
 
     @Override
@@ -85,7 +96,7 @@ public final class MidiConnectionController implements Controller, ComponentLife
         ComponentRegistrationBuilder b = ComponentRegistrationBuilder.newInstance(cc);
         b.setInstance(this);
         b.onCreate(() -> {
-            loadAgent(cc);
+            onCreate(cc);
         });
         return b.create();
     }

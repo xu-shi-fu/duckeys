@@ -18,6 +18,6 @@ public interface MidiUriAgent {
 
     MidiUriConnector findConnector(URI uri);
 
-    MidiUriConnection open(URI uri) throws IOException;
+    MidiUriConnection open(URI uri, MidiEventHandler rx) throws IOException;
 
 }
