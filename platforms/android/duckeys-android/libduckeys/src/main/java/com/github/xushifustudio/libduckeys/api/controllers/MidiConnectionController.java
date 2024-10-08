@@ -6,6 +6,10 @@ import com.github.xushifustudio.libduckeys.api.servers.Controller;
 import com.github.xushifustudio.libduckeys.api.servers.HandlerRegistry;
 import com.github.xushifustudio.libduckeys.api.servers.ServerContext;
 import com.github.xushifustudio.libduckeys.api.services.MidiConnectionService;
+import com.github.xushifustudio.libduckeys.context.ComponentContext;
+import com.github.xushifustudio.libduckeys.context.ComponentLife;
+import com.github.xushifustudio.libduckeys.context.ComponentRegistration;
+import com.github.xushifustudio.libduckeys.context.ComponentRegistrationBuilder;
 import com.github.xushifustudio.libduckeys.helper.IO;
 import com.github.xushifustudio.libduckeys.midi.MidiUriAgent;
 import com.github.xushifustudio.libduckeys.midi.MidiUriConnection;
@@ -13,9 +17,10 @@ import com.github.xushifustudio.libduckeys.midi.MidiUriConnection;
 import java.io.IOException;
 import java.net.URI;
 
-public final class MidiConnectionController implements Controller {
+public final class MidiConnectionController implements Controller, ComponentLife {
 
     private ServerContext mSC;
+    private MidiUriAgent mAgent;
 
     @Override
     public void registerSelf(ServerContext sc, HandlerRegistry hr) {
@@ -48,14 +53,17 @@ public final class MidiConnectionController implements Controller {
 
         MidiConnectionService.Request req = MidiConnectionService.decode(w);
 
-        MidiUriAgent agent = MidiUriAgent.getInstance(mSC.context);
+        MidiUriAgent agent = mAgent;
         MidiUriConnection conn = null;
 
         try {
+            // open
             String url = req.device.getUrl();
             conn = agent.open(URI.create(url));
 
+            // save to settings
 
+            // swap newer & older
             MidiUriConnection olderConn = mSC.currentConnection;
             mSC.currentConnection = conn;
             conn = olderConn;
@@ -66,5 +74,19 @@ public final class MidiConnectionController implements Controller {
 
         MidiConnectionService.Response resp = new MidiConnectionService.Response();
         return MidiConnectionService.encode(resp);
+    }
+
+    private void loadAgent(ComponentContext cc) {
+        mAgent = cc.components.find(MidiUriAgent.class);
+    }
+
+    @Override
+    public ComponentRegistration init(ComponentContext cc) {
+        ComponentRegistrationBuilder b = ComponentRegistrationBuilder.newInstance(cc);
+        b.setInstance(this);
+        b.onCreate(() -> {
+            loadAgent(cc);
+        });
+        return b.create();
     }
 }

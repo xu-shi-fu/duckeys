@@ -19,6 +19,7 @@ public final class MidiConnectionService {
 
     public static class Request {
         public DeviceInfo device;
+        public boolean writeToHistory;
     }
 
     public static class Response {

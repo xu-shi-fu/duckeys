@@ -8,6 +8,12 @@ import java.net.URI;
 
 public class VirtualMidiConnector implements MidiUriConnector {
     @Override
+    public boolean supports(URI uri) {
+        String str = uri.toString();
+        return str.startsWith("virtual:");
+    }
+
+    @Override
     public MidiUriConnection open(URI uri) throws IOException {
         return null;
     }

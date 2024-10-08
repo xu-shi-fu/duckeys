@@ -1,5 +1,6 @@
 package com.github.xushifustudio.libduckeys.ui.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import com.github.xushifustudio.libduckeys.api.services.MidiConnectionService;
 import com.github.xushifustudio.libduckeys.context.DuckClient;
 import com.github.xushifustudio.libduckeys.context.LifeActivity;
 import com.github.xushifustudio.libduckeys.context.LifeManager;
+import com.github.xushifustudio.libduckeys.helper.DialogItemSelector;
 
 public class CurrentDeviceActivity extends LifeActivity {
 
@@ -71,9 +73,42 @@ public class CurrentDeviceActivity extends LifeActivity {
             startActivity(i);
         });
         mButtonAddNewDevice.setOnClickListener((v) -> {
+            showAddNewDeviceDialog();
+        });
+    }
+
+
+    private void showAddNewDeviceDialog() {
+
+        DialogItemSelector sel = new DialogItemSelector(this);
+        sel.addItem(R.string.over_ble);
+        sel.addItem(R.string.over_wifi);
+        sel.addItem(R.string.over_usb);
+        sel.addItem(R.string.over_mock);
+        sel.addItem(R.string.over_virtual);
+
+        sel.addListener(R.string.over_ble, () -> {
             Intent i = new Intent(this, BluetoothScanningActivity.class);
             startActivity(i);
         });
+        sel.addListener(R.string.over_usb, () -> {
+        });
+        sel.addListener(R.string.over_wifi, () -> {
+        });
+        sel.addListener(R.string.over_mock, () -> {
+            Intent i = new Intent(this, MockDeviceActivity.class);
+            startActivity(i);
+        });
+        sel.addListener(R.string.over_virtual, () -> {
+        });
+
+        String[] items = sel.getItems();
+        AlertDialog.Builder ab = new AlertDialog.Builder(this);
+        ab.setItems(items, sel.getOnClickListener());
+        ab.setNegativeButton(R.string.cancel, (dlx, y) -> {
+        });
+        ab.setTitle(R.string.select_connecting_method);
+        ab.show();
     }
 
 

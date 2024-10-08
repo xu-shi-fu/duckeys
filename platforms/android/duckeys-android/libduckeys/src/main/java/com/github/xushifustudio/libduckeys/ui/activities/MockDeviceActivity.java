@@ -1,8 +1,8 @@
 package com.github.xushifustudio.libduckeys.ui.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 
@@ -12,15 +12,15 @@ import com.github.xushifustudio.libduckeys.api.Want;
 import com.github.xushifustudio.libduckeys.api.clients.Task;
 import com.github.xushifustudio.libduckeys.api.clients.TaskManager;
 import com.github.xushifustudio.libduckeys.api.servers.Server;
-import com.github.xushifustudio.libduckeys.api.services.AppMainService;
+import com.github.xushifustudio.libduckeys.api.services.MidiConnectionService;
 import com.github.xushifustudio.libduckeys.context.DuckClient;
 import com.github.xushifustudio.libduckeys.context.LifeActivity;
 import com.github.xushifustudio.libduckeys.context.LifeManager;
 import com.github.xushifustudio.libduckeys.helper.CommonErrorHandler;
 import com.github.xushifustudio.libduckeys.helper.DuckLogger;
+import com.github.xushifustudio.libduckeys.settings.apps.DeviceInfo;
 
-public class StartingActivity extends LifeActivity {
-
+public class MockDeviceActivity extends LifeActivity {
 
     private TaskManager mTaskMan;
     private DuckClient mClient;
@@ -29,50 +29,50 @@ public class StartingActivity extends LifeActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         init();
         super.onCreate(savedInstanceState);
-        //  setContentView(R.layout.layout_starting);
+        setContentView(R.layout.layout_mock_device);
+
+
+        findViewById(R.id.button_connect_to_mock_device).setOnClickListener(this::handleClickConnectToMockDevice);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        start();
-    }
 
     private void init() {
 
-        mTaskMan = new TaskManager(this);
         mClient = new DuckClient(this);
+        mTaskMan = new TaskManager(this);
+
 
         LifeManager lm = getLifeManager();
-        lm.add(mTaskMan);
         lm.add(mClient);
+        lm.add(mTaskMan);
     }
 
-    private void start() {
-        AppMainService.Holder holder = new AppMainService.Holder();
-        Task t = (tc) -> {
-            AppMainService.Request req = new AppMainService.Request();
-            Want want = AppMainService.encode(req);
+    private void handleClickConnectToMockDevice(View v) {
+
+        DeviceInfo info = new DeviceInfo();
+        info.setUrl("mock://localhost/connections/mock");
+        info.setName("mock");
+
+        Task task = (tc) -> {
+
+            MidiConnectionService.Request req = new MidiConnectionService.Request();
+            req.device = info;
+            req.writeToHistory = true;
+
+            Want want = MidiConnectionService.encode(req);
             want.method = Want.POST;
-            want.url = AppMainService.URI_APP_INIT;
+            want.url = MidiConnectionService.URI_CONNECT;
 
-            Server ser = mClient.waitForServerReady(15 * 1000);
+            Server ser = mClient.waitForServerReady();
             Have have = ser.invoke(want);
-
-            AppMainService.Response resp = AppMainService.decode(have);
-            holder.response = resp;
-            holder.request = req;
+            MidiConnectionService.Response resp = MidiConnectionService.decode(have);
+            Log.i(DuckLogger.TAG, "" + resp);
         };
-        mTaskMan.createNewTask(t).onThen((tc) -> {
-            Log.i(DuckLogger.TAG, "OK");
-            goHome();
-        }).onCatch((tc) -> {
-            CommonErrorHandler.handle(this, tc.error, CommonErrorHandler.FLAG_ALERT);
-        }).execute();
-    }
 
-    protected void goHome() {
-        Intent i = new Intent(this, ExampleActivity.class);
-        startActivity(i);
+        mTaskMan.createNewTask(task).onThen((tc) -> {
+            Log.i(DuckLogger.TAG, "ok");
+        }).onCatch((tc) -> {
+            CommonErrorHandler.handle(this, tc.error);
+        }).execute();
     }
 }

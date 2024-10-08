@@ -13,6 +13,7 @@ import com.github.xushifustudio.libduckeys.api.controllers.SettingsController;
 import com.github.xushifustudio.libduckeys.api.servers.DefaultServer;
 import com.github.xushifustudio.libduckeys.api.servers.Server;
 import com.github.xushifustudio.libduckeys.conn.BleMidiConnector;
+import com.github.xushifustudio.libduckeys.conn.MockMidiConnector;
 import com.github.xushifustudio.libduckeys.conn.UsbMidiConnector;
 import com.github.xushifustudio.libduckeys.conn.WifiMidiConnector;
 import com.github.xushifustudio.libduckeys.settings.DefaultSettingManager;
@@ -44,9 +45,10 @@ public final class DuckConfig {
 
 
         // connectors
-        cr.register(nil, new BleMidiConnector(ctx));
+        cr.register(nil, new BleMidiConnector( ));
         cr.register(nil, new UsbMidiConnector());
         cr.register(nil, new WifiMidiConnector());
+        cr.register(nil, new MockMidiConnector());
 
 
         // settings
@@ -62,5 +64,6 @@ public final class DuckConfig {
         cr.register(nil, new LifeMonitor("components.life.monitor"));
         cr.register(Server.class, new DefaultServer());
         cr.register(SettingManager.class, new DefaultSettingManager());
+        cr.register(DuckContext.class, new DuckContext());
     }
 }

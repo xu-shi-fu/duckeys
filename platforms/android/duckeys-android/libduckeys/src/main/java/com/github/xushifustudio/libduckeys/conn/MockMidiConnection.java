@@ -22,8 +22,8 @@ public final class MockMidiConnection implements MidiUriConnection {
     private final NopMERT mRT;
 
 
-    public MockMidiConnection() {
-        mURI = URI.create("mock://midi@localhost");
+    public MockMidiConnection(URI uri) {
+        mURI = uri;
         mRT = new NopMERT();
     }
 

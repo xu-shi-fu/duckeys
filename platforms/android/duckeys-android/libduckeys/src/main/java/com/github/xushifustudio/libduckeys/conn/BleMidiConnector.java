@@ -5,20 +5,28 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 
+import com.github.xushifustudio.libduckeys.context.ComponentContext;
+import com.github.xushifustudio.libduckeys.context.ComponentLife;
+import com.github.xushifustudio.libduckeys.context.ComponentRegistration;
+import com.github.xushifustudio.libduckeys.context.ComponentRegistrationBuilder;
 import com.github.xushifustudio.libduckeys.midi.MidiUriConnection;
 import com.github.xushifustudio.libduckeys.midi.MidiUriConnector;
 
 import java.io.IOException;
 import java.net.URI;
 
-public class BleMidiConnector implements MidiUriConnector {
+public class BleMidiConnector implements MidiUriConnector, ComponentLife {
 
-    private final BluetoothManager mBTM;
-    private final Context mContext;
+    private BluetoothManager mBTM;
+    private Context mContext;
 
-    public BleMidiConnector(Context context) {
-        mBTM = context.getSystemService(BluetoothManager.class);
-        mContext = context;
+    public BleMidiConnector() {
+    }
+
+    @Override
+    public boolean supports(URI uri) {
+        String str = uri.toString();
+        return str.startsWith("ble:");
     }
 
     @Override
@@ -36,5 +44,20 @@ public class BleMidiConnector implements MidiUriConnector {
         BleMidiConnection conn = new BleMidiConnection(mContext, uri, device);
         conn.connect(5000);
         return conn;
+    }
+
+    private void onLoad(ComponentContext cc) {
+        Context ctx = cc.context;
+        mBTM = ctx.getSystemService(BluetoothManager.class);
+        mContext = ctx;
+    }
+
+    @Override
+    public ComponentRegistration init(ComponentContext cc) {
+        ComponentRegistrationBuilder b = ComponentRegistrationBuilder.newInstance(cc);
+        b.onCreate(() -> {
+            onLoad(cc);
+        });
+        return b.create();
     }
 }
