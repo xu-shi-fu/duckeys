@@ -2,15 +2,18 @@ package com.github.xushifustudio.libduckeys.api.services;
 
 import com.github.xushifustudio.libduckeys.api.Have;
 import com.github.xushifustudio.libduckeys.api.Want;
+import com.github.xushifustudio.libduckeys.midi.MidiEvent;
 
 public final class MidiReaderService {
 
     public final static String URI = "uri://local/midi/reader";
 
     public static class Request {
+        public int timeout; // in milliseconds
     }
 
     public static class Response {
+        public MidiEvent event;
     }
 
 

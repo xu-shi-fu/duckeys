@@ -1,9 +1,6 @@
 package com.github.xushifustudio.libduckeys.api;
 
-import androidx.annotation.NonNull;
-
 import com.github.xushifustudio.libduckeys.helper.JsonCodec;
-import com.google.gson.Gson;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -77,6 +74,20 @@ public class Entity {
         e.length = bin.length;
         e.buffer = bin;
         e.offset = 0;
+        return e;
+    }
+
+    public static Entity encodeBytes(byte[] buffer, int offset, int length) {
+        if (buffer == null) {
+            buffer = new byte[0];
+            offset = 0;
+            length = 0;
+        }
+        Entity e = new Entity();
+        e.type = "application/octet-stream";
+        e.length = length;
+        e.buffer = buffer;
+        e.offset = offset;
         return e;
     }
 }

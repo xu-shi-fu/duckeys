@@ -17,6 +17,16 @@ public class HistoryDeviceSettings implements Serializable, SettingProperty {
     }
 
 
+    // 向历史列表中添加一条记录
+    public void add(DeviceInfo di) {
+        List<DeviceInfo> list = devices;
+        if (list == null) {
+            list = new ArrayList<>();
+            devices = list;
+        }
+        list.add(di);
+    }
+
     // dedup 去除列表中的重复项
     public void dedup() {
         List<DeviceInfo> src = devices;

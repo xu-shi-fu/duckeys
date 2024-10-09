@@ -11,6 +11,7 @@ import com.github.xushifustudio.libduckeys.midi.MidiEventDispatcher;
 import com.github.xushifustudio.libduckeys.midi.MidiEventHandler;
 import com.github.xushifustudio.libduckeys.midi.MidiEventRT;
 
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public final class BleMidiAdapter implements MERT {
@@ -108,17 +109,23 @@ public final class BleMidiAdapter implements MERT {
         }
         sb.append('\t');
 
-        BluetoothGattCharacteristic ch = mGattCharUpstream;
+        BluetoothGattCharacteristic ch1 = mGattCharUpstream;
         BluetoothGatt gatt = mGatt;
+
         try {
+            BluetoothGattCharacteristic ch2 = prepareWrite(gatt, ch1);
             String value = sb.toString();
-            ch.setValue(value);
-            gatt.writeCharacteristic(ch);
+            ch2.setValue(value);
+            gatt.writeCharacteristic(ch2);
         } catch (SecurityException e) {
             e.printStackTrace();
         }
     }
 
+    private BluetoothGattCharacteristic prepareWrite(BluetoothGatt gatt, BluetoothGattCharacteristic ch) {
+        BluetoothGattService service = gatt.getService(ch.getService().getUuid());
+        return service.getCharacteristic(ch.getUuid());
+    }
 
     @Override
     public MidiEventDispatcher getTx() {

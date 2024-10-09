@@ -1,15 +1,26 @@
 package com.github.xushifustudio.libduckeys.context;
 
-import com.github.xushifustudio.libduckeys.midi.MidiEventHandler;
+import com.github.xushifustudio.libduckeys.midi.MERT;
+import com.github.xushifustudio.libduckeys.midi.MidiEventRT;
 import com.github.xushifustudio.libduckeys.midi.MidiUriConnection;
 
 public class DuckContext {
 
     private UserContext currentUser;
     private MidiUriConnection currentConnection;
-    private MidiEventHandler mainMidiEventHandler;
+    private MidiEventRT midiRouter;
+
 
     public DuckContext() {
+        this.midiRouter = new MidiEventRT();
+    }
+
+    public MidiEventRT getMidiRouter() {
+        return midiRouter;
+    }
+
+    public void setMidiRouter(MidiEventRT midiRouter) {
+        this.midiRouter = midiRouter;
     }
 
     public MidiUriConnection getCurrentConnection() {
@@ -18,14 +29,6 @@ public class DuckContext {
 
     public void setCurrentConnection(MidiUriConnection currentConnection) {
         this.currentConnection = currentConnection;
-    }
-
-    public MidiEventHandler getMainMidiEventHandler() {
-        return mainMidiEventHandler;
-    }
-
-    public void setMainMidiEventHandler(MidiEventHandler mainMidiEventHandler) {
-        this.mainMidiEventHandler = mainMidiEventHandler;
     }
 
     public UserContext getCurrentUser() {

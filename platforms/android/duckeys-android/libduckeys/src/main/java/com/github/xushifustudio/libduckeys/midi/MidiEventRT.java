@@ -1,6 +1,6 @@
 package com.github.xushifustudio.libduckeys.midi;
 
-public class MidiEventRT implements MidiEventDispatcher, MidiEventHandler {
+public class MidiEventRT implements MidiEventDispatcher, MidiEventHandler, MERT {
 
     private MidiEventHandler mRx;
     private MidiEventDispatcher mTx;
@@ -9,6 +9,11 @@ public class MidiEventRT implements MidiEventDispatcher, MidiEventHandler {
     public MidiEventRT() {
         mTx = nop;
         mRx = nop;
+    }
+
+    @Override
+    public MidiEventDispatcher getTx() {
+        return this;
     }
 
     public final void setRx(MidiEventHandler rx) {

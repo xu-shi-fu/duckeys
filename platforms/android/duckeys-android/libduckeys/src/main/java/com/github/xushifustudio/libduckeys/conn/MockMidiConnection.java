@@ -1,5 +1,8 @@
 package com.github.xushifustudio.libduckeys.conn;
 
+import android.util.Log;
+
+import com.github.xushifustudio.libduckeys.helper.DuckLogger;
 import com.github.xushifustudio.libduckeys.midi.MidiEvent;
 import com.github.xushifustudio.libduckeys.midi.MidiEventDispatcher;
 import com.github.xushifustudio.libduckeys.midi.MidiEventHandler;
@@ -24,6 +27,8 @@ public final class MockMidiConnection implements MidiUriConnection {
 
         @Override
         public void dispatch(MidiEvent me) {
+            String msg = "MockMidiConnection.dispatch:event:" + me;
+            Log.i(DuckLogger.TAG, msg);
         }
     }
 

@@ -13,8 +13,14 @@ import com.github.xushifustudio.libduckeys.context.ComponentRegistrationBuilder;
 import com.github.xushifustudio.libduckeys.context.DuckContext;
 import com.github.xushifustudio.libduckeys.helper.IO;
 import com.github.xushifustudio.libduckeys.midi.MidiEventHandler;
+import com.github.xushifustudio.libduckeys.midi.MidiEventRT;
 import com.github.xushifustudio.libduckeys.midi.MidiUriAgent;
 import com.github.xushifustudio.libduckeys.midi.MidiUriConnection;
+import com.github.xushifustudio.libduckeys.settings.SettingManager;
+import com.github.xushifustudio.libduckeys.settings.SettingSession;
+import com.github.xushifustudio.libduckeys.settings.apps.CurrentDeviceSettings;
+import com.github.xushifustudio.libduckeys.settings.apps.DeviceInfo;
+import com.github.xushifustudio.libduckeys.settings.apps.HistoryDeviceSettings;
 
 import java.io.IOException;
 import java.net.URI;
@@ -24,6 +30,8 @@ public final class MidiConnectionController implements Controller, ComponentLife
     private ServerContext mSC;
     private DuckContext mDC;
     private MidiUriAgent mAgent;
+    private SettingManager mSettings;
+
 
     @Override
     public void registerSelf(ServerContext sc, HandlerRegistry hr) {
@@ -56,14 +64,15 @@ public final class MidiConnectionController implements Controller, ComponentLife
 
         MidiConnectionService.Request req = MidiConnectionService.decode(w);
 
+        MidiEventRT router = mDC.getMidiRouter();
         MidiUriAgent agent = mAgent;
         MidiUriConnection conn = null;
-        MidiEventHandler rx = mDC.getMainMidiEventHandler();
+
 
         try {
             // open
             String url = req.device.getUrl();
-            conn = agent.open(URI.create(url), rx);
+            conn = agent.open(URI.create(url), router);
 
             // write to history
             if (req.writeToHistory) {
@@ -73,6 +82,7 @@ public final class MidiConnectionController implements Controller, ComponentLife
             // swap newer & older
             MidiUriConnection olderConn = mDC.getCurrentConnection();
             mDC.setCurrentConnection(conn);
+            router.setTx(conn.getTx());
             conn = olderConn;
         } finally {
             IO.close(conn);
@@ -83,12 +93,41 @@ public final class MidiConnectionController implements Controller, ComponentLife
     }
 
     private void writeToHistory(MidiConnectionService.Request req) {
-        // todo ...
+        SettingSession session = null;
+        DeviceInfo dev = req.device;
+        if (dev == null) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        dev.setConnectedAt(now);
+        try {
+            session = mSettings.openSession();
+            HistoryDeviceSettings history = session.get(HistoryDeviceSettings.class);
+            CurrentDeviceSettings current = session.get(CurrentDeviceSettings.class);
+            if (history == null) {
+                history = new HistoryDeviceSettings();
+            }
+            if (current == null) {
+                current = new CurrentDeviceSettings();
+            }
+
+            current.setDevice(dev);
+            history.add(dev);
+            history.dedup();
+
+            int scope = current.scope();
+            session.put(history, scope);
+            session.put(current, scope);
+            session.commit();
+        } finally {
+            IO.close(session);
+        }
     }
 
     private void onCreate(ComponentContext cc) {
         mAgent = cc.components.find(MidiUriAgent.class);
         mDC = cc.components.find(DuckContext.class);
+        mSettings = cc.components.find(SettingManager.class);
     }
 
     @Override

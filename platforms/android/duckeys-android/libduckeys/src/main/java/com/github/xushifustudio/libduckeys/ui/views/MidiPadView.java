@@ -1,6 +1,7 @@
 package com.github.xushifustudio.libduckeys.ui.views;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -67,18 +68,20 @@ public class MidiPadView extends LinearLayout {
 
     private void setupButtonListener(View v, KeyConfig kc) {
         v.setOnTouchListener((view, event) -> {
-            handleOnTouchEvent(event, kc);
+            handleOnTouchEvent(view, event, kc);
             return true;
         });
     }
 
-    private void handleOnTouchEvent(MotionEvent me, KeyConfig kc) {
+    private void handleOnTouchEvent(View view, MotionEvent me, KeyConfig kc) {
         int action = me.getActionMasked();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                view.setBackgroundColor(Color.RED);
                 onTouchDown(kc);
                 break;
             case MotionEvent.ACTION_UP:
+                view.setBackgroundColor(0);
                 onTouchUp(kc);
                 break;
             default:
