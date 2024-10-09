@@ -170,10 +170,11 @@ public class BluetoothScanningActivity extends LifeActivity {
         Task task = (tc) -> {
             MidiConnectionService.Request req = new MidiConnectionService.Request();
             req.device = dev;
+            req.writeToHistory = true;
 
             Want want = MidiConnectionService.encode(req);
             want.method = Want.POST;
-            want.url =  MidiConnectionService.URI_CONNECT;
+            want.url = MidiConnectionService.URI_CONNECT;
 
             Server server = mClient.waitForServerReady();
             Have have = server.invoke(want);

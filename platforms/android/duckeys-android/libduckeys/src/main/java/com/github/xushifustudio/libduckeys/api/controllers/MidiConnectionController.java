@@ -45,18 +45,33 @@ public final class MidiConnectionController implements Controller, ComponentLife
     }
 
     private Have handleQueryHistoryList(Want w) {
-
-
+        SettingSession session = null;
         MidiConnectionService.Response resp = new MidiConnectionService.Response();
-        resp.history = null;
+        try {
+            session = mSettings.openSession();
+            HistoryDeviceSettings h0 = new HistoryDeviceSettings();
+            HistoryDeviceSettings history = session.get(HistoryDeviceSettings.class, h0);
+            resp.history = history.getDevices();
+        } finally {
+            IO.close(session);
+        }
         return MidiConnectionService.encode(resp);
     }
 
     private Have handleQueryCurrentState(Want w) {
-
-
+        SettingSession session = null;
         MidiConnectionService.Response resp = new MidiConnectionService.Response();
-        resp.current = null;
+        MidiUriConnection conn = mDC.getCurrentConnection();
+        try {
+            session = mSettings.openSession();
+            CurrentDeviceSettings c0 = new CurrentDeviceSettings();
+            CurrentDeviceSettings current = session.get(CurrentDeviceSettings.class, c0);
+            resp.current = current.getDevice();
+            resp.connected = (conn != null);
+            resp.enabled = current.isEnabled();
+        } finally {
+            IO.close(session);
+        }
         return MidiConnectionService.encode(resp);
     }
 

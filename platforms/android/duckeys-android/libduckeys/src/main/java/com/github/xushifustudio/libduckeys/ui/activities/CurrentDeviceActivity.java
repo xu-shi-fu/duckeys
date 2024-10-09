@@ -3,6 +3,7 @@ package com.github.xushifustudio.libduckeys.ui.activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -20,6 +21,8 @@ import com.github.xushifustudio.libduckeys.context.DuckClient;
 import com.github.xushifustudio.libduckeys.context.LifeActivity;
 import com.github.xushifustudio.libduckeys.context.LifeManager;
 import com.github.xushifustudio.libduckeys.helper.DialogItemSelector;
+import com.github.xushifustudio.libduckeys.helper.DuckLogger;
+import com.github.xushifustudio.libduckeys.settings.apps.DeviceInfo;
 
 public class CurrentDeviceActivity extends LifeActivity {
 
@@ -53,7 +56,7 @@ public class CurrentDeviceActivity extends LifeActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        loadCurrentDeviceInfo();
+        fetch();
     }
 
 
@@ -112,7 +115,7 @@ public class CurrentDeviceActivity extends LifeActivity {
     }
 
 
-    private void loadCurrentDeviceInfo() {
+    private void fetch() {
 
         final MidiConnectionService.Holder holder = new MidiConnectionService.Holder();
 
@@ -120,6 +123,8 @@ public class CurrentDeviceActivity extends LifeActivity {
             Server server = mClient.waitForServerReady(3000);
             MidiConnectionService.Request req = new MidiConnectionService.Request();
             Want want = MidiConnectionService.encode(req);
+            want.method = Want.GET;
+            want.url = MidiConnectionService.URI_CURRENT_STATE;
 
             holder.request = req;
             Have have = server.invoke(want);
@@ -127,17 +132,29 @@ public class CurrentDeviceActivity extends LifeActivity {
         };
 
         mTaskMan.createNewTask(task).onThen((tc) -> {
-
-            //     DeviceInfo dev = mSettingsManager.getCurrentDevice();
-            //     mTextCurrentDeviceName.setText(dev.getName());
-            //   mTextCurrentDeviceAddress.setText(dev.getUrl());
-            // mTextCurrentDeviceType.setText(dev.getScheme());
-
+            this.onFetchOk(holder.response);
         }).onCatch((tc) -> {
-
 
         }).onFinally((tc) -> {
 
         }).execute();
+    }
+
+    private void onFetchOk(MidiConnectionService.Response response) {
+
+        if (response == null) {
+            return;
+        }
+
+        DeviceInfo dev = response.current;
+        if (dev == null) {
+            return;
+        }
+
+        Log.i(DuckLogger.TAG, dev.toString());
+
+        mTextCurrentDeviceName.setText(dev.getName());
+        mTextCurrentDeviceAddress.setText(dev.getUrl());
+        mTextCurrentDeviceType.setText(dev.getScheme());
     }
 }

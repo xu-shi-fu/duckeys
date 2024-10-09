@@ -23,6 +23,8 @@ public final class MidiConnectionService {
     }
 
     public static class Response {
+        public boolean enabled;
+        public boolean connected;
         public DeviceInfo current;
         public List<DeviceInfo> history;
     }
