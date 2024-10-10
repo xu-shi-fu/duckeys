@@ -20,6 +20,7 @@ import com.github.xushifustudio.libduckeys.api.services.MidiConnectionService;
 import com.github.xushifustudio.libduckeys.context.DuckClient;
 import com.github.xushifustudio.libduckeys.context.LifeActivity;
 import com.github.xushifustudio.libduckeys.context.LifeManager;
+import com.github.xushifustudio.libduckeys.helper.CommonErrorHandler;
 import com.github.xushifustudio.libduckeys.helper.DialogItemSelector;
 import com.github.xushifustudio.libduckeys.helper.DuckLogger;
 import com.github.xushifustudio.libduckeys.settings.apps.DeviceInfo;
@@ -32,8 +33,10 @@ public class CurrentDeviceActivity extends LifeActivity {
     private TextView mTextCurrentDeviceName;
     private TextView mTextCurrentDeviceType;
     private TextView mTextCurrentDeviceAddress;
+    private TextView mTextCurrentState;
     private Button mButtonAddNewDevice;
     private Button mButtonShowHistoryDevice;
+    private Button mButtonReconnect;
 
 
     @Override
@@ -46,8 +49,10 @@ public class CurrentDeviceActivity extends LifeActivity {
         mTextCurrentDeviceName = findViewById(R.id.text_current_device_name);
         mTextCurrentDeviceType = findViewById(R.id.text_current_device_type);
         mTextCurrentDeviceAddress = findViewById(R.id.text_current_device_address);
+        mTextCurrentState = findViewById(R.id.text_current_state);
         mButtonAddNewDevice = findViewById(R.id.button_add_new_device);
         mButtonShowHistoryDevice = findViewById(R.id.button_show_history_device_list);
+        mButtonReconnect = findViewById(R.id.button_reconnect);
 
         setupListeners();
     }
@@ -77,6 +82,9 @@ public class CurrentDeviceActivity extends LifeActivity {
         });
         mButtonAddNewDevice.setOnClickListener((v) -> {
             showAddNewDeviceDialog();
+        });
+        mButtonReconnect.setOnClickListener((v) -> {
+            reconnect();
         });
     }
 
@@ -114,13 +122,33 @@ public class CurrentDeviceActivity extends LifeActivity {
         ab.show();
     }
 
+    private void reconnect() {
+
+        Task task = (tc) -> {
+            Server server = mClient.waitForServerReady();
+            MidiConnectionService.Request req = new MidiConnectionService.Request();
+            Want want = MidiConnectionService.encode(req);
+            want.method = Want.POST;
+            want.url = MidiConnectionService.URI_RECONNECT;
+
+            // holder.request = req;
+            Have have = server.invoke(want);
+            // holder.response = MidiConnectionService.decode(have);
+        };
+
+        mTaskMan.createNewTask(task).onThen((tc) -> {
+            this.fetch();
+        }).onCatch((tc) -> {
+            CommonErrorHandler.handle(this, tc.error);
+        }).execute();
+    }
 
     private void fetch() {
 
         final MidiConnectionService.Holder holder = new MidiConnectionService.Holder();
 
         Task task = (tc) -> {
-            Server server = mClient.waitForServerReady(3000);
+            Server server = mClient.waitForServerReady();
             MidiConnectionService.Request req = new MidiConnectionService.Request();
             Want want = MidiConnectionService.encode(req);
             want.method = Want.GET;
@@ -134,7 +162,7 @@ public class CurrentDeviceActivity extends LifeActivity {
         mTaskMan.createNewTask(task).onThen((tc) -> {
             this.onFetchOk(holder.response);
         }).onCatch((tc) -> {
-
+            CommonErrorHandler.handle(this, tc.error);
         }).onFinally((tc) -> {
 
         }).execute();
@@ -151,10 +179,13 @@ public class CurrentDeviceActivity extends LifeActivity {
             return;
         }
 
-        Log.i(DuckLogger.TAG, dev.toString());
+        // Log.i(DuckLogger.TAG, dev.toString());
+
+        String state = response.connected ? "connected" : "off";
 
         mTextCurrentDeviceName.setText(dev.getName());
         mTextCurrentDeviceAddress.setText(dev.getUrl());
         mTextCurrentDeviceType.setText(dev.getScheme());
+        mTextCurrentState.setText(state);
     }
 }

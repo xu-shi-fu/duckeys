@@ -41,6 +41,8 @@ public final class MidiConnectionController implements Controller, ComponentLife
         hr.register(Want.GET, MidiConnectionService.URI_HISTORY_LIST, this::handleQueryHistoryList);
         hr.register(Want.GET, MidiConnectionService.URI_CURRENT_STATE, this::handleQueryCurrentState);
         hr.register(Want.POST, MidiConnectionService.URI_CONNECT, this::handleConnect);
+        hr.register(Want.POST, MidiConnectionService.URI_RECONNECT, this::handleReconnect);
+        hr.register(Want.POST, MidiConnectionService.URI_DISCONNECT, this::handleDisconnect);
 
     }
 
@@ -106,6 +108,57 @@ public final class MidiConnectionController implements Controller, ComponentLife
         MidiConnectionService.Response resp = new MidiConnectionService.Response();
         return MidiConnectionService.encode(resp);
     }
+
+
+    private Have handleDisconnect(Want w) throws IOException {
+        MidiUriConnection conn = null;
+        MidiEventRT router = mDC.getMidiRouter();
+        try {
+            conn = mDC.getCurrentConnection();
+            mDC.setCurrentConnection(null);
+            router.setTx(null);
+        } finally {
+            IO.close(conn);
+        }
+        MidiConnectionService.Response resp = new MidiConnectionService.Response();
+        return MidiConnectionService.encode(resp);
+    }
+
+
+    private Have handleReconnect(Want w) throws IOException {
+
+        // 重新构建请求
+        MidiConnectionService.Request req = new MidiConnectionService.Request();
+
+        // disconnect
+        w = MidiConnectionService.encode(req);
+        w.method = Want.POST;
+        w.url = MidiConnectionService.URI_DISCONNECT;
+        Have h = this.handleDisconnect(w);
+
+        // read settings
+        SettingSession session = null;
+        CurrentDeviceSettings current = new CurrentDeviceSettings();
+        try {
+            Thread.sleep(1000);
+            session = mSettings.openSession();
+            current = session.get(CurrentDeviceSettings.class, current);
+            req.device = current.getDevice();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            IO.close(session);
+        }
+
+        // connect
+        w = MidiConnectionService.encode(req);
+        w.method = Want.POST;
+        w.url = MidiConnectionService.URI_CONNECT;
+        h = this.handleConnect(w);
+
+        return h;
+    }
+
 
     private void writeToHistory(MidiConnectionService.Request req) {
         SettingSession session = null;

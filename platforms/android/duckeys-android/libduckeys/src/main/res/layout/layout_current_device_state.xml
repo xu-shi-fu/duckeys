@@ -19,6 +19,11 @@
         android:layout_height="wrap_content"
         android:text="+连接到一个新的设备" />
 
+    <Button
+        android:id="@+id/button_reconnect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="重新连接" />
 
     <TextView
         android:layout_width="match_parent"
@@ -43,6 +48,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="(address)" />
+
+    <TextView
+        android:id="@+id/text_current_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(state)" />
 
     <Switch
         android:id="@+id/switch_connection_enabled"

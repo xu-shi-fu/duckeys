@@ -14,6 +14,7 @@ public final class MidiConnectionService {
     public final static String URI_CURRENT_STATE = "uri:///midi/connections/current/state";
     public final static String URI_CURRENT_CONTROL = "uri:///midi/connections/current/control";
     public final static String URI_CONNECT = "uri:///midi/connections/connect";
+    public final static String URI_RECONNECT = "uri:///midi/connections/reconnect";
     public final static String URI_DISCONNECT = "uri:///midi/connections/disconnect";
     public final static String URI_HISTORY_LIST = "uri:///midi/connections/history/list";
 
