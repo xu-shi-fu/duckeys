@@ -12,10 +12,10 @@ import com.github.xushifustudio.libduckeys.api.controllers.MidiWriterController;
 import com.github.xushifustudio.libduckeys.api.controllers.SettingsController;
 import com.github.xushifustudio.libduckeys.api.servers.DefaultServer;
 import com.github.xushifustudio.libduckeys.api.servers.Server;
-import com.github.xushifustudio.libduckeys.conn.BleMidiConnector;
 import com.github.xushifustudio.libduckeys.conn.MockMidiConnector;
 import com.github.xushifustudio.libduckeys.conn.UsbMidiConnector;
 import com.github.xushifustudio.libduckeys.conn.WifiMidiConnector;
+import com.github.xushifustudio.libduckeys.conn.bleconn.BleConnector;
 import com.github.xushifustudio.libduckeys.midi.DefaultMidiUriAgent;
 import com.github.xushifustudio.libduckeys.midi.MidiUriAgent;
 import com.github.xushifustudio.libduckeys.settings.DefaultSettingManager;
@@ -47,7 +47,7 @@ public final class DuckConfig {
 
 
         // connectors
-        cr.register(nil, new BleMidiConnector());
+        cr.register(nil, new BleConnector());
         cr.register(nil, new UsbMidiConnector());
         cr.register(nil, new WifiMidiConnector());
         cr.register(nil, new MockMidiConnector());

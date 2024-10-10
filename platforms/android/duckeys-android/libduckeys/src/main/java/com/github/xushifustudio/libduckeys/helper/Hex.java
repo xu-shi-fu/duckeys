@@ -35,12 +35,17 @@ public final class Hex {
         return b.toString();
     }
 
-
-    public static String stringify(byte[] data) {
+    public static String stringify(byte[] data, int offset, int length) {
         StringBuilder sb = new StringBuilder();
-        for (byte n : data) {
-            stringify(n, sb);
+        int end = offset + length;
+        for (int i = offset; i < end; i++) {
+            stringify(data[i], sb);
         }
         return sb.toString();
+    }
+
+
+    public static String stringify(byte[] data) {
+        return stringify(data, 0, data.length);
     }
 }

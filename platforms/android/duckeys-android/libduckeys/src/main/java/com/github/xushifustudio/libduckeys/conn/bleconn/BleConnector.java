@@ -1,4 +1,4 @@
-package com.github.xushifustudio.libduckeys.conn;
+package com.github.xushifustudio.libduckeys.conn.bleconn;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -16,12 +16,12 @@ import com.github.xushifustudio.libduckeys.midi.MidiUriConnector;
 import java.io.IOException;
 import java.net.URI;
 
-public class BleMidiConnector implements MidiUriConnector, ComponentLife {
+public class BleConnector implements MidiUriConnector, ComponentLife {
 
     private BluetoothManager mBTM;
     private Context mContext;
 
-    public BleMidiConnector() {
+    public BleConnector() {
     }
 
     @Override
@@ -31,7 +31,7 @@ public class BleMidiConnector implements MidiUriConnector, ComponentLife {
     }
 
     @Override
-    public MidiUriConnection open(URI uri , MidiEventHandler rx ) throws IOException {
+    public MidiUriConnection open(URI uri, MidiEventHandler rx) throws IOException {
 
         String addr = uri.getHost() + "";
         addr = addr.replace('-', ':');
@@ -42,7 +42,7 @@ public class BleMidiConnector implements MidiUriConnector, ComponentLife {
         BluetoothDevice device = adapter.getRemoteDevice(addr);
 
 
-        BleMidiConnection conn = new BleMidiConnection(mContext, uri, device);
+        BleConnection conn = new BleConnection(mContext, uri, device, rx);
         conn.connect(5000);
         return conn;
     }
