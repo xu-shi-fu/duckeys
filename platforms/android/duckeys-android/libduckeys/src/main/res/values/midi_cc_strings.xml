@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 0x -->
+    <string name="midi_cc_0"> Controller 0 MSB </string>
+    <string name="midi_cc_1"> Controller 1 MSB </string>
+    <string name="midi_cc_2"> Controller 2 MSB </string>
+    <string name="midi_cc_3"> Controller 3 MSB </string>
+    <string name="midi_cc_4"> Controller 4 MSB </string>
+    <string name="midi_cc_5"> Controller 5 MSB </string>
+    <string name="midi_cc_6"> Controller 6 MSB </string>
+    <string name="midi_cc_7"> Controller 7 MSB </string>
+    <string name="midi_cc_8"> Controller 8 MSB </string>
+    <string name="midi_cc_9"> Controller 9 MSB </string>
+
+    <!-- 1x -->
+    <string name="midi_cc_10"> Controller 10 MSB </string>
+    <string name="midi_cc_11"> Controller 11 MSB </string>
+    <string name="midi_cc_12"> Controller 12 MSB </string>
+    <string name="midi_cc_13"> Controller 13 MSB </string>
+    <string name="midi_cc_14"> Controller 14 MSB </string>
+    <string name="midi_cc_15"> Controller 15 MSB </string>
+    <string name="midi_cc_16"> Controller 16 MSB </string>
+    <string name="midi_cc_17"> Controller 17 MSB </string>
+    <string name="midi_cc_18"> Controller 18 MSB </string>
+    <string name="midi_cc_19"> Controller 19 MSB </string>
+
+    <!-- 2x -->
+    <string name="midi_cc_20"> Controller 20 MSB </string>
+    <string name="midi_cc_21"> Controller 21 MSB </string>
+    <string name="midi_cc_22"> Controller 22 MSB </string>
+    <string name="midi_cc_23"> Controller 23 MSB </string>
+    <string name="midi_cc_24"> Controller 24 MSB </string>
+    <string name="midi_cc_25"> Controller 25 MSB </string>
+    <string name="midi_cc_26"> Controller 26 MSB </string>
+    <string name="midi_cc_27"> Controller 27 MSB </string>
+    <string name="midi_cc_28"> Controller 28 MSB </string>
+    <string name="midi_cc_29"> Controller 29 MSB </string>
+
+    <!-- 3x -->
+    <string name="midi_cc_30"> Controller 30 MSB </string>
+    <string name="midi_cc_31"> Controller 31 MSB </string>
+    <string name="midi_cc_32"> Controller 0 LSB </string>
+    <string name="midi_cc_33"> Controller 1 LSB </string>
+    <string name="midi_cc_34"> Controller 2 LSB </string>
+    <string name="midi_cc_35"> Controller 3 LSB </string>
+    <string name="midi_cc_36"> Controller 4 LSB </string>
+    <string name="midi_cc_37"> Controller 5 LSB </string>
+    <string name="midi_cc_38"> Controller 6 LSB </string>
+    <string name="midi_cc_39"> Controller 7 LSB </string>
+
+    <!-- 4x -->
+    <string name="midi_cc_40"> Controller 8 LSB </string>
+    <string name="midi_cc_41"> Controller 9 LSB </string>
+    <string name="midi_cc_42"> Controller 10 LSB </string>
+    <string name="midi_cc_43"> Controller 11 LSB </string>
+    <string name="midi_cc_44"> Controller 12 LSB </string>
+    <string name="midi_cc_45"> Controller 13 LSB </string>
+    <string name="midi_cc_46"> Controller 14 LSB </string>
+    <string name="midi_cc_47"> Controller 15 LSB </string>
+    <string name="midi_cc_48"> Controller 16 LSB </string>
+    <string name="midi_cc_49"> Controller 17 LSB </string>
+
+    <!-- 5x -->
+    <string name="midi_cc_50"> Controller 18 LSB </string>
+    <string name="midi_cc_51"> Controller 19 LSB </string>
+    <string name="midi_cc_52"> Controller 20 LSB </string>
+    <string name="midi_cc_53"> Controller 21 LSB </string>
+    <string name="midi_cc_54"> Controller 22 LSB </string>
+    <string name="midi_cc_55"> Controller 23 LSB </string>
+    <string name="midi_cc_56"> Controller 24 LSB </string>
+    <string name="midi_cc_57"> Controller 25 LSB </string>
+    <string name="midi_cc_58"> Controller 26 LSB </string>
+    <string name="midi_cc_59"> Controller 27 LSB </string>
+
+    <!-- 6x -->
+    <string name="midi_cc_60"> Controller 28 LSB </string>
+    <string name="midi_cc_61"> Controller 29 LSB </string>
+    <string name="midi_cc_62"> Controller 30 LSB </string>
+    <string name="midi_cc_63"> Controller 31 LSB </string>
+    <string name="midi_cc_64"> 0 </string>
+    <string name="midi_cc_65"> 0 </string>
+    <string name="midi_cc_66"> 0 </string>
+    <string name="midi_cc_67"> 0 </string>
+    <string name="midi_cc_68"> 0 </string>
+    <string name="midi_cc_69"> 0 </string>
+
+    <!-- 7x -->
+    <string name="midi_cc_70"> 0 </string>
+    <string name="midi_cc_71"> 0 </string>
+    <string name="midi_cc_72"> 0 </string>
+    <string name="midi_cc_73"> 0 </string>
+    <string name="midi_cc_74"> 0 </string>
+    <string name="midi_cc_75"> 0 </string>
+    <string name="midi_cc_76"> 0 </string>
+    <string name="midi_cc_77"> 0 </string>
+    <string name="midi_cc_78"> 0 </string>
+    <string name="midi_cc_79"> 0 </string>
+
+    <!-- 8x -->
+    <string name="midi_cc_80"> 0 </string>
+    <string name="midi_cc_81"> 0 </string>
+    <string name="midi_cc_82"> 0 </string>
+    <string name="midi_cc_83"> 0 </string>
+    <string name="midi_cc_84"> 0 </string>
+    <string name="midi_cc_85"> 0 </string>
+    <string name="midi_cc_86"> 0 </string>
+    <string name="midi_cc_87"> 0 </string>
+    <string name="midi_cc_88"> 0 </string>
+    <string name="midi_cc_89"> 0 </string>
+
+    <!-- 9x -->
+    <string name="midi_cc_90"> 0 </string>
+    <string name="midi_cc_91"> 0 </string>
+    <string name="midi_cc_92"> 0 </string>
+    <string name="midi_cc_93"> 0 </string>
+    <string name="midi_cc_94"> 0 </string>
+    <string name="midi_cc_95"> 0 </string>
+    <string name="midi_cc_96"> 0 </string>
+    <string name="midi_cc_97"> 0 </string>
+    <string name="midi_cc_98"> 0 </string>
+    <string name="midi_cc_99"> 0 </string>
+
+    <!-- 10x -->
+    <string name="midi_cc_100"> 0 </string>
+    <string name="midi_cc_101"> 0 </string>
+    <string name="midi_cc_102"> 0 </string>
+    <string name="midi_cc_103"> 0 </string>
+    <string name="midi_cc_104"> 0 </string>
+    <string name="midi_cc_105"> 0 </string>
+    <string name="midi_cc_106"> 0 </string>
+    <string name="midi_cc_107"> 0 </string>
+    <string name="midi_cc_108"> 0 </string>
+    <string name="midi_cc_109"> 0 </string>
+
+    <!-- 11x -->
+    <string name="midi_cc_110"> 0 </string>
+    <string name="midi_cc_111"> 0 </string>
+    <string name="midi_cc_112"> 0 </string>
+    <string name="midi_cc_113"> 0 </string>
+    <string name="midi_cc_114"> 0 </string>
+    <string name="midi_cc_115"> 0 </string>
+    <string name="midi_cc_116"> 0 </string>
+    <string name="midi_cc_117"> 0 </string>
+    <string name="midi_cc_118"> 0 </string>
+    <string name="midi_cc_119"> 0 </string>
+
+    <string name="midi_cc_12x"> out of MIDI CC range </string>
+
+</resources>

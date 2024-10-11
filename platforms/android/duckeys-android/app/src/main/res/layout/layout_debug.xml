@@ -9,13 +9,6 @@
 
 
     <Button
-        android:id="@+id/button_piano_keyboard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Piano Keyboard" />
-
-
-    <Button
         android:id="@+id/button_midi_connection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,10 +26,28 @@
         android:layout_height="wrap_content"
         android:text="Show Current Device" />
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+
     <Button
         android:id="@+id/button_show_simple_midi_pad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Show Simple MIDI Pad" />
+        android:text="Simple MIDI Pad" />
+
+    <Button
+        android:id="@+id/button_show_midi_cc_console"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MIDI CC Console" />
+
+    <Button
+        android:id="@+id/button_piano_keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Piano Keyboard" />
+
 
 </LinearLayout>

@@ -39,12 +39,14 @@ public class BleConnContext {
     // 在访问这些字段时，需要启用事务:
     public BleTxContext dispatching;
     public final StringBuilder txBuffer;
+    public int txBufferCapacity;
 
 
     public BleConnContext() {
         rtx = new MidiEventRT();
-        txBuffer = new StringBuilder();
         callback = new BleGattCallback(this);
+        txBuffer = new StringBuilder();
+        txBufferCapacity = 32;
     }
 
     public void sleep(int ms) {

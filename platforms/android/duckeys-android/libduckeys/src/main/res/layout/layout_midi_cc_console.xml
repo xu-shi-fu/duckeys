@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activities.MidiCCConsoleActivity">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#550E0E"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="MIDI CC Console"
+        android:textColor="#D3903F"
+        android:textSize="25dp" />
+
+
+    <Switch
+        android:id="@+id/switch_auto_send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:padding="15dp"
+        android:text="自动发送 CC 消息" />
+
+    <ListView  android:id="@+id/listview_cc_props"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

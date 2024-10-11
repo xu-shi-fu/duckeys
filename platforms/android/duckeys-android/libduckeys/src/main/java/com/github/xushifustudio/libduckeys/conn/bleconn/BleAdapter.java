@@ -56,8 +56,12 @@ public final class BleAdapter implements MidiEventDispatcher {
         }
         final String row2 = row;
         mContext.runWithinTransaction(() -> {
-            mContext.txBuffer.append(row2);
-            mContext.txBuffer.append('\n');
+            StringBuilder buffer = mContext.txBuffer;
+            if (buffer.length() > mContext.txBufferCapacity) {
+                buffer.setLength(0); // overflow, reset
+            }
+            buffer.append(row2);
+            buffer.append('\n');
         });
         this.flush();
     }

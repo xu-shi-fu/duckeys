@@ -57,6 +57,7 @@
         <activity android:name="com.github.xushifustudio.libduckeys.ui.activities.HistoryDeviceActivity" />
         <activity android:name="com.github.xushifustudio.libduckeys.ui.activities.SimplePadActivity" />
         <activity android:name="com.github.xushifustudio.libduckeys.ui.activities.MockDeviceActivity" />
+        <activity android:name="com.github.xushifustudio.libduckeys.ui.activities.MidiCCConsoleActivity" />
 
     </application>
 

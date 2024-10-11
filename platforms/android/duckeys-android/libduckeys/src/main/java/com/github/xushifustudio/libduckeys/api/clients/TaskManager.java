@@ -14,24 +14,27 @@ public final class TaskManager extends BaseLife {
     private final ContextState mState;
     private final Handler mHandler;
     private final Context mContext;
-
+    private final MidiDispatcherWorker mMidiWorker;
 
     public TaskManager(Context ctx) {
         mHandler = new Handler();
         mState = new ContextState();
         mContext = ctx;
+        mMidiWorker = new MidiDispatcherWorker();
     }
 
 
     @Override
     public void onStart() {
         super.onStart();
+        mMidiWorker.onStart();
         mState.running = true;
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        mMidiWorker.onStop();
         mState.running = false;
     }
 
@@ -57,13 +60,13 @@ public final class TaskManager extends BaseLife {
         return tc;
     }
 
-    public  Worker   getDefaultWorker() {
+    public Worker getDefaultWorker() {
         return new DefaultWorker();
     }
 
     public Worker getMidiWorker() {
-        Log.w(DuckLogger.TAG, "todo: impl  getMidiWorker");
-        return new DefaultWorker();
+        // Log.w(DuckLogger.TAG, "todo: impl  getMidiWorker");
+        return mMidiWorker;
     }
 
     public Worker getBackgroundWorker() {

@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 
 import com.github.xushifustudio.libduckeys.api.API;
 import com.github.xushifustudio.libduckeys.api.clients.Task;
+import com.github.xushifustudio.libduckeys.api.clients.TaskContext;
 import com.github.xushifustudio.libduckeys.api.clients.TaskManager;
 import com.github.xushifustudio.libduckeys.api.servers.Server;
 import com.github.xushifustudio.libduckeys.context.BaseLife;
@@ -18,7 +19,7 @@ import com.github.xushifustudio.libduckeys.helper.IO;
 
 import java.io.IOException;
 
-public class MidiUserAgent extends BaseLife implements MERT {
+public class MidiUserAgent extends BaseLife implements MERT, MidiEventDispatcher {
 
     private final MidiEventRT mRT;
     private final Context mContext;
@@ -125,11 +126,21 @@ public class MidiUserAgent extends BaseLife implements MERT {
 
     @Override
     public MidiEventDispatcher getTx() {
-        return mRT.getTx();
+        return this;
     }
 
     @Override
     public void setRx(MidiEventHandler rx) {
         mRT.setRx(rx);
+    }
+
+    @Override
+    public void dispatch(MidiEvent me) {
+        Task task = (tc) -> {
+            mRT.dispatch(me);
+        };
+        TaskContext tc1 = mTasks.createNewTask(task);
+        tc1.worker = mTasks.getMidiWorker();
+        tc1.execute();
     }
 }
