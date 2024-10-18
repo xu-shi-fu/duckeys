@@ -2,12 +2,14 @@ package com.github.xushifustudio.libduckeys.helper;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 public final class CommonErrorHandler {
 
-    public static final int FLAG_TOAST = 1;
-    public static final int FLAG_ALERT = 2;
+    public static final int FLAG_TOAST = 0x01;
+    public static final int FLAG_ALERT = 0x02;
+    public static final int FLAG_LOG = 0x04;
 
     public static void handle(Context ctx, Throwable e) {
         handle(ctx, e, FLAG_TOAST);
@@ -18,14 +20,29 @@ public final class CommonErrorHandler {
         if (ctx == null || e == null) {
             return;
         }
+        boolean done = false;
 
         if ((flags & FLAG_TOAST) != 0) {
             handle_toast(ctx, e);
-        } else if ((flags & FLAG_ALERT) != 0) {
+            done = true;
+        }
+        if ((flags & FLAG_ALERT) != 0) {
             handle_alert(ctx, e);
+            done = true;
+        }
+        if ((flags & FLAG_LOG) != 0) {
+            handle_log(ctx, e);
+            done = true;
         }
 
-        e.printStackTrace();
+        if (!done) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private static void handle_log(Context ctx, Throwable e) {
+        Log.e(DuckLogger.TAG, e.getMessage());
     }
 
 

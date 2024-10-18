@@ -10,13 +10,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.github.xushifustudio.libduckeys.R;
-import com.github.xushifustudio.libduckeys.midi.MidiNoteEvent;
+import com.github.xushifustudio.libduckeys.midi.MidiNoteMessage;
 import com.github.xushifustudio.libduckeys.midi.Note;
 
 public class MidiPadView extends LinearLayout {
 
     private final KeyConfig[] mKeys;
-    private MidiNoteEvent.Listener mListener;
+    private MidiNoteMessage.Listener mListener;
 
     public MidiPadView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -90,8 +90,8 @@ public class MidiPadView extends LinearLayout {
     }
 
 
-    private void handleMidiNoteEvent(MidiNoteEvent event) {
-        MidiNoteEvent.Listener l = mListener;
+    private void handleMidiNoteEvent(MidiNoteMessage event) {
+        MidiNoteMessage.Listener l = mListener;
         if (l == null || event == null) {
             return;
         }
@@ -100,7 +100,7 @@ public class MidiPadView extends LinearLayout {
 
 
     private void onTouchDown(KeyConfig kc) {
-        MidiNoteEvent event = makeMidiNoteEvent(kc);
+        MidiNoteMessage event = makeMidiNoteEvent(kc);
         if (event == null) {
             return;
         }
@@ -110,7 +110,7 @@ public class MidiPadView extends LinearLayout {
     }
 
     private void onTouchUp(KeyConfig kc) {
-        MidiNoteEvent event = makeMidiNoteEvent(kc);
+        MidiNoteMessage event = makeMidiNoteEvent(kc);
         if (event == null) {
             return;
         }
@@ -119,7 +119,7 @@ public class MidiPadView extends LinearLayout {
         handleMidiNoteEvent(event);
     }
 
-    private MidiNoteEvent makeMidiNoteEvent(KeyConfig kc) {
+    private MidiNoteMessage makeMidiNoteEvent(KeyConfig kc) {
         if (kc == null) {
             return null;
         }
@@ -127,13 +127,13 @@ public class MidiPadView extends LinearLayout {
         if (note == null) {
             return null;
         }
-        MidiNoteEvent e = new MidiNoteEvent();
+        MidiNoteMessage e = new MidiNoteMessage();
         e.note = (byte) note.midi;
         e.channel = 0; // todo ...
         return e;
     }
 
-    public void setOnMidiNoteListener(MidiNoteEvent.Listener l) {
+    public void setOnMidiNoteListener(MidiNoteMessage.Listener l) {
         mListener = l;
     }
 }

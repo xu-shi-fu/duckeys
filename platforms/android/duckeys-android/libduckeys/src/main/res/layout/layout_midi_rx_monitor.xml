@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activities.MidiRxMonitorActivity">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#550E0E"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="MIDI Rx Monitor"
+        android:textColor="#D3903F"
+        android:textSize="25dp" />
+
+
+    <Button
+        android:id="@+id/button_echo_xxx"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Echo" />
+
+    <Button
+        android:id="@+id/button_clear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear" />
+
+
+    <ListView
+        android:id="@+id/listview_rx_midi_events"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

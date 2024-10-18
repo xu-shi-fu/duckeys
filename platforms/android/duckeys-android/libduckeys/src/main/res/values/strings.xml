@@ -4,6 +4,7 @@
     <string name="cancel">取消</string>
     <string name="close">关闭</string>
     <string name="ok">确定</string>
+    <string name="connect">连接</string>
 
     <string name="select_connecting_method"> 请选择连接方式 </string>
 

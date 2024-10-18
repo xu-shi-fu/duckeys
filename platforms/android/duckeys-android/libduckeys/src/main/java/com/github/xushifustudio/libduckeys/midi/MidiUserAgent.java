@@ -29,7 +29,7 @@ public class MidiUserAgent extends BaseLife implements MERT, MidiEventDispatcher
     private MidiWriter mWriter;
 
     public MidiUserAgent(Context ctx, DuckClient dc, TaskManager tm) {
-        mRT = new MidiEventRT();
+        mRT = new MidiEventRT("owner:MidiUserAgent");
         mContext = ctx;
         mClient = dc;
         mTasks = tm;
@@ -56,19 +56,20 @@ public class MidiUserAgent extends BaseLife implements MERT, MidiEventDispatcher
     }
 
     private void bind() {
-
-        //      MERT router = mDC.getMidiRouter();
-        //    MidiEventRT self = mRT;
-        //  router.setRx(self);
-
         mRT.setTx(this::write);
+        startRxLoop();
+    }
 
+    private void startRxLoop() {
         Task task = (tc) -> {
             Server ser = mClient.waitForServerReady();
             this.runMidiEventLoop(ser);
         };
-        mTasks.createNewTask(task).execute();
+        TaskContext x = mTasks.createNewTask(task);
+        x.worker = mTasks.getDefaultWorker();
+        x.execute();
     }
+
 
     private void runMidiEventLoop(Server ser) {
         API api_w = ser.getMidiWriterAPI();
@@ -79,7 +80,7 @@ public class MidiUserAgent extends BaseLife implements MERT, MidiEventDispatcher
             reader = new ApiMidiReader(api_r);
             writer = new ApiMidiWriter(api_w);
             mWriter = writer;
-            for (; mWorking; ) {
+            while (mWorking) {
                 this.tryRead(reader);
             }
         } catch (Exception e) {
@@ -105,9 +106,27 @@ public class MidiUserAgent extends BaseLife implements MERT, MidiEventDispatcher
                 return;
             }
             Log.i(DuckLogger.TAG, "" + evt);
+            mRT.handle(evt);
         } catch (Exception e) {
+            if (isTimeout(e)) {
+                String msg = e.getMessage();
+                Log.w(DuckLogger.TAG, "MidiUserAgent.tryRead:" + msg);
+                return;
+            }
             e.printStackTrace();
         }
+    }
+
+    private boolean isTimeout(Exception e) {
+        if (e == null) {
+            return false;
+        }
+        final String keyword = "timeout";
+        final String msg = e.getMessage();
+        if (msg == null) {
+            return false;
+        }
+        return msg.contains(keyword);
     }
 
 

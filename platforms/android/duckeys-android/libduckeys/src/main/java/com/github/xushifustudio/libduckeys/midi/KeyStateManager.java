@@ -10,7 +10,7 @@ public class KeyStateManager extends BaseLife {
 
     public KeyStateManager() {
         mKeys = initKeys();
-        mMeRT = new MidiEventRT();
+        mMeRT = new MidiEventRT("owner:KeyStateManager");
         mKeyNA = initKeyNA();
     }
 
@@ -20,7 +20,7 @@ public class KeyStateManager extends BaseLife {
     }
 
 
-    public void write(MidiNoteEvent event) {
+    public void write(MidiNoteMessage event) {
 
         if (!event.on) {
             event.velocity = 0;
@@ -34,7 +34,7 @@ public class KeyStateManager extends BaseLife {
         state.on = event.on;
         state.velocity = event.velocity;
 
-        MidiEvent me = MidiNoteEvent.toMidiEvent(event);
+        MidiEvent me = MidiNoteMessage.toMidiEvent(event);
         mMeRT.dispatch(me);
     }
 

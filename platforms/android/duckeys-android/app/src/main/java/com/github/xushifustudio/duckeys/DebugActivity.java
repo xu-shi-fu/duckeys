@@ -5,10 +5,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.github.xushifustudio.libduckeys.ui.activities.BaseAboutActivity;
 import com.github.xushifustudio.libduckeys.ui.activities.BluetoothScanningActivity;
 import com.github.xushifustudio.libduckeys.ui.activities.CurrentDeviceActivity;
 import com.github.xushifustudio.libduckeys.ui.activities.MidiCCConsoleActivity;
 import com.github.xushifustudio.libduckeys.ui.activities.MidiConnectionActivity;
+import com.github.xushifustudio.libduckeys.ui.activities.MidiDeviceActivity;
+import com.github.xushifustudio.libduckeys.ui.activities.MidiRxMonitorActivity;
 import com.github.xushifustudio.libduckeys.ui.activities.PianoKeyboardActivity;
 import com.github.xushifustudio.libduckeys.ui.activities.SimplePadActivity;
 
@@ -38,6 +41,22 @@ public class DebugActivity extends Activity {
         });
         findViewById(R.id.button_show_midi_cc_console).setOnClickListener((v) -> {
             Intent i = new Intent(this, MidiCCConsoleActivity.class);
+            startActivity(i);
+        });
+        findViewById(R.id.button_show_midi_devices).setOnClickListener((v) -> {
+            Intent i = new Intent(this, MidiDeviceActivity.class);
+            startActivity(i);
+        });
+        findViewById(R.id.button_show_midi_rx_monitor).setOnClickListener((v) -> {
+            Intent i = new Intent(this, MidiRxMonitorActivity.class);
+            startActivity(i);
+        });
+        findViewById(R.id.button_show_about).setOnClickListener((v) -> {
+            Intent i = new Intent(this, AboutOpenDuckeysActivity.class);
+            startActivity(i);
+        });
+        findViewById(R.id.button_debug_multi_touch).setOnClickListener((v) -> {
+            Intent i = new Intent(this, DebugMultiTouchActivity.class);
             startActivity(i);
         });
     }

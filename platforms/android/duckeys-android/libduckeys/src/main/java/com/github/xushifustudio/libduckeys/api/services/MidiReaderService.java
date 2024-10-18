@@ -1,5 +1,6 @@
 package com.github.xushifustudio.libduckeys.api.services;
 
+import com.github.xushifustudio.libduckeys.api.Entity;
 import com.github.xushifustudio.libduckeys.api.Have;
 import com.github.xushifustudio.libduckeys.api.Want;
 import com.github.xushifustudio.libduckeys.midi.MidiEvent;
@@ -18,19 +19,23 @@ public final class MidiReaderService {
 
 
     public static Want encode(Request req) {
-        return new Want();
+        Want dst = new Want();
+        dst.entity = Entity.encodeJSON(req);
+        return dst;
     }
 
     public static Have encode(Response resp) {
-        return new Have();
+        Have dst = new Have();
+        dst.entity = Entity.encodeJSON(resp);
+        return dst;
     }
 
 
     public static Request decode(Want req) {
-        return new Request();
+        return Entity.decodeJSON(req.entity, Request.class);
     }
 
     public static Response decode(Have resp) {
-        return new Response();
+        return Entity.decodeJSON(resp.entity, Response.class);
     }
 }

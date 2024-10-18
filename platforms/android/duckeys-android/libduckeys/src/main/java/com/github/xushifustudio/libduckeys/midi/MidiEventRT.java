@@ -1,14 +1,25 @@
 package com.github.xushifustudio.libduckeys.midi;
 
+import androidx.annotation.NonNull;
+
 public class MidiEventRT implements MidiEventDispatcher, MidiEventHandler, MERT {
 
     private MidiEventHandler mRx;
     private MidiEventDispatcher mTx;
     private final NopMERT nop = new NopMERT();
+    private final String mTag;
 
-    public MidiEventRT() {
+    public MidiEventRT(String tag) {
         mTx = nop;
         mRx = nop;
+        mTag = tag;
+    }
+
+
+    @NonNull
+    @Override
+    public String toString() {
+        return super.toString() + " tag:" + mTag;
     }
 
     @Override

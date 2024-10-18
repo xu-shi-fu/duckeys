@@ -11,13 +11,31 @@ import java.util.List;
 public final class LifeManager {
 
     private final List<Life> mItems;
+    private List<Life> mOnCreateBuffer;
+    private MyOnCreateCaller mOnCreateCaller;
     private Life mMainLife;
 
     public LifeManager() {
         mItems = new ArrayList<>();
+        mOnCreateBuffer = new ArrayList<>();
+        mOnCreateCaller = null;
     }
 
     public void add(Life l) {
+        if (l == null) {
+            return;
+        }
+        if (this.mItems.contains(l)) {
+            return; // 避免重复
+        }
+        MyOnCreateCaller caller = mOnCreateCaller;
+        List<Life> buffer = mOnCreateBuffer;
+        if (caller != null) {
+            caller.invoke(l);
+        }
+        if (buffer != null) {
+            buffer.add(l);
+        }
         mItems.add(l);
     }
 
@@ -47,24 +65,46 @@ public final class LifeManager {
         }
     }
 
+    private static class MyOnCreateCaller {
+
+        final Bundle savedInstanceState;
+
+        MyOnCreateCaller(Bundle b) {
+            this.savedInstanceState = b;
+        }
+
+        public void invoke(Life l) {
+            l.onCreate(this.savedInstanceState);
+        }
+    }
+
 
     private class MyMainLife implements Life {
 
-
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
-            forEachItem(false, (l) -> {
-                l.onCreate(savedInstanceState);
-            });
+            MyOnCreateCaller caller = new MyOnCreateCaller(savedInstanceState);
+            List<Life> buffer = mOnCreateBuffer;
+            if (buffer != null) {
+                for (Life l : buffer) {
+                    caller.invoke(l);
+                }
+            }
+            mOnCreateBuffer = null;
+            mOnCreateCaller = caller;
         }
 
         @Override
         public void onStart() {
+            mOnCreateCaller = null;
+            mOnCreateBuffer = null;
             forEachItem(false, Life::onStart);
         }
 
         @Override
         public void onRestart() {
+            mOnCreateCaller = null;
+            mOnCreateBuffer = null;
             forEachItem(false, Life::onRestart);
         }
 
@@ -89,7 +129,7 @@ public final class LifeManager {
         }
     }
 
-    public final Life getMain() {
+    public Life getMain() {
         Life ml = mMainLife;
         if (ml == null) {
             ml = new MyMainLife();
@@ -97,5 +137,4 @@ public final class LifeManager {
         }
         return ml;
     }
-
 }

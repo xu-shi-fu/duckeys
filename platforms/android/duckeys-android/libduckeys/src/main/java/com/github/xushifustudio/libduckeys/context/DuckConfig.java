@@ -15,6 +15,7 @@ import com.github.xushifustudio.libduckeys.api.servers.Server;
 import com.github.xushifustudio.libduckeys.conn.MockMidiConnector;
 import com.github.xushifustudio.libduckeys.conn.UsbMidiConnector;
 import com.github.xushifustudio.libduckeys.conn.WifiMidiConnector;
+import com.github.xushifustudio.libduckeys.conn.androidmidi.AndroidMidiConnector;
 import com.github.xushifustudio.libduckeys.conn.bleconn.BleConnector;
 import com.github.xushifustudio.libduckeys.midi.DefaultMidiUriAgent;
 import com.github.xushifustudio.libduckeys.midi.MidiUriAgent;
@@ -51,6 +52,7 @@ public final class DuckConfig {
         cr.register(nil, new UsbMidiConnector());
         cr.register(nil, new WifiMidiConnector());
         cr.register(nil, new MockMidiConnector());
+        cr.register(nil, new AndroidMidiConnector());
 
 
         // settings

@@ -6,6 +6,9 @@
     <uses-feature android:name="android.hardware.bluetooth_le" />
     <uses-feature android:name="android.hardware.location.gps" />
     <uses-feature android:name="android.hardware.location.network" />
+    <uses-feature
+        android:name="android.software.midi"
+        android:required="true" />
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -49,6 +52,8 @@
 
         <activity android:name=".MainActivity" />
         <activity android:name=".DebugActivity" />
+        <activity android:name=".AboutOpenDuckeysActivity" />
+        <activity android:name=".DebugMultiTouchActivity" />
 
         <activity android:name="com.github.xushifustudio.libduckeys.ui.activities.PianoKeyboardActivity" />
         <activity android:name="com.github.xushifustudio.libduckeys.ui.activities.BluetoothScanningActivity" />
@@ -58,6 +63,8 @@
         <activity android:name="com.github.xushifustudio.libduckeys.ui.activities.SimplePadActivity" />
         <activity android:name="com.github.xushifustudio.libduckeys.ui.activities.MockDeviceActivity" />
         <activity android:name="com.github.xushifustudio.libduckeys.ui.activities.MidiCCConsoleActivity" />
+        <activity android:name="com.github.xushifustudio.libduckeys.ui.activities.MidiDeviceActivity" />
+        <activity android:name="com.github.xushifustudio.libduckeys.ui.activities.MidiRxMonitorActivity" />
 
     </application>
 

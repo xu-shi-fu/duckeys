@@ -15,6 +15,12 @@
         android:text="MIDI Connection" />
 
     <Button
+        android:id="@+id/button_show_midi_devices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MIDI Devices" />
+
+    <Button
         android:id="@+id/button_bluetooth_scan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,5 +55,27 @@
         android:layout_height="wrap_content"
         android:text="Piano Keyboard" />
 
+    <Button
+        android:id="@+id/button_show_midi_rx_monitor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MIDI Rx Monitor" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <Button
+        android:id="@+id/button_show_about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="About" />
+
+
+    <Button
+        android:id="@+id/button_debug_multi_touch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Debug Multi-Touch" />
 
 </LinearLayout>

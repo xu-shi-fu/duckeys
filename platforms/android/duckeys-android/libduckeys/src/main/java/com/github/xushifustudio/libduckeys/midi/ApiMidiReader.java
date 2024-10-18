@@ -26,10 +26,10 @@ public class ApiMidiReader implements MidiReader, Closeable {
             want.url = MidiReaderService.URI;
             Have have = api.invoke(want);
             MidiReaderService.Response resp = MidiReaderService.decode(have);
+            return resp.event;
         } catch (Exception e) {
             throw new IOException(e);
         }
-        return null;
     }
 
     @Override

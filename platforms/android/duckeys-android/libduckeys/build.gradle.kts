@@ -6,6 +6,12 @@ android {
     namespace = "com.github.xushifustudio.libduckeys"
     compileSdk = 34
 
+    publishing{
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
+
     defaultConfig {
         minSdk = 26
 

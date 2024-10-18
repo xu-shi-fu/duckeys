@@ -2,7 +2,6 @@ package com.github.xushifustudio.libduckeys.ui.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +22,7 @@ import com.github.xushifustudio.libduckeys.context.DuckClient;
 import com.github.xushifustudio.libduckeys.context.LifeActivity;
 import com.github.xushifustudio.libduckeys.context.LifeManager;
 import com.github.xushifustudio.libduckeys.helper.DuckLogger;
-import com.github.xushifustudio.libduckeys.midi.MidiCCEvent;
+import com.github.xushifustudio.libduckeys.midi.MidiControlChangeMessage;
 import com.github.xushifustudio.libduckeys.midi.MidiCCTable;
 import com.github.xushifustudio.libduckeys.midi.MidiEvent;
 import com.github.xushifustudio.libduckeys.midi.MidiUserAgent;
@@ -235,13 +234,13 @@ public class MidiCCConsoleActivity extends LifeActivity {
         Log.i(DuckLogger.TAG, msg);
 
 
-        MidiCCEvent ev1 = new MidiCCEvent();
+        MidiControlChangeMessage ev1 = new MidiControlChangeMessage();
         ev1.cc = p.cc;
         ev1.value = (byte) value;
 
         p.value = value;
 
-        MidiEvent ev2 = MidiCCEvent.toMidiEvent(ev1);
+        MidiEvent ev2 = MidiControlChangeMessage.toMidiEvent(ev1);
         mMidiUA.getTx().dispatch(ev2);
     }
 }

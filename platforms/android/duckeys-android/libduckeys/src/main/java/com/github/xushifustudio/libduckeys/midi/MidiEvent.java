@@ -10,6 +10,7 @@ public class MidiEvent {
     public int offset;
     public int count;
     public long timestamp;
+    public boolean flush;
 
 
     @NonNull

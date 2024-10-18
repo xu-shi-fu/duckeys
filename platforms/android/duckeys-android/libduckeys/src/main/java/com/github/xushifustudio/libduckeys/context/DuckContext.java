@@ -12,7 +12,7 @@ public class DuckContext {
 
 
     public DuckContext() {
-        this.midiRouter = new MidiEventRT();
+        this.midiRouter = new MidiEventRT("owner:DuckContext");
     }
 
     public MidiEventRT getMidiRouter() {

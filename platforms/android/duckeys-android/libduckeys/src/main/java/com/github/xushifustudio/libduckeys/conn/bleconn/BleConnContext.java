@@ -43,7 +43,7 @@ public class BleConnContext {
 
 
     public BleConnContext() {
-        rtx = new MidiEventRT();
+        rtx = new MidiEventRT("owner:BleConnContext");
         callback = new BleGattCallback(this);
         txBuffer = new StringBuilder();
         txBufferCapacity = 32;

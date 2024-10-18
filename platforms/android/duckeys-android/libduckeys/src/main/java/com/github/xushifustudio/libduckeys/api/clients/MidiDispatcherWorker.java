@@ -1,6 +1,8 @@
 package com.github.xushifustudio.libduckeys.api.clients;
 
 import com.github.xushifustudio.libduckeys.context.BaseLife;
+import com.github.xushifustudio.libduckeys.helper.DefaultWaiter;
+import com.github.xushifustudio.libduckeys.helper.Waiter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,10 +12,13 @@ public class MidiDispatcherWorker extends BaseLife implements Worker {
 
     private MyWorking mCurrentWorking;
     private final List<TaskRuntime> mTaskList;
+    private final Waiter mWaiter;
+    private final String mWaiterTag = "MidiDispatcherWorker";
 
     public MidiDispatcherWorker() {
         List<TaskRuntime> tlist = new ArrayList<>();
         mTaskList = Collections.synchronizedList(tlist);
+        mWaiter = new DefaultWaiter();
     }
 
     private class MyWorking implements Runnable {
@@ -23,7 +28,7 @@ public class MidiDispatcherWorker extends BaseLife implements Worker {
             while (alive()) {
                 try {
                     if (mTaskList.size() == 0) {
-                        this.wait(1000);
+                        mWaiter.wait(mWaiterTag, 1000);
                         continue;
                     }
                     TaskRuntime item = mTaskList.remove(0);
@@ -65,9 +70,7 @@ public class MidiDispatcherWorker extends BaseLife implements Worker {
             return;
         }
         wk.add(rt);
-        synchronized (wk) {
-            wk.notify();
-        }
+        mWaiter.notify(mWaiterTag);
     }
 
     private void runTask(TaskRuntime rt) {
