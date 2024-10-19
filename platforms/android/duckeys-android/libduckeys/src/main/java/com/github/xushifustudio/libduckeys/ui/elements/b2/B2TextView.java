@@ -9,8 +9,8 @@ import com.github.xushifustudio.libduckeys.ui.box2.B2Align;
 import com.github.xushifustudio.libduckeys.ui.box2.B2LayoutThis;
 import com.github.xushifustudio.libduckeys.ui.box2.B2RenderThis;
 import com.github.xushifustudio.libduckeys.ui.box2.B2Style;
-import com.github.xushifustudio.libduckeys.ui.box2.B2View;
 import com.github.xushifustudio.libduckeys.ui.box2.ICanvas;
+import com.github.xushifustudio.libduckeys.ui.styles.B2StyleReader;
 
 public class B2TextView extends B2RectView {
 
@@ -34,10 +34,11 @@ public class B2TextView extends B2RectView {
             p = null;
         }
         if (p == null) {
-            B2Style st = this.getStyle(true);
+            B2Style sty = this.getStyle(true);
+            B2StyleReader sr = new B2StyleReader(sty);
             p = new Paint();
-            p.setTextSize(st.fontSize);
-            p.setColor(st.textColor);
+            p.setTextSize(sr.readSize(B2Style.font_size));
+            p.setColor(sr.readColor(B2Style.text_color));
             this.cachedTextPaint = p;
         }
         return p;
@@ -69,13 +70,21 @@ public class B2TextView extends B2RectView {
     private PointF computeDrawTextAt() {
 
         B2Style sty = this.getStyle(true);
+        B2StyleReader srd = new B2StyleReader(sty);
+        B2Align align = srd.readAlign(B2Style.align);
+
         float box_w = this.width;
         float box_h = this.height;
         float str_w = this.contentWidth;
         float str_h = this.contentHeight;
         float offset_y = (box_h / 2) - (str_h / 2);
         float offset_x = (box_w / 2) - (str_w / 2);
-        B2Align align = sty.getAlign(true);
+        float padding_y, padding_x;
+
+        final String[] padding_top = {B2Style.padding_top, B2Style.padding};
+        final String[] padding_left = {B2Style.padding_left, B2Style.padding};
+        final String[] padding_right = {B2Style.padding_right, B2Style.padding};
+        final String[] padding_bottom = {B2Style.padding_bottom, B2Style.padding};
 
         PointF at = new PointF();
         at.x = offset_x;
@@ -83,32 +92,44 @@ public class B2TextView extends B2RectView {
 
         switch (align) {
             case TOP:
-                at.y -= offset_y;
+                padding_y = srd.readSize(padding_top);
+                at.y -= (offset_y - padding_y);
                 break;
             case LEFT:
-                at.x -= offset_x;
+                padding_x = srd.readSize(padding_left);
+                at.x -= (offset_x - padding_x);
                 break;
             case RIGHT:
-                at.x += offset_x;
+                padding_x = srd.readSize(padding_right);
+                at.x += (offset_x - padding_x);
                 break;
             case BOTTOM:
-                at.y += offset_y;
+                padding_y = srd.readSize(padding_bottom);
+                at.y += (offset_y - padding_y);
                 break;
             case BOTTOM_LEFT:
-                at.x -= offset_x;
-                at.y += offset_y;
+                padding_y = srd.readSize(padding_bottom);
+                padding_x = srd.readSize(padding_left);
+                at.x -= (offset_x - padding_x);
+                at.y += (offset_y - padding_y);
                 break;
             case BOTTOM_RIGHT:
-                at.x += offset_x;
-                at.y += offset_y;
+                padding_y = srd.readSize(padding_bottom);
+                padding_x = srd.readSize(padding_right);
+                at.x += (offset_x - padding_x);
+                at.y += (offset_y - padding_y);
                 break;
             case TOP_LEFT:
-                at.x -= offset_x;
-                at.y -= offset_y;
+                padding_y = srd.readSize(padding_top);
+                padding_x = srd.readSize(padding_left);
+                at.x -= (offset_x - padding_x);
+                at.y -= (offset_y - padding_y);
                 break;
             case TOP_RIGHT:
-                at.x += offset_x;
-                at.y -= offset_y;
+                padding_y = srd.readSize(padding_top);
+                padding_x = srd.readSize(padding_right);
+                at.x += (offset_x - padding_x);
+                at.y -= (offset_y - padding_y);
                 break;
             case CENTER:
             default:

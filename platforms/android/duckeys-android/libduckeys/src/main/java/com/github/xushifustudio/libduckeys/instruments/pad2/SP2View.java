@@ -6,7 +6,9 @@ import android.graphics.Color;
 import com.github.xushifustudio.libduckeys.ui.box2.B2Align;
 import com.github.xushifustudio.libduckeys.ui.box2.B2Container;
 import com.github.xushifustudio.libduckeys.ui.box2.B2Layout;
+import com.github.xushifustudio.libduckeys.ui.box2.B2State;
 import com.github.xushifustudio.libduckeys.ui.box2.B2Style;
+import com.github.xushifustudio.libduckeys.ui.box2.B2StyleBuilder;
 import com.github.xushifustudio.libduckeys.ui.elements.b2.B2Button;
 import com.github.xushifustudio.libduckeys.ui.elements.b2.B2Containers;
 import com.github.xushifustudio.libduckeys.ui.elements.b2.B2Space;
@@ -72,22 +74,39 @@ public class SP2View extends B2Container {
             text = align.toString();
         }
 
-
         B2Style st1 = btn.getStyle(true);
-        B2Style st2 = new B2Style(st1);
+        B2StyleBuilder stb = new B2StyleBuilder();
+        stb.setParent(st1);
+        stb.putAlign(B2Style.align, align);
+        B2Style st2 = stb.create();
 
-        st2.align = align;
         btn.setText(text);
         btn.setStyle(st2);
     }
 
 
     private B2Style getButtonStyle() {
-        B2Style st = new B2Style();
-        st.textColor = Color.WHITE;
-        st.backgroundColor = Color.GRAY;
-        st.fontSize = 35;
-        return st;
+        B2StyleBuilder stb = new B2StyleBuilder();
+
+        /////////////////////////////////////
+        stb.setState(B2State.NORMAL);
+
+        stb.putColor(B2Style.text_color, Color.WHITE);
+        stb.putColor(B2Style.background_color, Color.GRAY);
+        stb.putSize(B2Style.font_size, 35);
+
+        stb.putSize(B2Style.padding, 20);
+
+        stb.putColor(B2Style.border_color, Color.DKGRAY);
+        stb.putSize(B2Style.border_width, 20);
+
+        stb.putSize(B2Style.border_radius_x, 20);
+        stb.putSize(B2Style.border_radius_y, 20);
+
+        /////////////////////////////////////
+        stb.setState(B2State.PRESSED);
+
+        return stb.create();
     }
 
 }

@@ -16,6 +16,10 @@ public class B2Container extends B2View {
         children.add(child);
     }
 
+    public void add(B2View child, int id) {
+        children.add(child, id);
+    }
+
     public void remove(B2View child) {
         children.remove(child);
     }

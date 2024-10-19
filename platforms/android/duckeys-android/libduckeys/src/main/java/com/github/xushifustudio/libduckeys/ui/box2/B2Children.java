@@ -16,13 +16,21 @@ public class B2Children extends B2View {
         this.parent = aParent;
     }
 
-
     public void add(B2View child) {
+        innerAdd(child, 0);
+    }
+
+    public void add(B2View child, int id) {
+        innerAdd(child, id);
+    }
+
+    private void innerAdd(B2View child, int id) {
         if (child == null) {
             return;
         }
         ChildHolder h = new ChildHolder();
         h.child = child;
+        h.id = id;
         if (first == null || last == null) {
             first = h;
         } else {

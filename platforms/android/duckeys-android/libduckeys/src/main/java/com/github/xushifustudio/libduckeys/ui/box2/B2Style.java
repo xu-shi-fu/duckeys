@@ -1,90 +1,85 @@
 package com.github.xushifustudio.libduckeys.ui.box2;
 
-import android.graphics.Paint;
+import java.util.Map;
 
-public class B2Style {
+public interface B2Style extends B2PropertyHandler {
+
+
+    // property-names ////////////////////////////////////////////////////////////////
+
 
     // colors
-    public int color; // default, main, foreground
-    public int textColor;
-    public int backgroundColor;
-    public int borderColor;
-    public int colorHover;
-    public int colorDisabled;
-    public int colorPressed;
+    String color = "color"; // default, main, normal, foreground
+    String text_color = "text-color";
+    String background_color = "background-color";
+
 
     // borders
-    public int border;
-    public int borderTop;
-    public int borderLeft;
-    public int borderRight;
-    public int borderBottom;
+    String border = "border";
+    String border_color = "border-color";
+    String border_width = "border-width";
+    String border_style = "border-style";
+
+    String border_top = "border-top";
+    String border_top_color = "border-top-color";
+    String border_top_style = "border-top-style";
+    String border_top_width = "border-top-width";
+
+    String border_left = "border-left";
+    String border_left_color = "border-left-color";
+    String border_left_style = "border-left-style";
+    String border_left_width = "border-left-width";
+
+    String border_right = "border-right";
+    String border_right_color = "border-right-color";
+    String border_right_style = "border-right-style";
+    String border_right_width = "border-right-width";
+
+    String border_bottom = "border-bottom";
+    String border_bottom_color = "border-bottom-color";
+    String border_bottom_style = "border-bottom-style";
+    String border_bottom_width = "border-bottom-width";
+
+
+    String border_radius = "border-radius";
+    String border_radius_x = "border-radius-x";
+    String border_radius_y = "border-radius-y";
+
 
     // margins
-    public int margin;
-    public int marginTop;
-    public int marginLeft;
-    public int marginRight;
-    public int marginBottom;
+    String margin = "margin";
+    String margin_top = "margin-top";
+    String margin_left = "margin-left";
+    String margin_right = "margin-right";
+    String margin_bottom = "margin-bottom";
 
     // paddings
-    public int padding;
-    public int paddingTop;
-    public int paddingLeft;
-    public int paddingRight;
-    public int paddingBottom;
+    String padding = "padding";
+    String padding_top = "padding-top";
+    String padding_left = "padding-left";
+    String padding_right = "padding-right";
+    String padding_bottom = "padding-bottom";
+
 
     // font
-    public float fontSize;
+    String font_size = "font-size";
 
     // align
-    public B2Align align;
+    String align = "align";
 
-    public B2Style() {
-    }
 
-    public B2Style(B2Style src) {
+    // methods ////////////////////////////////////////////////////////////////
 
-        if (src == null) {
-            return;
-        }
+    Map<String, B2PropertyHolder> fetchAll(Map<String, B2PropertyHolder> dest);
 
-        this.align = src.align;
-        this.fontSize = src.fontSize;
+    B2PropertyHolder get(String name);
 
-        this.color = src.color;
-        this.textColor = src.textColor;
-        this.borderColor = src.borderColor;
-        this.backgroundColor = src.backgroundColor;
-        this.colorDisabled = src.colorDisabled;
-        this.colorPressed = src.colorPressed;
-        this.colorHover = src.colorHover;
+    B2PropertyHolder get(String name, B2State state);
 
-        this.border = src.border;
-        this.borderTop = src.borderTop;
-        this.borderLeft = src.borderLeft;
-        this.borderRight = src.borderRight;
-        this.borderBottom = src.borderBottom;
+    void put(B2PropertyHolder h);
 
-        this.margin = src.margin;
-        this.marginTop = src.marginTop;
-        this.marginLeft = src.marginLeft;
-        this.marginRight = src.marginRight;
-        this.marginBottom = src.marginBottom;
+    long revision();
 
-        this.padding = src.padding;
-        this.paddingTop = src.paddingTop;
-        this.paddingLeft = src.paddingLeft;
-        this.paddingRight = src.paddingRight;
-        this.paddingBottom = src.paddingBottom;
-
-    }
-
-    public B2Align getAlign(boolean not_null) {
-        B2Align value = this.align;
-        if (value == null && not_null) {
-            value = B2Align.TOP_LEFT;
-        }
-        return value;
-    }
+    // 返回：revision
+    long update();
 }

@@ -3,6 +3,8 @@ package com.github.xushifustudio.libduckeys.ui.box2;
 import android.util.Log;
 
 import com.github.xushifustudio.libduckeys.helper.DuckLogger;
+import com.github.xushifustudio.libduckeys.ui.styles.BaseStyle;
+import com.github.xushifustudio.libduckeys.ui.styles.SimpleStyle;
 
 public class B2View extends B2Box implements B2RenderAble, B2LayoutAble, B2OnTouchListener {
 
@@ -161,7 +163,7 @@ public class B2View extends B2Box implements B2RenderAble, B2LayoutAble, B2OnTou
     public B2Style getStyle(boolean create) {
         B2Style st = this.style;
         if (st == null && create) {
-            st = new B2Style();
+            st = new BaseStyle();
             this.style = st;
         }
         return st;
