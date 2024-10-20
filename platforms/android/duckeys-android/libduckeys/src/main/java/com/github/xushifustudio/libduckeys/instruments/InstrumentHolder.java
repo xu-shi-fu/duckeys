@@ -40,6 +40,7 @@ public class InstrumentHolder extends BaseLife {
         ctx.setCallback(callback);
         ctx.setOnTouchListener(listener);
         // ctx.setHolder(sh); // set by callback
+        view.setOnTouchListener(listener);
 
         sh.addCallback(callback);
     }

@@ -93,7 +93,7 @@ public class SP2View extends B2Container {
 
         stb.putColor(B2Style.text_color, Color.WHITE);
         stb.putColor(B2Style.background_color, Color.GRAY);
-        stb.putSize(B2Style.font_size, 35);
+        stb.putSize(B2Style.font_size, 36);
 
         stb.putSize(B2Style.padding, 20);
 
@@ -105,6 +105,10 @@ public class SP2View extends B2Container {
 
         /////////////////////////////////////
         stb.setState(B2State.PRESSED);
+
+        stb.putSize(B2Style.font_size, 35);
+        stb.putColor(B2Style.background_color, Color.rgb(250, 128, 128));
+        // stb.putColor(B2Style.border_color, Color.BLUE);
 
         return stb.create();
     }

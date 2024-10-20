@@ -17,6 +17,10 @@ public class B2View extends B2Box implements B2RenderAble, B2LayoutAble, B2OnTou
     public boolean enabled;
     public boolean exists;
     public boolean visible;
+    public boolean pressed;
+    public boolean selected;
+    public boolean focused;
+    public boolean interactive; // 表示该视图可以响应 touch 操作
     private B2Style style;
 
     public int layoutWidth;  // 用于排版：[SIZE_AS_WEIGHT|SIZE_AS_PARENT|SIZE_AS_CONTENT|+NUM]
@@ -84,7 +88,7 @@ public class B2View extends B2Box implements B2RenderAble, B2LayoutAble, B2OnTou
         if (!exists || !visible || !enabled) {
             return;
         }
-        if (self.context.done) {
+        if (self.context.brake) {
             return;
         }
         if (self.context.depthLimit < self.depth) {
@@ -139,7 +143,23 @@ public class B2View extends B2Box implements B2RenderAble, B2LayoutAble, B2OnTou
 
 
     protected void onTouchBefore(B2OnTouchThis self) {
+        if (this.interactive) {
+            switch (self.context.action) {
+                case B2OnTouchContext.ACTION_DOWN:
+                case B2OnTouchContext.ACTION_POINTER_DOWN:
+                case B2OnTouchContext.ACTION_MOVE:
+                    this.pressed = true;
+                    break;
+                case B2OnTouchContext.ACTION_UP:
+                case B2OnTouchContext.ACTION_POINTER_UP:
+                    this.pressed = false;
+                    break;
+                default:
+                    break;
+            }
+        }
     }
+
 
     protected void onTouchChildren(B2OnTouchThis self) {
     }

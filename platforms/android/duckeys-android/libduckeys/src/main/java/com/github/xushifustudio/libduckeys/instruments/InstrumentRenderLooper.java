@@ -11,14 +11,11 @@ import com.github.xushifustudio.libduckeys.ui.box2.B2LayoutThis;
 import com.github.xushifustudio.libduckeys.ui.box2.B2RenderContext;
 import com.github.xushifustudio.libduckeys.ui.box2.B2RenderThis;
 import com.github.xushifustudio.libduckeys.ui.box2.B2View;
-import com.github.xushifustudio.libduckeys.ui.box2.FPSCounter;
 
 public class InstrumentRenderLooper implements Runnable {
 
     private final InstrumentContext ic;
     private int layoutRevision;
-    private final FPSCounter fps = new FPSCounter();
-
 
     public InstrumentRenderLooper(InstrumentContext ctx) {
         this.ic = ctx;
@@ -84,8 +81,8 @@ public class InstrumentRenderLooper implements Runnable {
             rc.canvas = can;
             B2RenderThis th = new B2RenderThis(rc, v2);
             v2.paint(th);
-            fps.addFrame();
-            fps.draw(can);
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             holder.unlockCanvasAndPost(can);
         }

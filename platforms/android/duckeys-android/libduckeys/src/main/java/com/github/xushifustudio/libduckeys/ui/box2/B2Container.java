@@ -1,5 +1,7 @@
 package com.github.xushifustudio.libduckeys.ui.box2;
 
+import android.graphics.PointF;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,10 +72,25 @@ public class B2Container extends B2View {
         super.onTouchChildren(th1);
         final B2OnTouchContext ctx = th1.context;
         this.children.forItemsReverse((child, holder) -> {
-            B2OnTouchThis th2 = new B2OnTouchThis(th1, child);
-            child.onTouch(th2);
-            return !ctx.done;
+            if (isHitChild(th1, child)) {
+                B2OnTouchThis th2 = new B2OnTouchThis(th1, child);
+                child.onTouch(th2);
+            }
+            return !ctx.brake;
         });
+    }
+
+    private boolean isHitChild(B2OnTouchThis th1, B2View child) {
+        B2OnTouchPointer ptr = th1.context.pointer;
+        if (ptr == null) {
+            return false;
+        }
+        PointF local = th1.coordinates.global2local(new PointF(ptr.globalX, ptr.globalY));
+        float t = child.top();
+        float l = child.left();
+        float r = child.right();
+        float b = child.bottom();
+        return (l <= local.x) && (local.x <= r) && (t <= local.y) && (local.y <= b);
     }
 
     public List<B2View> listChildren() {

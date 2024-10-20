@@ -5,6 +5,6 @@ import java.util.List;
 
 public enum B2State {
 
-    NORMAL, DISABLED, HOVER, PRESSED
+    NORMAL, DISABLED, HOVER, PRESSED, SELECTED,
 
 }
