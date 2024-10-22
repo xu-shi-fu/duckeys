@@ -4,7 +4,9 @@ package com.github.xushifustudio.libduckeys.ui.elements.b2;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 
+import com.github.xushifustudio.libduckeys.helper.DuckLogger;
 import com.github.xushifustudio.libduckeys.ui.box2.B2Container;
 import com.github.xushifustudio.libduckeys.ui.box2.B2Layout;
 import com.github.xushifustudio.libduckeys.ui.box2.B2OnTouchContext;

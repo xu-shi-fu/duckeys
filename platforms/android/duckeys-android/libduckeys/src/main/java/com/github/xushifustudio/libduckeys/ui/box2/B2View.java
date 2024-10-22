@@ -21,14 +21,16 @@ public class B2View extends B2Box implements B2RenderAble, B2LayoutAble, B2OnTou
     public boolean selected;
     public boolean focused;
     public boolean interactive; // 表示该视图可以响应 touch 操作
-    private B2Style style;
 
     public int layoutWidth;  // 用于排版：[SIZE_AS_WEIGHT|SIZE_AS_PARENT|SIZE_AS_CONTENT|+NUM]
     public int layoutHeight; // 用于排版：[SIZE_AS_WEIGHT|SIZE_AS_PARENT|SIZE_AS_CONTENT|+NUM]
     public int contentWidth; // 用于排版：内容的宽度
     public int contentHeight;// 用于排版：内容的高度
 
+    // private fields
     private B2Container parent;
+    private B2OnTouchPointer.Binding mPointerBinding;
+    private B2Style style;
 
     public B2View() {
         this.enabled = true;
@@ -133,6 +135,9 @@ public class B2View extends B2Box implements B2RenderAble, B2LayoutAble, B2OnTou
     }
 
     protected void onPaintBefore(B2RenderThis self) {
+        if (this.interactive) {
+            this.checkPointerBinding();
+        }
     }
 
     protected void onPaintChildren(B2RenderThis self) {
@@ -149,10 +154,12 @@ public class B2View extends B2Box implements B2RenderAble, B2LayoutAble, B2OnTou
                 case B2OnTouchContext.ACTION_POINTER_DOWN:
                 case B2OnTouchContext.ACTION_MOVE:
                     this.pressed = true;
+                    this.bindWithPointer(self);
                     break;
                 case B2OnTouchContext.ACTION_UP:
                 case B2OnTouchContext.ACTION_POINTER_UP:
                     this.pressed = false;
+                    this.mPointerBinding = null;
                     break;
                 default:
                     break;
@@ -160,6 +167,23 @@ public class B2View extends B2Box implements B2RenderAble, B2LayoutAble, B2OnTou
         }
     }
 
+    private void bindWithPointer(B2OnTouchThis self) {
+        B2OnTouchPointer ptr = self.context.pointer;
+        if (ptr == null) {
+            return;
+        }
+        mPointerBinding = ptr.bind(mPointerBinding);
+    }
+
+    private void checkPointerBinding() {
+        B2OnTouchPointer.Binding b2 = mPointerBinding;
+        if (b2 != null) {
+            if (!b2.isAlive()) {
+                mPointerBinding = null;
+                this.pressed = false;
+            }
+        }
+    }
 
     protected void onTouchChildren(B2OnTouchThis self) {
     }

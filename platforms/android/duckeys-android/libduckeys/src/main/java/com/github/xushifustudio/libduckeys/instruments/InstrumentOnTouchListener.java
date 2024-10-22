@@ -28,7 +28,7 @@ public class InstrumentOnTouchListener implements View.OnTouchListener {
 
         view.performClick();
 
-        final boolean default_result = true;
+        boolean default_result = true;
         final int action = me.getActionMasked();
         final long now = System.currentTimeMillis();
 
@@ -74,10 +74,8 @@ public class InstrumentOnTouchListener implements View.OnTouchListener {
                 break;
             case B2OnTouchContext.ACTION_CANCEL:
                 on_touch_ctx.cancelled = true;
-                on_touch_ctx.stopped = true;
-                on_touch_ctx.stoppedAt = now;
-                ptr.stopped = true;
-                ptr.stoppedAt = now;
+                this.handleOnTouchCancel(on_touch_ctx, false);
+                default_result = false;
                 break;
             default:
                 break;
@@ -91,7 +89,31 @@ public class InstrumentOnTouchListener implements View.OnTouchListener {
             B2OnTouchThis on_touch_th = new B2OnTouchThis(on_touch_ctx, v2);
             v2.onTouch(on_touch_th);
         }
+
         return default_result;
+    }
+
+    private B2OnTouchContext mCancelledOnTouchContext;
+
+    private void handleOnTouchCancel(final B2OnTouchContext ctx, boolean immediate) {
+        if (!immediate) {
+            // close ctx later
+            final B2OnTouchContext older = mCancelledOnTouchContext;
+            mCancelledOnTouchContext = ctx;
+            this.handleOnTouchCancel(older, true);
+        }
+        // close ctx right now
+        if (ctx == null) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        for (B2OnTouchPointer ptr : ctx.pointers.values()) {
+            ptr.bind(null);
+            ptr.stopped = true;
+            ptr.stoppedAt = now;
+        }
+        ctx.stoppedAt = now;
+        ctx.stopped = true;
     }
 
     private void invokeWhileMove(B2OnTouchContext ctx, long now, MotionEvent me) {
@@ -107,9 +129,11 @@ public class InstrumentOnTouchListener implements View.OnTouchListener {
             if (ptr == null) {
                 continue;
             }
-            if (B2Size.equal(x, ptr.globalX) && B2Size.equal(y, ptr.globalY)) {
-                continue;
-            }
+
+            //if (B2Size.equal(x, ptr.globalX) && B2Size.equal(y, ptr.globalY)) {
+            //  continue;
+            //}
+
             ptr.globalX = x;
             ptr.globalY = y;
             ptr.updatedAt = now;
@@ -149,6 +173,7 @@ public class InstrumentOnTouchListener implements View.OnTouchListener {
         ptr.globalX = x;
         ptr.globalY = y;
         ptr.updatedAt = now;
+
         return ptr;
     }
 

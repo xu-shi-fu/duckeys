@@ -4,26 +4,15 @@ import com.github.xushifustudio.libduckeys.midi.Note;
 
 public class KeyState {
 
+    public final Keyboard keyboard;
     public final Note note;
-    public boolean pressedOlder;
-    public boolean pressedNewer;
+    public boolean want;  // 1=key_on, 0=key_off
+    public boolean have; // 1=key_on, 0=key_off
+    public byte velocity;
 
-    public KeyState(Note n) {
+    public KeyState(Keyboard kb, Note n) {
+        this.keyboard = kb;
         this.note = n;
+        this.velocity = 100;
     }
-
-    public void setPressed(boolean pressed) {
-        this.pressedNewer = pressed;
-    }
-
-    public void flush(InstrumentContext ic) {
-        if (pressedNewer == pressedOlder) {
-            return;
-        }
-
-        // ic.getMert().dispatch(  );
-
-        pressedOlder = pressedNewer;
-    }
-
 }
