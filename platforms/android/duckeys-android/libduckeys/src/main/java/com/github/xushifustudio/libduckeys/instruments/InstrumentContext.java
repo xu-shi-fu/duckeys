@@ -14,15 +14,17 @@ public class InstrumentContext extends SurfaceContext {
 
     private Instrument instrument;
     private MidiEventRT mert;
+    private Keyboard keyboard;
 
     public InstrumentContext() {
+        this.keyboard = new Keyboard(this);
         this.mert = new MidiEventRT(InstrumentContext.class.getName());
     }
 
 
-    public static InstrumentContext createNewInstance(Context ctx, SurfaceView view, LifeManager lm) {
+    public void init(Context ctx, SurfaceView view, LifeManager lm) {
 
-        InstrumentContext ic = new InstrumentContext();
+        InstrumentContext ic = this; // new InstrumentContext();
 
         MidiEventRT rt = new MidiEventRT(InstrumentContext.class.getName());
         Life life = new InstrumentHolder(ic);
@@ -46,9 +48,16 @@ public class InstrumentContext extends SurfaceContext {
         ic.setActive(false);
         ic.setLayoutRevision(0);
 
-        return ic;
+//        return ic;
     }
 
+    public Keyboard getKeyboard() {
+        return keyboard;
+    }
+
+    public void setKeyboard(Keyboard keyboard) {
+        this.keyboard = keyboard;
+    }
 
     public Instrument getInstrument() {
         return instrument;

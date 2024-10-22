@@ -1,5 +1,7 @@
 package com.github.xushifustudio.libduckeys.ui.layouts;
 
+import android.graphics.RectF;
+
 import com.github.xushifustudio.libduckeys.ui.box2.B2Container;
 import com.github.xushifustudio.libduckeys.ui.box2.B2Layout;
 import com.github.xushifustudio.libduckeys.ui.box2.B2LayoutThis;
@@ -16,8 +18,6 @@ public class B2GridLayout implements B2Layout {
     public static final int ORDER_BOTTOM_TO_TOP = 0x10;
     public static final int ORDER_BOTTOM_OR_TOP_FIRST = 0x02;
     public static final int ORDER_LEFT_OR_RIGHT_FIRST = 0x01;
-
-
 
 
     // order 由 [FROM_LEFT_TO_RIGHT | FROM_RIGHT_TO_LEFT | FROM_TOP_TO_BOTTOM | ... ] 这几个值合成
@@ -66,7 +66,8 @@ public class B2GridLayout implements B2Layout {
     }
 
     @Override
-    public void apply(B2LayoutThis self, B2Container parent) {
+    public void apply(B2Container parent, B2LayoutThis self) {
+
         List<B2View> children = parent.listChildren();
         final float parent_w = parent.width;
         final float parent_h = parent.height;
@@ -108,6 +109,11 @@ public class B2GridLayout implements B2Layout {
             B2View child = children.get(j);
             child.visible = false;
         }
+    }
+
+    @Override
+    public void computeContentSize(B2Container container, RectF size) {
+
     }
 
     private interface Indexer {

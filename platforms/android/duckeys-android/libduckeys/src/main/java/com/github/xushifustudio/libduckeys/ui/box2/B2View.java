@@ -1,12 +1,14 @@
 package com.github.xushifustudio.libduckeys.ui.box2;
 
+import android.graphics.RectF;
 import android.util.Log;
+import android.util.SizeF;
 
 import com.github.xushifustudio.libduckeys.helper.DuckLogger;
 import com.github.xushifustudio.libduckeys.ui.styles.BaseStyle;
 import com.github.xushifustudio.libduckeys.ui.styles.SimpleStyle;
 
-public class B2View extends B2Box implements B2RenderAble, B2LayoutAble, B2OnTouchListener {
+public class B2View extends B2ViewAbs implements B2RenderAble, B2LayoutAble, B2OnTouchListener {
 
 
     public static final int SIZE_AS_WEIGHT = 0;
@@ -14,28 +16,18 @@ public class B2View extends B2Box implements B2RenderAble, B2LayoutAble, B2OnTou
     public static final int SIZE_AS_CONTENT = -2;
 
 
-    public boolean enabled;
-    public boolean exists;
-    public boolean visible;
-    public boolean pressed;
-    public boolean selected;
-    public boolean focused;
-    public boolean interactive; // 表示该视图可以响应 touch 操作
-
-    public int layoutWidth;  // 用于排版：[SIZE_AS_WEIGHT|SIZE_AS_PARENT|SIZE_AS_CONTENT|+NUM]
-    public int layoutHeight; // 用于排版：[SIZE_AS_WEIGHT|SIZE_AS_PARENT|SIZE_AS_CONTENT|+NUM]
-    public int contentWidth; // 用于排版：内容的宽度
-    public int contentHeight;// 用于排版：内容的高度
-
     // private fields
-    private B2Container parent;
+
     private B2OnTouchPointer.Binding mPointerBinding;
     private B2Style style;
+    private B2Container parent;
+
 
     public B2View() {
-        this.enabled = true;
-        this.visible = true;
-        this.exists = true;
+    }
+
+    @Override
+    public void computeContentSize(RectF size) {
     }
 
     public B2Container getParent() {
@@ -134,19 +126,23 @@ public class B2View extends B2Box implements B2RenderAble, B2LayoutAble, B2OnTou
         this.onPaintAfter(self);
     }
 
+    @Override
     protected void onPaintBefore(B2RenderThis self) {
         if (this.interactive) {
             this.checkPointerBinding();
         }
     }
 
+    @Override
     protected void onPaintChildren(B2RenderThis self) {
     }
 
+    @Override
     protected void onPaintAfter(B2RenderThis self) {
     }
 
 
+    @Override
     protected void onTouchBefore(B2OnTouchThis self) {
         if (this.interactive) {
             switch (self.context.action) {
@@ -185,18 +181,23 @@ public class B2View extends B2Box implements B2RenderAble, B2LayoutAble, B2OnTou
         }
     }
 
+    @Override
     protected void onTouchChildren(B2OnTouchThis self) {
     }
 
+    @Override
     protected void onTouchAfter(B2OnTouchThis self) {
     }
 
+    @Override
     protected void onLayoutBefore(B2LayoutThis self) {
     }
 
+    @Override
     protected void onLayoutChildren(B2LayoutThis self) {
     }
 
+    @Override
     protected void onLayoutAfter(B2LayoutThis self) {
     }
 

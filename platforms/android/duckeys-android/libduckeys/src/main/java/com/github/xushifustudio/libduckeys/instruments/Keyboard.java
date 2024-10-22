@@ -51,6 +51,10 @@ public class Keyboard {
         rtx.dispatch(event);
     }
 
+    public int countKeyState() {
+        return keys.length;
+    }
+
     public KeyState getKeyState(int index) {
         if (0 <= index && index < keys.length) {
             return keys[index];

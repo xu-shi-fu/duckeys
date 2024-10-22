@@ -4,6 +4,8 @@ import android.graphics.Color;
 
 import com.github.xushifustudio.libduckeys.instruments.InstrumentContext;
 import com.github.xushifustudio.libduckeys.instruments.KeyState;
+import com.github.xushifustudio.libduckeys.instruments.Keyboard;
+import com.github.xushifustudio.libduckeys.instruments.KeyboardView;
 import com.github.xushifustudio.libduckeys.ui.box2.B2Container;
 import com.github.xushifustudio.libduckeys.ui.box2.B2Layout;
 import com.github.xushifustudio.libduckeys.ui.box2.B2OnTouchThis;
@@ -13,13 +15,14 @@ import com.github.xushifustudio.libduckeys.ui.box2.B2StyleBuilder;
 import com.github.xushifustudio.libduckeys.ui.elements.b2.B2Containers;
 import com.github.xushifustudio.libduckeys.ui.layouts.B2SimpleLayout;
 
-public class Pad4x4View extends B2Container {
+public class Pad4x4View extends KeyboardView {
 
     private final PadContext context;
 
 
-    public Pad4x4View(InstrumentContext ic) {
-        this.context = new PadContext(ic);
+    public Pad4x4View(PadContext pc) {
+        super(pc);
+        this.context = pc;
         this.initLayout();
     }
 
@@ -34,7 +37,7 @@ public class Pad4x4View extends B2Container {
         this.add(pad4x4);
 
         for (int i = 0; i < buttons.length; i++) {
-            Pad4x4Button btn = new Pad4x4Button();
+            Pad4x4Button btn = new Pad4x4Button(context);
             btn.setText("btn_" + i);
             btn.setStyle(btn_style);
             buttons[i] = btn;
@@ -48,7 +51,8 @@ public class Pad4x4View extends B2Container {
 
 
     private KeyState getKeyStateByIndex(int i) {
-        return this.context.keyboard.getKeyState(i);
+        Keyboard kb = context.getKeyboard();
+        return kb.getKeyState(i);
     }
 
 
@@ -83,6 +87,5 @@ public class Pad4x4View extends B2Container {
     @Override
     protected void onTouchAfter(B2OnTouchThis self) {
         super.onTouchAfter(self);
-        this.context.keyboard.flush();
     }
 }

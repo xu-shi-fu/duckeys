@@ -20,9 +20,12 @@ public class SimplePad2 {
         // v_debug.setDisplayTouchAtGrid(true);
 
 
-        InstrumentContext ic = InstrumentContext.createNewInstance(ctx, view, lm);
-        B2View v2 = new Pad4x4View(ic);
+        PadContext ic = new PadContext();
+        ic.init(ctx, view, lm);
+
+        Pad4x4View v2 = new Pad4x4View(ic);
         ic.setView2(v2);
+
         return ic;
     }
 

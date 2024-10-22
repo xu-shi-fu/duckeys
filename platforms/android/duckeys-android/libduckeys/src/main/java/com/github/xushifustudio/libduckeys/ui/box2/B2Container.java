@@ -1,6 +1,7 @@
 package com.github.xushifustudio.libduckeys.ui.box2;
 
 import android.graphics.PointF;
+import android.graphics.RectF;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +29,22 @@ public class B2Container extends B2View {
 
 
     @Override
+    public void computeContentSize(RectF size) {
+        super.computeContentSize(size);
+        B2Layout la = this.layout;
+        if (la != null) {
+            la.computeContentSize(this, size);
+        }
+    }
+
+
+    @Override
     protected void onLayoutBefore(B2LayoutThis self) {
         super.onLayoutBefore(self);
         final B2Layout l = this.layout;
         if (l != null) {
             self.phase = B2WalkingPhase.BEFORE;
-            l.apply(self, this);
+            l.apply(this, self);
         }
     }
 
@@ -53,7 +64,7 @@ public class B2Container extends B2View {
         final B2Layout l = this.layout;
         if (l != null) {
             self.phase = B2WalkingPhase.AFTER;
-            l.apply(self, this);
+            l.apply(this, self);
         }
     }
 

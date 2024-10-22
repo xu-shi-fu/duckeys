@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#8BC34A"
     android:orientation="vertical"
     tools:context=".StartupActivity">
 
@@ -29,6 +28,7 @@
         android:layout_height="wrap_content"
         android:text="duckeys"
         android:textAlignment="center"
+        android:textColor="#E3E3E3"
         android:textSize="36sp" />
 
     <Space

@@ -1,5 +1,7 @@
 package com.github.xushifustudio.libduckeys.ui.layouts;
 
+import android.graphics.RectF;
+
 import com.github.xushifustudio.libduckeys.ui.box2.B2Container;
 import com.github.xushifustudio.libduckeys.ui.box2.B2Layout;
 import com.github.xushifustudio.libduckeys.ui.box2.B2LayoutThis;
@@ -17,7 +19,7 @@ public class B2SimpleLayout implements B2Layout {
     }
 
     @Override
-    public void apply(B2LayoutThis self, B2Container container) {
+    public void apply( B2Container container, B2LayoutThis self ) {
         List<B2View> clist = container.listChildren();
         for (B2View child : clist) {
             child.x = 0;
@@ -25,5 +27,10 @@ public class B2SimpleLayout implements B2Layout {
             child.width = container.width;
             child.height = container.height;
         }
+    }
+
+    @Override
+    public void computeContentSize(B2Container container, RectF size) {
+
     }
 }
