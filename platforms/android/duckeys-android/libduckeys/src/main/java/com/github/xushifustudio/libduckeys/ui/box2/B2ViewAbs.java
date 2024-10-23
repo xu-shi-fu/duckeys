@@ -5,6 +5,7 @@ import android.util.SizeF;
 
 public abstract class B2ViewAbs extends B2Box {
 
+    // states
 
     public boolean enabled;
     public boolean exists;
@@ -14,21 +15,21 @@ public abstract class B2ViewAbs extends B2Box {
     public boolean focused;
     public boolean interactive; // 表示该视图可以响应 touch 操作
 
-    public int layoutWidth;  // 用于排版：[SIZE_AS_WEIGHT|SIZE_AS_PARENT|SIZE_AS_CONTENT|+NUM]
-    public int layoutHeight; // 用于排版：[SIZE_AS_WEIGHT|SIZE_AS_PARENT|SIZE_AS_CONTENT|+NUM]
-    public int contentWidth; // 用于排版：内容的宽度
-    public int contentHeight;// 用于排版：内容的高度
+    // layout
 
+    private B2LayoutParams layoutParams;
 
     public B2ViewAbs() {
         this.enabled = true;
-        this.visible = true;
         this.exists = true;
+        this.focused = false;
+        this.interactive = false;
+        this.pressed = false;
+        this.selected = false;
+        this.visible = true;
     }
 
-
-    public abstract void computeContentSize(RectF size);
-
+    // abstract methods
 
     protected abstract void onLayoutBefore(B2LayoutThis self);
 
@@ -50,4 +51,18 @@ public abstract class B2ViewAbs extends B2Box {
 
     protected abstract void onTouchAfter(B2OnTouchThis self);
 
+    protected abstract void computeContentSize();
+
+    protected abstract void computeBoxSize();
+
+    // getters & setters
+
+
+    public B2LayoutParams getLayoutParams() {
+        return layoutParams;
+    }
+
+    public void setLayoutParams(B2LayoutParams layoutParams) {
+        this.layoutParams = layoutParams;
+    }
 }

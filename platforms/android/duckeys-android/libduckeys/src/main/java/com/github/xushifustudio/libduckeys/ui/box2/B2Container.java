@@ -1,7 +1,10 @@
 package com.github.xushifustudio.libduckeys.ui.box2;
 
+import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
+
+import com.github.xushifustudio.libduckeys.ui.styles.B2StyleReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +14,48 @@ public class B2Container extends B2View {
     private final B2Children children;
     private B2Layout layout;
 
+    private MyStyle mCachedStyle;
+
+
     public B2Container() {
         this.children = new B2Children(this);
     }
+
+
+    private static class MyStyle {
+        Paint bgPaint;
+        long rev;
+    }
+
+
+    private MyStyle loadMyStyle(B2Style src) {
+
+        B2StyleReader reader = new B2StyleReader(src);
+        int bg_color = reader.readColor(B2Style.background_color);
+
+        Paint paint = new Paint();
+        paint.setColor(bg_color);
+        paint.setStyle(Paint.Style.FILL);
+
+        MyStyle dst = new MyStyle();
+        dst.rev = src.revision();
+        dst.bgPaint = paint;
+        return dst;
+    }
+
+    private MyStyle getMyStyle() {
+        MyStyle older = this.mCachedStyle;
+        B2Style src = this.getStyle(true);
+        if (older != null) {
+            if (older.rev == src.revision()) {
+                return older;
+            }
+        }
+        MyStyle s2 = this.loadMyStyle(src);
+        this.mCachedStyle = s2;
+        return s2;
+    }
+
 
     public void add(B2View child) {
         children.add(child);
@@ -25,16 +67,6 @@ public class B2Container extends B2View {
 
     public void remove(B2View child) {
         children.remove(child);
-    }
-
-
-    @Override
-    public void computeContentSize(RectF size) {
-        super.computeContentSize(size);
-        B2Layout la = this.layout;
-        if (la != null) {
-            la.computeContentSize(this, size);
-        }
     }
 
 
@@ -66,6 +98,13 @@ public class B2Container extends B2View {
             self.phase = B2WalkingPhase.AFTER;
             l.apply(this, self);
         }
+    }
+
+
+    @Override
+    protected void onPaintBefore(B2RenderThis self) {
+        super.onPaintBefore(self);
+        this.paintBackground(self);
     }
 
     @Override
@@ -112,6 +151,16 @@ public class B2Container extends B2View {
         });
         return dst;
     }
+
+
+    private void paintBackground(B2RenderThis self) {
+        ICanvas can = self.getLocalCanvas();
+        MyStyle sty = this.getMyStyle();
+        float w = this.width;
+        float h = this.height;
+        can.drawRect(0, 0, w, h, sty.bgPaint);
+    }
+
 
     public B2Layout getLayout() {
         return layout;

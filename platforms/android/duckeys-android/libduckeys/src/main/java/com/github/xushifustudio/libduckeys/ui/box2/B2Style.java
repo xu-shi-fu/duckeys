@@ -67,6 +67,11 @@ public interface B2Style extends B2PropertyHandler {
     // align
     String align = "align";
 
+    //layout
+    String layout_weight = "layout_weight";
+    String layout_width = "layout_width";
+    String layout_height = "layout_height";
+
 
     // methods ////////////////////////////////////////////////////////////////
 

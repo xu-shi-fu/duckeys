@@ -13,18 +13,11 @@ public class SimplePad2 {
 
     public static InstrumentContext create(Context ctx, SurfaceView view, LifeManager lm) {
 
-        //     B2View v2 = new SP2View();
-        // B2DebugLayerView v_debug = B2DebugLayerView.wrap(v2);
-        // v2 = v_debug;
-        //  v_debug.setDisplayFPS(true);
-        // v_debug.setDisplayTouchAtGrid(true);
-
-
         PadContext ic = new PadContext();
         ic.init(ctx, view, lm);
 
-        Pad4x4View v2 = new Pad4x4View(ic);
-        ic.setView2(v2);
+        SimplePadView view2 = new SimplePadView(ic);
+        ic.setView2(view2);
 
         return ic;
     }

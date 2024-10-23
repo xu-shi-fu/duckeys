@@ -29,8 +29,4 @@ public class B2SimpleLayout implements B2Layout {
         }
     }
 
-    @Override
-    public void computeContentSize(B2Container container, RectF size) {
-
-    }
 }

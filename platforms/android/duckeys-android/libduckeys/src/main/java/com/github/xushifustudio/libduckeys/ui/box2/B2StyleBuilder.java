@@ -3,6 +3,7 @@ package com.github.xushifustudio.libduckeys.ui.box2;
 import com.github.xushifustudio.libduckeys.ui.styles.AlignProperty;
 import com.github.xushifustudio.libduckeys.ui.styles.BaseStyle;
 import com.github.xushifustudio.libduckeys.ui.styles.ColorProperty;
+import com.github.xushifustudio.libduckeys.ui.styles.IntegerProperty;
 import com.github.xushifustudio.libduckeys.ui.styles.SizeProperty;
 
 import java.util.ArrayList;
@@ -73,6 +74,18 @@ public class B2StyleBuilder {
         list.add(holder);
         return this;
     }
+
+    public B2StyleBuilder putInt(String name, int value) {
+        IntegerProperty p = new IntegerProperty(value);
+        B2PropertyHolder holder = new B2PropertyHolder();
+        holder.name = name;
+        holder.property = p;
+        holder.handler = p.getHandler();
+        holder.state = state;
+        list.add(holder);
+        return this;
+    }
+
 
     public B2StyleBuilder putSize(String name, float size) {
         SizeProperty p = new SizeProperty(size);

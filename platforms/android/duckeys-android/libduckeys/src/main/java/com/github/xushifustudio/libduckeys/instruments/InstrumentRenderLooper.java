@@ -10,6 +10,7 @@ import com.github.xushifustudio.libduckeys.ui.box2.B2LayoutContext;
 import com.github.xushifustudio.libduckeys.ui.box2.B2LayoutThis;
 import com.github.xushifustudio.libduckeys.ui.box2.B2RenderContext;
 import com.github.xushifustudio.libduckeys.ui.box2.B2RenderThis;
+import com.github.xushifustudio.libduckeys.ui.box2.B2Size;
 import com.github.xushifustudio.libduckeys.ui.box2.B2View;
 
 public class InstrumentRenderLooper implements Runnable {
@@ -89,7 +90,23 @@ public class InstrumentRenderLooper implements Runnable {
     }
 
     private boolean isWantLayout() {
+        this.checkView2Size();
         return this.layoutRevision != ic.getLayoutRevision();
+    }
+
+    private void checkView2Size() {
+        B2View v2 = ic.getView2();
+        if (v2 == null) {
+            return;
+        }
+        int w = ic.getWidth();
+        int h = ic.getHeight();
+        if (B2Size.equal(w, v2.width) && B2Size.equal(h, v2.height)) {
+            return;
+        }
+        v2.height = h;
+        v2.width = w;
+        this.layoutRevision = -1;
     }
 
 

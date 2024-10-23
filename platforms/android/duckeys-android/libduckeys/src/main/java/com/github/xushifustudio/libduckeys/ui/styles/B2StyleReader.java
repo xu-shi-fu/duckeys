@@ -53,6 +53,19 @@ public class B2StyleReader {
         return innerReadSize(null, names);
     }
 
+    public int readInt(String name) {
+        IntegerProperty p = new IntegerProperty(0);
+        B2PropertyQuery q = this.createNewQuery(name, null);
+        q.property = p;
+        q.state = this.state;
+        this.style.query(q);
+        if (q.ok) {
+            p = (IntegerProperty) q.property;
+            return p.getValue();
+        }
+        return 0;
+    }
+
 
     public int readColor(String name) {
         return innerReadColor(name, null);

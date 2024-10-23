@@ -4,6 +4,7 @@ import android.graphics.RectF;
 
 import com.github.xushifustudio.libduckeys.ui.box2.B2Container;
 import com.github.xushifustudio.libduckeys.ui.box2.B2Layout;
+import com.github.xushifustudio.libduckeys.ui.box2.B2LayoutParams;
 import com.github.xushifustudio.libduckeys.ui.box2.B2LayoutThis;
 import com.github.xushifustudio.libduckeys.ui.box2.B2View;
 
@@ -69,8 +70,9 @@ public class B2GridLayout implements B2Layout {
     public void apply(B2Container parent, B2LayoutThis self) {
 
         List<B2View> children = parent.listChildren();
-        final float parent_w = parent.width;
-        final float parent_h = parent.height;
+        RectF client_rect = getClientRect(parent, self);
+        final float parent_w = client_rect.width();
+        final float parent_h = client_rect.height();
         final int col = getRegularColumnNum();
         final int row = getRegularRowNum();
         final float cell_w = parent_w / col;
@@ -94,11 +96,12 @@ public class B2GridLayout implements B2Layout {
                 idx2.next();
                 if (j < children.size()) {
                     B2View child = children.get(j);
-                    child.x = mod.x;
-                    child.y = mod.y;
+                    child.x = client_rect.left + mod.x;
+                    child.y = client_rect.top + mod.y;
                     child.width = cell_w;
                     child.height = cell_h;
                     child.visible = true;
+                    this.applyChildMargin(child);
                 }
                 j++;
             }
@@ -111,10 +114,25 @@ public class B2GridLayout implements B2Layout {
         }
     }
 
-    @Override
-    public void computeContentSize(B2Container container, RectF size) {
-
+    private void applyChildMargin(B2View child) {
+        B2LayoutParams lp = child.getLayoutParams();
+        RectF margin = lp.margin;
+        child.x += margin.left;
+        child.y += margin.top;
+        child.width -= (margin.left + margin.right);
+        child.height -= (margin.top + margin.bottom);
     }
+
+    private RectF getClientRect(B2Container parent, B2LayoutThis self) {
+        B2LayoutParams lp = parent.getLayoutParams();
+        RectF rect = new RectF(0, 0, parent.width, parent.height);
+        rect.top += lp.padding.top;
+        rect.left += lp.padding.left;
+        rect.right -= lp.padding.right;
+        rect.bottom -= lp.padding.bottom;
+        return rect;
+    }
+
 
     private interface Indexer {
         void reset();

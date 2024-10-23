@@ -23,8 +23,4 @@ public class B2NopLayout implements B2Layout {
 
     }
 
-    @Override
-    public void computeContentSize(B2Container container, RectF size) {
-
-    }
 }

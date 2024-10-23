@@ -7,6 +7,4 @@ public interface B2Layout {
 
     void apply(B2Container container, B2LayoutThis self);
 
-    void computeContentSize(B2Container container, RectF size);
-
 }

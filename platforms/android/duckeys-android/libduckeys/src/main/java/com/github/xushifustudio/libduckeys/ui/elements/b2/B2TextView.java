@@ -136,9 +136,7 @@ public class B2TextView extends B2RectView {
     @Override
     protected void onLayoutBefore(B2LayoutThis self) {
         super.onLayoutBefore(self);
-        SizeF size = this.computeContentSize();
-        this.contentHeight = (int) size.getHeight();
-        this.contentWidth = (int) size.getWidth();
+        this.computeContentSize();
     }
 
     @Override
@@ -146,10 +144,10 @@ public class B2TextView extends B2RectView {
         super.onPaintBefore(self);
     }
 
-    private SizeF computeContentSize() {
+    protected void computeContentSize() {
         String str = this.text;
         if (str == null) {
-            return new SizeF(0, 0);
+            return;
         }
         try {
             MyStyleCache style_cache = this.getStyleCache();
@@ -158,11 +156,11 @@ public class B2TextView extends B2RectView {
             RectF padding = ss.padding;
             Rect rect = new Rect();
             paint.getTextBounds(str, 0, str.length(), rect);
-            float h = rect.height() + padding.top + padding.bottom;
-            float w = rect.width() + padding.left + padding.right;
-            return new SizeF(w, h);
+            this.contentWidth = rect.width();
+            this.contentHeight = rect.height();
         } catch (Exception e) {
-            return new SizeF(0, 0);
+            // return new SizeF(0, 0);
+            e.printStackTrace();
         }
     }
 
