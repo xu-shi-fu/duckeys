@@ -2,13 +2,11 @@ package com.github.xushifustudio.libduckeys.ui.box2;
 
 import android.graphics.RectF;
 import android.util.Log;
-import android.util.SizeF;
 
 import com.github.xushifustudio.libduckeys.helper.DuckLogger;
 import com.github.xushifustudio.libduckeys.instruments.pad2.SP2View;
 import com.github.xushifustudio.libduckeys.ui.styles.B2StyleReader;
 import com.github.xushifustudio.libduckeys.ui.styles.BaseStyle;
-import com.github.xushifustudio.libduckeys.ui.styles.SimpleStyle;
 
 public class B2View extends B2ViewAbs implements B2RenderAble, B2LayoutAble, B2OnTouchListener {
 
@@ -20,12 +18,30 @@ public class B2View extends B2ViewAbs implements B2RenderAble, B2LayoutAble, B2O
 
     // private fields
 
+    private OnClickDispatcher mOnClickDispatcher;
     private B2OnTouchPointer.Binding mPointerBinding;
     private B2Style style;
     private B2Container parent;
-
+    private OnClickListener onClickListener;
 
     public B2View() {
+    }
+
+    private OnClickDispatcher getOnClickDispatcher() {
+        OnClickDispatcher disp = mOnClickDispatcher;
+        if (disp == null) {
+            disp = new OnClickDispatcher();
+            mOnClickDispatcher = disp;
+        }
+        return disp;
+    }
+
+    public OnClickListener getOnClickListener() {
+        return onClickListener;
+    }
+
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
     public B2Container getParent() {
@@ -185,6 +201,7 @@ public class B2View extends B2ViewAbs implements B2RenderAble, B2LayoutAble, B2O
 
     @Override
     protected void onTouchAfter(B2OnTouchThis self) {
+        this.getOnClickDispatcher().handleOnTouch(self, this.onClickListener);
     }
 
     @Override
@@ -289,6 +306,49 @@ public class B2View extends B2ViewAbs implements B2RenderAble, B2LayoutAble, B2O
     private static class MyLayoutParams extends B2LayoutParams {
         long rev;
     }
+
+    public interface OnClickListener {
+        void onClick(B2View view);
+    }
+
+    private class OnClickDispatcher {
+
+        private B2OnTouchPointer ptr;
+
+        void handleOnTouch(B2OnTouchThis self, OnClickListener l) {
+            if (self == null || l == null) {
+                return;
+            }
+            switch (self.context.action) {
+                case B2OnTouchContext.ACTION_DOWN:
+                    this.handleActionDown(self, l);
+                    break;
+                case B2OnTouchContext.ACTION_UP:
+                    this.handleActionUp(self, l);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void handleActionDown(B2OnTouchThis self, OnClickListener l) {
+            this.ptr = self.context.pointer;
+        }
+
+        private void handleActionUp(B2OnTouchThis self, OnClickListener l) {
+            B2OnTouchPointer p1 = this.ptr;
+            B2OnTouchPointer p2 = self.context.pointer;
+            if (p1 == null || p2 == null) {
+                return;
+            }
+            if (!p1.equals(p2)) {
+                return;
+            }
+            this.ptr = null;
+            l.onClick(B2View.this);
+        }
+    }
+
 
     public B2Style getStyle() {
         return style;

@@ -31,6 +31,13 @@ public interface ICanvas {
     void drawText(CharSequence text, int start, int end, float x, float y, Paint paint);
 
 
+    void drawLine(float x1, float y1, float x2, float y2, Paint paint);
+
+    void drawLines(float[] pts, int offset, int count, Paint paint);
+
+    void drawLines(float[] pts, Paint paint);
+
+
     Canvas getGlobalCanvas();
 
 }

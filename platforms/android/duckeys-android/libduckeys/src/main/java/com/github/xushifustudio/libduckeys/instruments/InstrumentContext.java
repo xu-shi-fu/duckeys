@@ -16,9 +16,12 @@ public class InstrumentContext extends SurfaceContext {
     private MidiEventRT mert;
     private Keyboard keyboard;
 
+    private SensorBuffer sensorBuffer;
+
     public InstrumentContext() {
         this.keyboard = new Keyboard(this);
         this.mert = new MidiEventRT(InstrumentContext.class.getName());
+        this.sensorBuffer = new SensorBuffer(1024 * 2);
     }
 
 
@@ -49,6 +52,15 @@ public class InstrumentContext extends SurfaceContext {
         ic.setLayoutRevision(0);
 
 //        return ic;
+    }
+
+
+    public SensorBuffer getSensorBuffer() {
+        return sensorBuffer;
+    }
+
+    public void setSensorBuffer(SensorBuffer sensorBuffer) {
+        this.sensorBuffer = sensorBuffer;
     }
 
     public Keyboard getKeyboard() {

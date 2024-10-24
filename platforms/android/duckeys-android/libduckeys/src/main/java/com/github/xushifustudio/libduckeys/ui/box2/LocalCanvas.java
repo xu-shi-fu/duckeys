@@ -13,11 +13,40 @@ public class LocalCanvas implements ICanvas {
 
     private final Canvas mCanvas;
     private final B2CoordinateSystem mCoordinates;
+    private float[] mLinesBuffer;
 
     public LocalCanvas(Canvas global, B2CoordinateSystem cs) {
         mCanvas = global;
         mCoordinates = cs;
     }
+
+    private float[] getLinesBuffer(int count) {
+        float[] older = this.mLinesBuffer;
+        if (older != null) {
+            if (older.length >= count) {
+                return older;
+            }
+        }
+        float[] buf = new float[count * 2];
+        this.mLinesBuffer = buf;
+        return buf;
+    }
+
+
+    private void prepareDrawLinesBuffer(float[] src, int offset, float[] dst, int count) {
+        PointF p1 = new PointF();
+        final int end = offset + count;
+        int j = 0;
+        for (int i = offset; (i + 1) < end; i += 2) {
+            p1.x = src[i];
+            p1.y = src[i + 1];
+            PointF p2 = mCoordinates.local2global(p1);
+            dst[j] = p2.x;
+            dst[j + 1] = p2.y;
+            j += 2;
+        }
+    }
+
 
     @Override
     public void drawRect(@NonNull RectF rect, @NonNull Paint paint) {
@@ -72,6 +101,28 @@ public class LocalCanvas implements ICanvas {
         PointF p2 = mCoordinates.local2global(new PointF(x, y));
         mCanvas.drawText(text, start, end, p2.x, p2.y, paint);
     }
+
+    @Override
+    public void drawLine(float x1, float y1, float x2, float y2, Paint paint) {
+        PointF p1 = mCoordinates.local2global(new PointF(x1, y1));
+        PointF p2 = mCoordinates.local2global(new PointF(x2, y2));
+        mCanvas.drawLine(p1.x, p1.y, p2.x, p2.y, paint);
+    }
+
+    @Override
+    public void drawLines(float[] pts, int offset, int count, Paint paint) {
+        float[] dst = this.getLinesBuffer(count);
+        this.prepareDrawLinesBuffer(pts, offset, dst, count);
+        mCanvas.drawLines(dst, 0, count, paint);
+    }
+
+    @Override
+    public void drawLines(float[] pts, Paint paint) {
+        float[] dst = this.getLinesBuffer(pts.length);
+        this.prepareDrawLinesBuffer(pts, 0, dst, pts.length);
+        mCanvas.drawLines(dst, 0, pts.length, paint);
+    }
+
 
     @Override
     public Canvas getGlobalCanvas() {

@@ -10,6 +10,7 @@ import com.github.xushifustudio.libduckeys.api.clients.TaskManager;
 import com.github.xushifustudio.libduckeys.context.DuckClient;
 import com.github.xushifustudio.libduckeys.context.LifeActivity;
 import com.github.xushifustudio.libduckeys.context.LifeManager;
+import com.github.xushifustudio.libduckeys.helper.AccelerometerController;
 import com.github.xushifustudio.libduckeys.instruments.InstrumentContext;
 import com.github.xushifustudio.libduckeys.instruments.pad2.SimplePad2;
 import com.github.xushifustudio.libduckeys.midi.MidiEventRT;
@@ -39,20 +40,23 @@ public class SimplePadActivity extends LifeActivity {
 
     private void init() {
 
+        LifeManager lm = getLifeManager();
         DuckClient client = new DuckClient(this);
         TaskManager tm = new TaskManager(this);
         MidiUserAgent ua = new MidiUserAgent(this, client, tm);
-        LifeManager lm = getLifeManager();
 
         InstrumentContext ic = SimplePad2.create(this, mSurfaceView, lm);
         MidiEventRT mert = ic.getMert();
         ua.setRx(mert);
         mert.setTx(ua);
 
+        AccelerometerController acc_sensor = new AccelerometerController(this, ic.getSensorBuffer());
+
         lm.add(tm);
         lm.add(client);
         lm.add(ua);
         lm.add(ic.getLife());
+        lm.add(acc_sensor);
 
         mMidiUA = ua;
         mIC = ic;

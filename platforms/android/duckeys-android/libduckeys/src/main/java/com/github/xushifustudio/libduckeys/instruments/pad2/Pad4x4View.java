@@ -2,7 +2,9 @@ package com.github.xushifustudio.libduckeys.instruments.pad2;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.util.Log;
 
+import com.github.xushifustudio.libduckeys.helper.DuckLogger;
 import com.github.xushifustudio.libduckeys.instruments.InstrumentContext;
 import com.github.xushifustudio.libduckeys.instruments.KeyState;
 import com.github.xushifustudio.libduckeys.instruments.Keyboard;
@@ -25,6 +27,8 @@ public class Pad4x4View extends KeyboardView {
 
     private final PadContext context;
     private final B2RectView mBackground;
+    private Pad4x4Button[] mButtons;
+    private MyLoadedKeyStateInfo mLoadedKeyStateInfo;
 
     public Pad4x4View(PadContext pc) {
         super(pc);
@@ -34,6 +38,11 @@ public class Pad4x4View extends KeyboardView {
         this.initMyBackground();
     }
 
+    private static class MyLoadedKeyStateInfo {
+        int note0;
+    }
+
+
     private void initMyBackground() {
         this.mBackground.setStyle(this.getStyle());
     }
@@ -41,7 +50,7 @@ public class Pad4x4View extends KeyboardView {
     @Override
     protected void onPaintBefore(B2RenderThis self) {
         super.onPaintBefore(self);
-
+        this.checkKeyStateInfo();
     }
 
 
@@ -65,12 +74,42 @@ public class Pad4x4View extends KeyboardView {
             pad4x4.add(btn);
             btn.setKeyState(this.getKeyStateByIndex(i + note0));
         }
+        mButtons = buttons;
 
         pad4x4.setStyle(pad_style);
 
         B2Layout la = B2SimpleLayout.getInstance();
         this.setLayout(la);
         this.add(pad4x4);
+    }
+
+
+    private void reloadKeyState(int note0) {
+        Pad4x4Button[] buttons = mButtons;
+        if (buttons == null) {
+            return;
+        }
+        for (int i = 0; i < buttons.length; i++) {
+            KeyState ks = this.getKeyStateByIndex(i + note0);
+            Log.i(DuckLogger.TAG, "load_pad_key_note:" + ks.note.name);
+            Pad4x4Button btn = buttons[i];
+            btn.setText(ks.note.name);
+            btn.setKeyState(ks);
+        }
+    }
+
+    private void checkKeyStateInfo() {
+        MyLoadedKeyStateInfo older = this.mLoadedKeyStateInfo;
+        if (older != null) {
+            if (older.note0 == this.context.note0) {
+                return;
+            }
+        }
+        // reload
+        MyLoadedKeyStateInfo info = new MyLoadedKeyStateInfo();
+        info.note0 = this.context.note0;
+        this.reloadKeyState(info.note0);
+        this.mLoadedKeyStateInfo = info;
     }
 
 
