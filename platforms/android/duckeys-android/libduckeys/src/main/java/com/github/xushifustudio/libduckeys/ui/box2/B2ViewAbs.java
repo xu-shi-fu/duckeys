@@ -15,6 +15,8 @@ public abstract class B2ViewAbs extends B2Box {
     public boolean focused;
     public boolean interactive; // 表示该视图可以响应 touch 操作
 
+    private B2State state;
+
     // layout
 
     private B2LayoutParams layoutParams;
@@ -57,6 +59,13 @@ public abstract class B2ViewAbs extends B2Box {
 
     // getters & setters
 
+    public B2State getState() {
+        return state;
+    }
+
+    public void setState(B2State state) {
+        this.state = state;
+    }
 
     public B2LayoutParams getLayoutParams() {
         return layoutParams;

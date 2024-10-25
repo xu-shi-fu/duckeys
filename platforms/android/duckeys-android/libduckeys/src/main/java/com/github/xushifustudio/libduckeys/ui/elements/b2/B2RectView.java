@@ -36,6 +36,12 @@ public class B2RectView extends B2View {
         final MyStateStyle styleNormal;
         final MyStateStyle stylePressed;
         final MyStateStyle styleSelected;
+        final MyStateStyle styleDisabled;
+        final MyStateStyle styleHover;
+        final MyStateStyle styleFocused;
+        final MyStateStyle styleCustom1;
+        final MyStateStyle styleCustom2;
+
 
         public MyLayoutCache(long rev) {
             this.revision = rev;
@@ -43,6 +49,11 @@ public class B2RectView extends B2View {
             this.styleNormal = new MyStateStyle();
             this.stylePressed = new MyStateStyle();
             this.styleSelected = new MyStateStyle();
+            this.styleDisabled = new MyStateStyle();
+            this.styleHover = new MyStateStyle();
+            this.styleFocused = new MyStateStyle();
+            this.styleCustom1 = new MyStateStyle();
+            this.styleCustom2 = new MyStateStyle();
         }
     }
 
@@ -72,12 +83,19 @@ public class B2RectView extends B2View {
         final long rev = style1.revision();
         MyLayoutCache lc = new MyLayoutCache(rev);
         lc.rect.set(0, 0, this.width, this.height);
+
         loadStateStyle(lc, lc.styleNormal, style1, B2State.NORMAL);
         loadStateStyle(lc, lc.stylePressed, style1, B2State.PRESSED);
         loadStateStyle(lc, lc.styleSelected, style1, B2State.SELECTED);
 
-        Log.d(DuckLogger.TAG, "B2RectView.loadLayoutCache()");
+        loadStateStyle(lc, lc.styleDisabled, style1, B2State.DISABLED);
+        loadStateStyle(lc, lc.styleHover, style1, B2State.HOVER);
+        loadStateStyle(lc, lc.styleFocused, style1, B2State.FOCUSED);
 
+        loadStateStyle(lc, lc.styleCustom1, style1, B2State.CUSTOM1);
+        loadStateStyle(lc, lc.styleCustom2, style1, B2State.CUSTOM2);
+
+        Log.d(DuckLogger.TAG, "B2RectView.loadLayoutCache()");
         return lc;
     }
 
@@ -159,14 +177,29 @@ public class B2RectView extends B2View {
     }
 
     private MyStateStyle getStyleByState(MyLayoutCache ca) {
-        if (ca == null) {
-            return null;
+        B2State st = this.getState();
+        if (st == null) {
+            return ca.styleNormal;
         }
-        if (this.pressed) {
-            return ca.stylePressed;
-        }
-        if (this.selected) {
-            return ca.styleSelected;
+        switch (st) {
+            case NORMAL:
+                return ca.styleNormal;
+            case PRESSED:
+                return ca.stylePressed;
+            case SELECTED:
+                return ca.styleSelected;
+            case FOCUSED:
+                return ca.styleFocused;
+            case DISABLED:
+                return ca.styleDisabled;
+            case HOVER:
+                return ca.styleHover;
+            case CUSTOM1:
+                return ca.styleCustom1;
+            case CUSTOM2:
+                return ca.styleCustom2;
+            default:
+                break;
         }
         return ca.styleNormal;
     }

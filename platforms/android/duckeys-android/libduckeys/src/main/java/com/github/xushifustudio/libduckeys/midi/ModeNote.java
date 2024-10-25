@@ -2,7 +2,11 @@ package com.github.xushifustudio.libduckeys.midi;
 
 public enum ModeNote {
 
-    NA, // 调外音
+
+    /**
+     * 调外音
+     */
+    NONE,
 
     NOTE1,  // 多
     NOTE2, // 来

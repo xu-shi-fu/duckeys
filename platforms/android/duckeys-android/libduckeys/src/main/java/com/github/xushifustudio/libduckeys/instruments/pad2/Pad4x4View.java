@@ -159,6 +159,15 @@ public class Pad4x4View extends KeyboardView {
         stb.putColor(B2Style.border_color, btn_bg_color_2);
         stb.putColor(B2Style.background_color, btn_bg_color_2);
 
+
+        /////////////////////////////////////
+        stb.setState(B2State.CUSTOM1); // mode note
+        stb.putColor(B2Style.background_color, Color.rgb(200, 200, 100));
+
+        /////////////////////////////////////
+        stb.setState(B2State.CUSTOM2); // chord note
+        stb.putColor(B2Style.background_color, Color.rgb(100, 200, 100));
+
         return stb.create();
     }
 

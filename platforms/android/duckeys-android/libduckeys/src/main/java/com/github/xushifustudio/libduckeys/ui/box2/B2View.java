@@ -349,6 +349,23 @@ public class B2View extends B2ViewAbs implements B2RenderAble, B2LayoutAble, B2O
         }
     }
 
+    @Override
+    public B2State getState() {
+        B2State st = super.getState();
+        if (st == B2State.AUTO) {
+            if (!this.enabled) {
+                return B2State.DISABLED;
+            } else if (this.pressed) {
+                return B2State.PRESSED;
+            } else if (this.focused) {
+                return B2State.FOCUSED;
+            } else if (this.selected) {
+                return B2State.SELECTED;
+            }
+            return B2State.NORMAL;
+        }
+        return st;
+    }
 
     public B2Style getStyle() {
         return style;

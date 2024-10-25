@@ -1,8 +1,11 @@
 package com.github.xushifustudio.libduckeys.instruments;
 
+import com.github.xushifustudio.libduckeys.midi.ChordNote;
+import com.github.xushifustudio.libduckeys.midi.ModeNote;
 import com.github.xushifustudio.libduckeys.ui.box2.B2OnTouchContext;
 import com.github.xushifustudio.libduckeys.ui.box2.B2OnTouchThis;
 import com.github.xushifustudio.libduckeys.ui.box2.B2RenderThis;
+import com.github.xushifustudio.libduckeys.ui.box2.B2State;
 import com.github.xushifustudio.libduckeys.ui.elements.b2.B2Button;
 
 public class KeyButton extends B2Button {
@@ -59,6 +62,37 @@ public class KeyButton extends B2Button {
             return;
         }
         this.pressed = ks.have;
+    }
+
+    @Override
+    public B2State getState() {
+        KeyState ks = this.getKeyState();
+        if (ks == null) {
+            return B2State.NORMAL;
+        }
+        if (this.pressed) {
+            return B2State.PRESSED;
+        } else if (this.isChord(ks)) {
+            return B2State.CUSTOM2;
+        } else if (this.isMode(ks)) {
+            return B2State.CUSTOM1;
+        }
+        // return super.getState();
+        return B2State.NORMAL;
+    }
+
+    private boolean isChord(KeyState ks) {
+        if (ks.chord == null) {
+            return false;
+        }
+        return ks.chord != ChordNote.NONE;
+    }
+
+    private boolean isMode(KeyState ks) {
+        if (ks.mode == null) {
+            return false;
+        }
+        return ks.mode != ModeNote.NONE;
     }
 
     private void setNoteOn(KeyState ks, boolean on) {

@@ -2,7 +2,10 @@ package com.github.xushifustudio.libduckeys.midi;
 
 public enum ChordNote {
 
-    NA,  // 非和弦音
+    /**
+     * 非和弦音
+     */
+    NONE,
 
     ROOT, // 根音
 
