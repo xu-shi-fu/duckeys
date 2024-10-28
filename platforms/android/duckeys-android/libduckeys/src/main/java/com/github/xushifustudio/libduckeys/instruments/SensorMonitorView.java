@@ -4,6 +4,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
+import com.github.xushifustudio.libduckeys.midi.Mode;
+import com.github.xushifustudio.libduckeys.midi.ModePattern;
+import com.github.xushifustudio.libduckeys.midi.Note;
 import com.github.xushifustudio.libduckeys.ui.box2.B2RenderThis;
 import com.github.xushifustudio.libduckeys.ui.box2.ICanvas;
 import com.github.xushifustudio.libduckeys.ui.elements.b2.B2RectView;
@@ -12,10 +15,12 @@ public class SensorMonitorView extends B2RectView {
 
     private float[] mLinesBuffer;
     private SensorBuffer mSensorBuffer;
+    private InstrumentContext mIC;
 
     public SensorMonitorView(InstrumentContext ic) {
         mLinesBuffer = new float[1024 * 2];
         mSensorBuffer = ic.getSensorBuffer();
+        mIC = ic;
     }
 
     @Override
@@ -49,7 +54,34 @@ public class SensorMonitorView extends B2RectView {
 
         paint.setColor(Color.GRAY);
         can.drawRect(rect, paint);
+
+        paint.setStyle(Paint.Style.FILL);
+        paint.setTextSize(39);
+        this.paintMode(can, paint);
+        this.paintChord(can, paint);
     }
+
+
+    private void paintMode(ICanvas can, Paint paint) {
+        ModeManager mm = this.mIC.getModeManager();
+        Mode mode = mm.getHave();
+        if (mode == null) {
+            return;
+        }
+        Note n1 = mode.getNote1();
+        ModePattern pattern = mode.getPattern();
+        StringBuilder b = new StringBuilder();
+        b.append("mode: ");
+        b.append(n1.key).append(n1.sharp ? "# " : " ");
+        b.append(pattern.name());
+        can.drawText(b.toString(), 20, 70, paint);
+    }
+
+    private void paintChord(ICanvas can, Paint paint) {
+
+
+    }
+
 
     private void prepareLinesForX(float[] dst, float ref, float scale) {
         int j = 0;

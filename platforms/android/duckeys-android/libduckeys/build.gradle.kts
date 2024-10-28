@@ -1,12 +1,32 @@
 plugins {
     id("com.android.library")
+    id("maven-publish")
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "com.github.xushifustudio"
+            artifactId = "libduckeys"
+            version = "0.0.1"
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = ""
+            url = uri(layout.buildDirectory.dir("repo"))
+        }
+    }
 }
 
 android {
     namespace = "com.github.xushifustudio.libduckeys"
     compileSdk = 34
 
-    publishing{
+    publishing {
         singleVariant("release") {
             withSourcesJar()
         }
@@ -17,6 +37,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+    }
+
+    testFixtures {
+        enable = true
     }
 
     buildTypes {
@@ -34,6 +58,7 @@ android {
     }
     buildToolsVersion = "35.0.0"
 }
+
 
 dependencies {
 

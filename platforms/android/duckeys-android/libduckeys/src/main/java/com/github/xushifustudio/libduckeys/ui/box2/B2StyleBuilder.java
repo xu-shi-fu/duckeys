@@ -58,7 +58,7 @@ public class B2StyleBuilder {
         holder.name = name;
         holder.property = p;
         holder.handler = p.getHandler();
-        holder.state = state;
+        holder.state = this.state;
         list.add(holder);
         return this;
     }
@@ -70,7 +70,7 @@ public class B2StyleBuilder {
         holder.name = name;
         holder.property = p;
         holder.handler = p.getHandler();
-        holder.state = state;
+        holder.state = this.state;
         list.add(holder);
         return this;
     }
@@ -81,7 +81,7 @@ public class B2StyleBuilder {
         holder.name = name;
         holder.property = p;
         holder.handler = p.getHandler();
-        holder.state = state;
+        holder.state = this.state;
         list.add(holder);
         return this;
     }
@@ -93,7 +93,7 @@ public class B2StyleBuilder {
         holder.name = name;
         holder.property = p;
         holder.handler = p.getHandler();
-        holder.state = state;
+        holder.state = this.state;
         list.add(holder);
         return this;
     }

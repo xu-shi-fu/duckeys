@@ -17,8 +17,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:contentDescription="duckeys"
-        android:src="@color/material_on_background_disabled"
-        tools:src="@android:mipmap/sym_def_app_icon" />
+        android:src="@color/piano_white_key_down" />
 
 
     <Space

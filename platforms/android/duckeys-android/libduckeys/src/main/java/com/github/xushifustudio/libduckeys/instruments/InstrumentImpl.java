@@ -13,13 +13,15 @@ public class InstrumentImpl implements Instrument {
 
     @Override
     public void apply(Chord chord) {
-        NotePatternManager npm = new NotePatternManager(chord);
-        npm.applyTo(mIC.getKeyboard());
+        ChordManager cm = mIC.getChordManager();
+        cm.setWant(chord);
+        cm.apply(mIC, false);
     }
 
     @Override
     public void apply(Mode mode) {
-        NotePatternManager npm = new NotePatternManager(mode);
-        npm.applyTo(mIC.getKeyboard());
+        ModeManager mm = mIC.getModeManager();
+        mm.setWant(mode);
+        mm.apply(mIC, false);
     }
 }

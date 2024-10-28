@@ -1,6 +1,9 @@
 package com.github.xushifustudio.libduckeys.midi;
 
+import com.github.xushifustudio.libduckeys.helper.Strings;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class AbstractPattern implements NotePattern {
@@ -53,6 +56,15 @@ public abstract class AbstractPattern implements NotePattern {
         }
         return 0;
     }
+
+
+    public static boolean equal(AbstractPattern a, AbstractPattern b) {
+        if (a == null || b == null) {
+            return false;
+        }
+        return Arrays.equals(a.mOffsets, b.mOffsets);
+    }
+
 
     @Override
     public Note getNote(int index, Note base) {

@@ -27,6 +27,11 @@ public class ChordPattern extends AbstractPattern {
         }
     }
 
+    public static boolean equal(ChordPattern a, ChordPattern b) {
+        return AbstractPattern.equal(a, b);
+    }
+
+
     @Override
     public int type() {
         return NotePattern.TYPE_CHORD;

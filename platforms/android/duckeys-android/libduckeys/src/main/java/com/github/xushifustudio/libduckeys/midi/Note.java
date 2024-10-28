@@ -58,6 +58,11 @@ public final class Note {
         return false;
     }
 
+    public static Note empty() {
+        Cache c = getCache();
+        return c.findByIndex(0, true);
+    }
+
     public static Note forNote(int index) {
         Cache c = getCache();
         return c.findByIndex(index, true);
@@ -71,9 +76,13 @@ public final class Note {
     }
 
     public static Note forNote(char key, boolean sharp, int group) {
+        if ('a' <= key && key <= 'z') {
+            key = (char) (key + 'A' - 'a');
+        }
+        final char k2 = key;
         Cache c = getCache();
         return c.findByFilter((n) -> {
-            return ((key == n.key) && (sharp == n.sharp) & (group == n.group));
+            return ((k2 == n.key) && (sharp == n.sharp) & (group == n.group));
         }, true);
     }
 
@@ -85,6 +94,13 @@ public final class Note {
             dst[i] = src[i];
         }
         return dst;
+    }
+
+    public static boolean equal(Note a, Note b) {
+        if (a == null || b == null) {
+            return false;
+        }
+        return ((a.key == b.key) && (a.sharp == b.sharp) && (a.group == b.group));
     }
 
 

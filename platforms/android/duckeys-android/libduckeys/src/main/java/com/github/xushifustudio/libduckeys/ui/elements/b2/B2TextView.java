@@ -44,12 +44,23 @@ public class B2TextView extends B2RectView {
         final MyStyleState normal;
         final MyStyleState selected;
         final MyStyleState pressed;
+        final MyStyleState focused;
+        final MyStyleState disabled;
+        final MyStyleState hover;
+        final MyStyleState custom1;
+        final MyStyleState custom2;
+
 
         public MyStyleCache(long rev) {
             this.revision = rev;
             this.normal = new MyStyleState();
             this.pressed = new MyStyleState();
             this.selected = new MyStyleState();
+            this.focused = new MyStyleState();
+            this.disabled = new MyStyleState();
+            this.hover = new MyStyleState();
+            this.custom1 = new MyStyleState();
+            this.custom2 = new MyStyleState();
         }
     }
 
@@ -83,6 +94,11 @@ public class B2TextView extends B2RectView {
         this.loadStyleWithState(sc.normal, srd, B2State.NORMAL);
         this.loadStyleWithState(sc.pressed, srd, B2State.PRESSED);
         this.loadStyleWithState(sc.selected, srd, B2State.SELECTED);
+        this.loadStyleWithState(sc.focused, srd, B2State.FOCUSED);
+        this.loadStyleWithState(sc.disabled, srd, B2State.DISABLED);
+        this.loadStyleWithState(sc.hover, srd, B2State.HOVER);
+        this.loadStyleWithState(sc.custom1, srd, B2State.CUSTOM1);
+        this.loadStyleWithState(sc.custom2, srd, B2State.CUSTOM2);
         return sc;
     }
 
@@ -120,14 +136,27 @@ public class B2TextView extends B2RectView {
 
 
     private MyStyleState getCurrentStyleByState(MyStyleCache sc) {
-        if (sc == null) {
-            return null;
+        B2State state1 = this.getState();
+        if (state1 == null) {
+            return sc.normal;
         }
-        if (this.pressed) {
-            return sc.pressed;
-        }
-        if (this.selected) {
-            return sc.selected;
+        switch (state1) {
+            case PRESSED:
+                return sc.pressed;
+            case SELECTED:
+                return sc.selected;
+            case FOCUSED:
+                return sc.focused;
+            case DISABLED:
+                return sc.disabled;
+            case HOVER:
+                return sc.hover;
+            case CUSTOM1:
+                return sc.custom1;
+            case CUSTOM2:
+                return sc.custom2;
+            default:
+                break;
         }
         return sc.normal;
     }

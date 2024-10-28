@@ -20,12 +20,17 @@ public class InstrumentContext extends SurfaceContext {
     private Keyboard keyboard;
 
     private SensorBuffer sensorBuffer;
-    private Mode mode;
+
+    private ModeManager modeManager;
+    private ChordManager chordManager;
+
 
     public InstrumentContext() {
         this.keyboard = new Keyboard(this);
         this.mert = new MidiEventRT(InstrumentContext.class.getName());
         this.sensorBuffer = new SensorBuffer(1024 * 2);
+        this.modeManager = new ModeManager();
+        this.chordManager = new ChordManager();
     }
 
 
@@ -51,7 +56,6 @@ public class InstrumentContext extends SurfaceContext {
         ic.setCallback(callback);
         ic.setOnTouchListener(on_touch);
         ic.setLooper(looper);
-        ic.setMode(mode);
         ic.setInstrument(instr);
 
         ic.setWidth(0);
@@ -66,12 +70,20 @@ public class InstrumentContext extends SurfaceContext {
     }
 
 
-    public Mode getMode() {
-        return mode;
+    public ModeManager getModeManager() {
+        return modeManager;
     }
 
-    public void setMode(Mode mode) {
-        this.mode = mode;
+    public void setModeManager(ModeManager modeManager) {
+        this.modeManager = modeManager;
+    }
+
+    public ChordManager getChordManager() {
+        return chordManager;
+    }
+
+    public void setChordManager(ChordManager chordManager) {
+        this.chordManager = chordManager;
     }
 
     public SensorBuffer getSensorBuffer() {
