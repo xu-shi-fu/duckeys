@@ -1,6 +1,8 @@
 package com.github.xushifustudio.libduckeys.midi;
 
 
+import androidx.annotation.NonNull;
+
 /**
  * Mode 表示曲调，例如 “C# major”
  */
@@ -27,6 +29,16 @@ public class Mode {
         boolean b1 = Note.equal(a.note1, b.note1);
         boolean b2 = ModePattern.equal(a.pattern, b.pattern);
         return (b1 && b2);
+    }
+
+
+    @NonNull
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        b.append(note1.key).append(note1.sharp ? "# " : " ");
+        b.append(pattern.name());
+        return b.toString();
     }
 
     public Note getNote1() {

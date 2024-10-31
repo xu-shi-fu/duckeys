@@ -3,8 +3,16 @@ package com.github.xushifustudio.libduckeys.instruments;
 import com.github.xushifustudio.libduckeys.midi.ChordNote;
 import com.github.xushifustudio.libduckeys.midi.ModeNote;
 import com.github.xushifustudio.libduckeys.midi.Note;
+import com.github.xushifustudio.libduckeys.ui.box2.B2State;
 
 public class KeyState {
+
+
+    public static final B2State STATE_MODE_N1 = B2State.CUSTOM1; // 主音
+    public static final B2State STATE_MODE_X = B2State.CUSTOM2; // 调内音
+    public static final B2State STATE_CHORD_ROOT = B2State.CUSTOM3; // 和弦根音
+    public static final B2State STATE_CHORD_X = B2State.CUSTOM4; // 和弦音
+
 
     public final Keyboard keyboard;
     public final Note note;

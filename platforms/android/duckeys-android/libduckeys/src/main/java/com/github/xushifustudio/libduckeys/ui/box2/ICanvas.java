@@ -38,6 +38,9 @@ public interface ICanvas {
     void drawLines(float[] pts, Paint paint);
 
 
+    void drawCircle(float cx, float cy, float radius, Paint paint);
+
+
     Canvas getGlobalCanvas();
 
 }

@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
+import com.github.xushifustudio.libduckeys.midi.Chord;
 import com.github.xushifustudio.libduckeys.midi.Mode;
 import com.github.xushifustudio.libduckeys.midi.ModePattern;
 import com.github.xushifustudio.libduckeys.midi.Note;
@@ -57,7 +58,7 @@ public class SensorMonitorView extends B2RectView {
 
         paint.setStyle(Paint.Style.FILL);
         paint.setTextSize(39);
-        this.paintMode(can, paint);
+        //    this.paintMode(can, paint);
         this.paintChord(can, paint);
     }
 
@@ -78,8 +79,15 @@ public class SensorMonitorView extends B2RectView {
     }
 
     private void paintChord(ICanvas can, Paint paint) {
-
-
+        Chord ch1 = this.mIC.getChordManager().input.getWant();
+        if (ch1 == null) {
+            return;
+        }
+        String text = ch1.toString();
+        float txt_w = paint.measureText(text);
+        float x1 = (this.width - txt_w) / 2;
+        float y1 = this.height - 20;
+        can.drawText(text, x1, y1, paint);
     }
 
 

@@ -73,19 +73,35 @@ public class KeyButton extends B2Button {
         if (this.pressed) {
             return B2State.PRESSED;
         } else if (this.isChord(ks)) {
-            return B2State.CUSTOM2;
+            if (isChordRoot(ks)) {
+                return KeyState.STATE_CHORD_ROOT;
+            }
+            return KeyState.STATE_CHORD_X;
         } else if (this.isMode(ks)) {
-            return B2State.CUSTOM1;
+            if (isModeN1(ks)) {
+                return KeyState.STATE_MODE_N1;
+            }
+            return KeyState.STATE_MODE_X;
         }
         // return super.getState();
         return B2State.NORMAL;
     }
 
     private boolean isChord(KeyState ks) {
+
+        /*
         if (ks.chord == null) {
             return false;
         }
         return ks.chord != ChordNote.NONE;
+
+         */
+
+        return false;
+    }
+
+    private boolean isChordRoot(KeyState ks) {
+        return ks.chord == ChordNote.ROOT;
     }
 
     private boolean isMode(KeyState ks) {
@@ -93,6 +109,10 @@ public class KeyButton extends B2Button {
             return false;
         }
         return ks.mode != ModeNote.NONE;
+    }
+
+    private boolean isModeN1(KeyState ks) {
+        return ks.mode == ModeNote.NOTE1;
     }
 
     private void setNoteOn(KeyState ks, boolean on) {

@@ -28,10 +28,25 @@ public class ChordSelector {
 
     private ChordPattern mType;
     private Note mRoot;
+    private OnUpdatedListener mOnUpdatedListener;
 
     public ChordSelector() {
     }
 
+    public interface OnUpdatedListener {
+        void onUpdated(ChordSelector src);
+    }
+
+    private void fireOnUpdated(OnUpdatedListener l) {
+        if (l == null) {
+            return;
+        }
+        l.onUpdated(this);
+    }
+
+    public void setOnUpdatedListener(OnUpdatedListener l) {
+        this.mOnUpdatedListener = l;
+    }
 
     private static class MyChordTypeSet {
 
@@ -54,18 +69,8 @@ public class ChordSelector {
         private ChordPattern[] listChordTypes() {
             Note root = Note.empty();
             List<Chord> list = new ArrayList<>();
-
-            list.add(Chords.major(root));
-            list.add(Chords.major7(root));
-            list.add(Chords.major9(root));
-            list.add(Chords.major11(root));
-
-            list.add(Chords.minor(root));
-            list.add(Chords.minor7(root));
-            list.add(Chords.minor9(root));
-
             list.add(Chords.none());
-
+            list = Chords.listAll(root, list);
             ChordPattern[] array = new ChordPattern[list.size()];
             for (int i = 0; i < array.length; i++) {
                 Chord ch = list.get(i);
@@ -169,7 +174,7 @@ public class ChordSelector {
         if (ic == null) {
             return;
         }
-        Chord current = ic.getChordManager().getHave();
+        Chord current = ic.getChordManager().output.getHave();
         if (current == null) {
             return;
         }
@@ -182,8 +187,10 @@ public class ChordSelector {
             return;
         }
         ChordManager cm = ic.getChordManager();
-        cm.setWant(new Chord(mRoot, mType));
-        cm.apply(ic, false);
+        cm.output.setWant(new Chord(mRoot, mType));
+        cm.apply(ic, cm.output, false);
+
+        fireOnUpdated(this.mOnUpdatedListener);
     }
 
     public InstrumentContext getIC() {

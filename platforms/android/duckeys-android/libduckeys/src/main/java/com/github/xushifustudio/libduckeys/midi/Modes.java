@@ -1,5 +1,8 @@
 package com.github.xushifustudio.libduckeys.midi;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class Modes {
 
     private static final int W = 2; // whole
@@ -128,5 +131,28 @@ public final class Modes {
         b.name("Locrian");
         b.add(H).add(W).add(W).add(H).add(W).add(W).add(W);
         return new Mode(n1, b.create());
+    }
+
+
+    public static List<Mode> listAll(Note n1, List<Mode> dst) {
+        if (dst == null) {
+            dst = new ArrayList<>();
+        }
+        if (n1 == null) {
+            n1 = Note.forNote(12 * 5);
+        }
+
+        dst.add(major(n1));
+        dst.add(minor(n1));
+
+        dst.add(aeolian(n1));
+        dst.add(dorian(n1));
+        dst.add(ionian(n1));
+        dst.add(locrian(n1));
+        dst.add(lydian(n1));
+        dst.add(mixolydian(n1));
+        dst.add(phrygian(n1));
+
+        return dst;
     }
 }

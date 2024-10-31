@@ -14,8 +14,8 @@ public class InstrumentImpl implements Instrument {
     @Override
     public void apply(Chord chord) {
         ChordManager cm = mIC.getChordManager();
-        cm.setWant(chord);
-        cm.apply(mIC, false);
+        cm.output.setWant(chord);
+        cm.apply(mIC, cm.output, false);
     }
 
     @Override

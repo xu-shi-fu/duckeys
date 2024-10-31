@@ -123,6 +123,12 @@ public class LocalCanvas implements ICanvas {
         mCanvas.drawLines(dst, 0, pts.length, paint);
     }
 
+    @Override
+    public void drawCircle(float cx, float cy, float radius, Paint paint) {
+        PointF pc = mCoordinates.local2global(new PointF(cx, cy));
+        mCanvas.drawCircle(pc.x, pc.y, radius, paint);
+    }
+
 
     @Override
     public Canvas getGlobalCanvas() {

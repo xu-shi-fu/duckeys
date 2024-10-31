@@ -1,5 +1,7 @@
 package com.github.xushifustudio.libduckeys.midi;
 
+import androidx.annotation.NonNull;
+
 /**
  * Chord 表示一个和弦，例如：“Fm7”
  */
@@ -28,6 +30,16 @@ public class Chord {
         boolean b1 = Note.equal(a.root, b.root);
         boolean b2 = ChordPattern.equal(a.pattern, b.pattern);
         return (b1 && b2);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        b.append(root.key);
+        b.append(root.sharp ? "# " : " ");
+        b.append(pattern.name());
+        return b.toString();
     }
 
     public Note getRoot() {

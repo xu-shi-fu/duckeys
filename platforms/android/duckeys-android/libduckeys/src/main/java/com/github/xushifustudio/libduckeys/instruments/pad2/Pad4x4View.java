@@ -131,7 +131,7 @@ public class Pad4x4View extends KeyboardView {
         B2StyleBuilder stb = new B2StyleBuilder();
 
         int text_color = Color.rgb(166, 166, 166);
-        int btn_bg_color = Color.rgb(233, 233, 233);
+        int btn_bg_color = Color.rgb(220, 220, 220);
         int btn_bg_color_2 = Color.rgb(233, 133, 133);
 
         int font_size_l = 39;
@@ -166,13 +166,25 @@ public class Pad4x4View extends KeyboardView {
 
 
         /////////////////////////////////////
-        stb.setState(B2State.CUSTOM1); // mode note
-        // stb.putColor(B2Style.background_color, Color.rgb(200, 200, 100));
+        stb.setState(KeyState.STATE_MODE_N1); // mode note (n1)
+
         stb.putSize(B2Style.font_size, font_size_l);
         stb.putColor(B2Style.text_color, Color.BLACK);
+        stb.putColor(B2Style.background_color, Color.rgb(250, 250, 210));
 
         /////////////////////////////////////
-        stb.setState(B2State.CUSTOM2); // chord note
+        stb.setState(KeyState.STATE_MODE_X); // mode note
+
+        stb.putSize(B2Style.font_size, font_size_l);
+        stb.putColor(B2Style.text_color, Color.BLACK);
+        stb.putColor(B2Style.background_color, Color.rgb(180, 180, 120));
+
+        /////////////////////////////////////
+        stb.setState(KeyState.STATE_CHORD_ROOT); // chord note (root)
+
+
+        /////////////////////////////////////
+        stb.setState(KeyState.STATE_CHORD_X); // chord note
         stb.putColor(B2Style.background_color, Color.rgb(100, 200, 100));
         stb.putColor(B2Style.text_color, Color.rgb(33, 33, 33));
         stb.putSize(B2Style.font_size, font_size_l);

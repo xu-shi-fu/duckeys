@@ -21,7 +21,7 @@ import java.util.List;
 
 public class SimplePadView extends B2Container {
 
-    private final List<B2Button> mBankButtons;
+    private final List<PadBankButton> mBankButtons;
     private final PadContext mPadContext;
 
     public SimplePadView(PadContext pc) {
@@ -85,7 +85,7 @@ public class SimplePadView extends B2Container {
         B2Container bar = new B2Container();
 
         for (int i = 0; i < 8; i++) {
-            B2Button btn = new B2Button();
+            PadBankButton btn = new PadBankButton();
             btn.setText("bank" + i);
             btn.setStyle(style_bank_btn);
             btn.setOnClickListener(new MyBankButtonOnClickListener(i * 12));

@@ -140,6 +140,24 @@ public class ModeSelector {
     }
 
 
+    public interface OnUpdatedListener {
+        void onUpdated(ModeSelector src);
+    }
+
+    private OnUpdatedListener mOnUpdatedListener;
+
+    private void fireOnUpdated(OnUpdatedListener l) {
+        if (l == null) {
+            return;
+        }
+        l.onUpdated(this);
+    }
+
+    public void setOnUpdatedListener(OnUpdatedListener l) {
+        this.mOnUpdatedListener = l;
+    }
+
+
     public void showBaseDialog() {
         this.load();
         String[] items = this.base_set.keys();
@@ -193,6 +211,8 @@ public class ModeSelector {
         ModeManager mm = ic.getModeManager();
         // mm.setWant( );
         ic.getInstrument().apply(new Mode(n1, mp));
+
+        fireOnUpdated(this.mOnUpdatedListener);
     }
 
     public InstrumentContext getIC() {

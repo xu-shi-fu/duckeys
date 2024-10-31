@@ -1,5 +1,10 @@
 package com.github.xushifustudio.libduckeys.instruments;
 
+import android.util.Log;
+
+import com.github.xushifustudio.libduckeys.helper.DuckLogger;
+import com.github.xushifustudio.libduckeys.instruments.control.ChordDetector;
+import com.github.xushifustudio.libduckeys.midi.Chord;
 import com.github.xushifustudio.libduckeys.ui.box2.B2Container;
 import com.github.xushifustudio.libduckeys.ui.box2.B2OnTouchContext;
 import com.github.xushifustudio.libduckeys.ui.box2.B2OnTouchThis;
@@ -46,5 +51,21 @@ public class KeyboardView extends B2Container {
         if (kb != null) {
             kb.flush();
         }
+        if (self.context.action == B2OnTouchContext.ACTION_POINTER_DOWN) {
+            this.detectChord(kb);
+        }
+    }
+
+    private void detectChord(Keyboard kb) {
+        if (kb == null) {
+            return;
+        }
+        ChordDetector cd = new ChordDetector(ic);
+        Chord ch = cd.detect(kb);
+        // if (ch == null) {
+        //   return;
+        // }
+        //   Log.i(DuckLogger.TAG, "detected chord: " + ch);
+        ic.getChordManager().input.setWant(ch);
     }
 }

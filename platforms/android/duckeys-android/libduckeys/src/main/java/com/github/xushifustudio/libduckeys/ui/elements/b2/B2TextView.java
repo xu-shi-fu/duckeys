@@ -49,6 +49,8 @@ public class B2TextView extends B2RectView {
         final MyStyleState hover;
         final MyStyleState custom1;
         final MyStyleState custom2;
+        final MyStyleState custom3;
+        final MyStyleState custom4;
 
 
         public MyStyleCache(long rev) {
@@ -61,6 +63,8 @@ public class B2TextView extends B2RectView {
             this.hover = new MyStyleState();
             this.custom1 = new MyStyleState();
             this.custom2 = new MyStyleState();
+            this.custom3 = new MyStyleState();
+            this.custom4 = new MyStyleState();
         }
     }
 
@@ -99,6 +103,8 @@ public class B2TextView extends B2RectView {
         this.loadStyleWithState(sc.hover, srd, B2State.HOVER);
         this.loadStyleWithState(sc.custom1, srd, B2State.CUSTOM1);
         this.loadStyleWithState(sc.custom2, srd, B2State.CUSTOM2);
+        this.loadStyleWithState(sc.custom3, srd, B2State.CUSTOM3);
+        this.loadStyleWithState(sc.custom4, srd, B2State.CUSTOM4);
         return sc;
     }
 
@@ -155,6 +161,10 @@ public class B2TextView extends B2RectView {
                 return sc.custom1;
             case CUSTOM2:
                 return sc.custom2;
+            case CUSTOM3:
+                return sc.custom3;
+            case CUSTOM4:
+                return sc.custom4;
             default:
                 break;
         }

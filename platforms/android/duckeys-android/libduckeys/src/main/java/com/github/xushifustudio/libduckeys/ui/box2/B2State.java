@@ -18,4 +18,7 @@ public enum B2State {
     CUSTOM3,
     CUSTOM4,
     CUSTOM5,
+    CUSTOM6,
+    CUSTOM7,
+    CUSTOM8,
 }
