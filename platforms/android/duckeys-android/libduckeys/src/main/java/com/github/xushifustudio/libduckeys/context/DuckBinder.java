@@ -4,5 +4,6 @@ import com.github.xushifustudio.libduckeys.api.servers.Server;
 
 public interface DuckBinder extends Server {
 
+    FrameworkAPI getFramework();
 
 }

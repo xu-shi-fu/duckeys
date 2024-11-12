@@ -32,8 +32,10 @@ public final class DuckConfig {
     private DuckConfig() {
     }
 
-    public static void configure(Context ctx, ComponentRegistering cr) {
+    public static void configure(Context ctx, DuckConfiguration cfg) {
 
+        final FrameworkContext fc = null;  //  cfg.framework.getFrameworkContext();
+        final ComponentRegistering cr = null; // cfg . .registering;
         final String nil = null;
 
         // api (controllers)
@@ -68,7 +70,7 @@ public final class DuckConfig {
         cr.register(nil, new LifeMonitor("components.life.monitor"));
         cr.register(Server.class, new DefaultServer());
         cr.register(SettingManager.class, new DefaultSettingManager());
-        cr.register(DuckContext.class, new DuckContext());
+        cr.register(DuckContext.class, new DuckContext(fc));
         cr.register(MidiUriAgent.class, new DefaultMidiUriAgent());
     }
 }

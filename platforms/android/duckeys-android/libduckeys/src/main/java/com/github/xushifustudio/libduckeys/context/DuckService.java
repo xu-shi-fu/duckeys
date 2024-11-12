@@ -21,10 +21,11 @@ import com.github.xushifustudio.libduckeys.api.servers.ServerBuilder;
 import com.github.xushifustudio.libduckeys.api.servers.ServerBuilderFactory;
 import com.github.xushifustudio.libduckeys.api.servers.ServerHolder;
 
-public class DuckService extends LifeService {
+public class DuckService extends LifeService implements ComponentLife {
 
     private final MyBinder mBinder; // facade
     private final ServerHolder mHolder; // inner
+
 
     public DuckService() {
         mBinder = new MyBinder();
@@ -75,21 +76,28 @@ public class DuckService extends LifeService {
     private void init() {
         LifeManager lm = getLifeManager();
         lm.add(mHolder);
-        loadServer(mHolder);
     }
 
 
-    private void loadServer(ServerHolder h) {
-        Application app = this.getApplication();
-        ComponentRegistry reg = (ComponentRegistry) app;
-        ComponentContext cc = new ComponentContext();
-        ComponentsLoader loader = new ComponentsLoader(cc);
-        cc.context = app;
-        loader.loadComponents(reg::registerComponents);
+    private void onLoadServer(ComponentContext cc, ServerHolder h) {
         Server ser = cc.components.find(Server.class);
+        if (ser == null) {
+            throw new RuntimeException("onLoadServer: server is null");
+        }
         h.setServer(ser);
         h.setComponents(cc.components);
         h.setComponentContext(cc);
+    }
+
+    @Override
+    public ComponentRegistration init(ComponentContext cc) {
+        ComponentRegistrationBuilder b = new ComponentRegistrationBuilder();
+        b.setType(DuckService.class);
+        b.setInstance(this);
+        b.onCreate(() -> {
+            this.onLoadServer(cc, this.mHolder);
+        });
+        return b.create();
     }
 
 
@@ -121,6 +129,13 @@ public class DuckService extends LifeService {
         @Override
         public API getMidiReaderAPI() {
             return getInner().getMidiReaderAPI();
+        }
+
+        @Override
+        public FrameworkAPI getFramework() {
+            Context ctx = DuckService.this.getApplicationContext();
+            FrameworkContext fc = FrameworkContext.getInstance(ctx);
+            return fc.getApi();
         }
     }
 

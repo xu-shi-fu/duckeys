@@ -88,3 +88,5 @@ lint/tmp/
 *.hprof
 platforms/android/duckeys-android/.idea/misc.xml
 platforms/android/duckeys-android/.idea/misc.xml
+platforms/android/duckeys-android/.idea/gradle.xml
+platforms/android/duckeys-android/.idea/deploymentTargetDropDown.xml

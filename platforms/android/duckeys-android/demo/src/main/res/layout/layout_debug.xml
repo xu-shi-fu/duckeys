@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DemoDebugActivity">
+
+
+    <Button
+        android:id="@+id/button_midi_connection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MIDI Connection" />
+
+    <Button
+        android:id="@+id/button_show_midi_devices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MIDI Devices" />
+
+    <Button
+        android:id="@+id/button_bluetooth_scan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bluetooth Scan" />
+
+    <Button
+        android:id="@+id/button_show_current_device"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Show Current Device" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+
+    <Button
+        android:id="@+id/button_show_simple_midi_pad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Simple MIDI Pad" />
+
+    <Button
+        android:id="@+id/button_show_midi_cc_console"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MIDI CC Console" />
+
+    <Button
+        android:id="@+id/button_piano_keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Piano Keyboard" />
+
+    <Button
+        android:id="@+id/button_show_midi_rx_monitor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MIDI Rx Monitor" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <Button
+        android:id="@+id/button_show_about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="About" />
+
+
+    <Button
+        android:id="@+id/button_debug_multi_touch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Debug Multi-Touch" />
+
+</LinearLayout>

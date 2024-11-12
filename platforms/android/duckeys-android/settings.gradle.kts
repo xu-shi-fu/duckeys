@@ -14,5 +14,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Duckeys"
-include(":app")
+include(":demo")
 include(":libduckeys")
